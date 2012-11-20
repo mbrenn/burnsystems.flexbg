@@ -51,6 +51,8 @@
     <Compile Include="Modules\ServerInfoProviderM\IServerInfoProvider.cs" />
     <Compile Include="Modules\ServerInfoProviderM\ServerInfo.cs" />
     <Compile Include="Modules\ServerInfoProviderM\ServerInfoProvider.cs" />
+    <Compile Include="Modules\UserM\Controller\LoginModel.cs" />
+    <Compile Include="Modules\UserM\Controller\UsersController.cs" />
     <Compile Include="Modules\UserM\Data\UserDatabaseLocal.cs" />
     <Compile Include="Modules\UserM\Interfaces\IUserManagement.cs" />
     <Compile Include="Modules\UserM\Logic\UserManagementLocal.cs" />
@@ -60,6 +62,10 @@
     <Compile Include="Runtime.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\BurnSystems.WebServer\src\BurnSystems.WebServer\BurnSystems.WebServer.csproj">
+      <Project>{b31df31a-f19e-4ff9-b50f-b70f4f5949f4}</Project>
+      <Name>BurnSystems.WebServer</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\BurnSystems\src\BurnSystems.csproj">
       <Project>{42023d16-afd1-4d99-bc39-9ef46982eb54}</Project>
       <Name>BurnSystems</Name>
