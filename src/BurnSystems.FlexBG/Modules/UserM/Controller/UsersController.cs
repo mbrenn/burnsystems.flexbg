@@ -88,30 +88,25 @@ namespace BurnSystems.FlexBG.Modules.UserM.Controllers
             FormsAuthentication.SignOut();
 
             return RedirectToAction("Index", "Home");
-        }
+        }*/
 
         [WebMethod]
-        public void Register()
+        public void Register([PostModel] RegisterModel model)
         {
-            return View();
-        }
+            var hasSuccess = true;
 
-        [WebMethod]
-        [PostModel]
-        public ActionResult Register(RegisterModel model)
-        {
             // Checks, if username already exists
             if (this.UserManagement.IsUsernameExisting(model.Username))
             {
-                this.ModelState["Username"].Errors.Add("Der gewünschte Benutzername ist bereits belegt. Leider kannst du hier noch keinen Krieg gegen ihn erklären.");
+                //this.ModelState["Username"].Errors.Add("Der gewünschte Benutzername ist bereits belegt. Leider kannst du hier noch keinen Krieg gegen ihn erklären.");
             }
 
             if (model.AcceptTOS == false)
             {
-                this.ModelState["AcceptTOS"].Errors.Add("Ohne Akzeptanz der Nutzungsbedingungen können wir dir leider keinen Einlass gewähren.");
+                //this.ModelState["AcceptTOS"].Errors.Add("Ohne Akzeptanz der Nutzungsbedingungen können wir dir leider keinen Einlass gewähren.");
             }
 
-            if (this.ModelState.IsValid)
+            //if (this.ModelState.IsValid)
             {
                 // Everything seems ok, create and add user
                 var user = new UserM.Models.User();
@@ -121,15 +116,19 @@ namespace BurnSystems.FlexBG.Modules.UserM.Controllers
                 user.EMail = model.EMail;
 
                 this.UserManagement.AddUser(user);
-                return View("RegisterSuccess");
+                //return View("RegisterSuccess");
             }
 
-            return View();            
-        }
+            var result = new
+            {
+                success = hasSuccess
+            };
 
+            this.TemplateOrJson(result );
+        }
+        /*
         [WebMethod]
-        [PostModel]
-        public void PasswordForgotten(ForgotPasswordModel model)
+        public void PasswordForgotten([PostModel] ForgotPasswordModel model)
         {
             if (this.MailSender == null)
             {
@@ -198,7 +197,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Controllers
         }
 
         [WebMethod]
-        public ActionResult ChangePassword(ChangePasswordModel model)
+        public ActionResult ChangePassword([PostModel] ChangePasswordModel model)
         {
             var user = this.UserManagement.GetUser(HttpContext.User.Identity.Name);
             Assert.That(user, Is.Not.Null);

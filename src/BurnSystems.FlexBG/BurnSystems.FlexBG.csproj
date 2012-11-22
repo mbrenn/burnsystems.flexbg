@@ -51,7 +51,11 @@
     <Compile Include="Modules\ServerInfoProviderM\IServerInfoProvider.cs" />
     <Compile Include="Modules\ServerInfoProviderM\ServerInfo.cs" />
     <Compile Include="Modules\ServerInfoProviderM\ServerInfoProvider.cs" />
+    <Compile Include="Modules\UserM\Controller\ChangePasswordModel.cs" />
+    <Compile Include="Modules\UserM\Controller\CreateNewPasswordModel.cs" />
+    <Compile Include="Modules\UserM\Controller\ForgotPasswordModel.cs" />
     <Compile Include="Modules\UserM\Controller\LoginModel.cs" />
+    <Compile Include="Modules\UserM\Controller\RegisterModel.cs" />
     <Compile Include="Modules\UserM\Controller\UsersController.cs" />
     <Compile Include="Modules\UserM\Data\UserDatabaseLocal.cs" />
     <Compile Include="Modules\UserM\Interfaces\IUserManagement.cs" />
