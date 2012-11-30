@@ -7,6 +7,7 @@ using BurnSystems.FlexBG.Modules.UserM.Models;
 using BurnSystems.FlexBG.Modules.GameInfoM;
 using BurnSystems.FlexBG.Interfaces;
 using BurnSystems.FlexBG.Modules.UserM.Data;
+using BurnSystems.ObjectActivation;
 
 namespace BurnSystems.FlexBG.Modules.UserM.Logic
 {
@@ -28,6 +29,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
             get { return this.userDb; }
         }
 
+        [Inject(IsMandatory = true)]
         public IGameInfoProvider GameInfoProvider
         {
             get;

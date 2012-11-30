@@ -6,14 +6,16 @@ using System.Text;
 using BurnSystems.FlexBG.Modules.ConfigurationStorageM;
 using System.Xml.Serialization;
 using BurnSystems.Test;
+using BurnSystems.ObjectActivation;
 
 namespace BurnSystems.FlexBG.Modules.GameInfoM
 {
     public class GameInfoProvider : IGameInfoProvider
     {
+        [Inject]
         public GameInfoProvider(IConfigurationStorage storage)
         {
-            Ensure.That(storage != null);
+            Ensure.That(storage != null, "IConfigurationStorage not set in Constructor");
 
             var xmlInfo = storage.Documents
                 .Elements("FlexBG")

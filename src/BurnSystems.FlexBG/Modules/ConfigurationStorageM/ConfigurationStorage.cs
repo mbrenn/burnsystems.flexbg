@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
@@ -23,6 +24,18 @@ namespace BurnSystems.FlexBG.Modules.ConfigurationStorageM
 
         public ConfigurationStorage()
         {
+        }
+
+        /// <summary>
+        /// Loads all xmlfiles from directory
+        /// </summary>
+        /// <param name="directoryPath">Directory from which the xml files shall be loaded</param>
+        public void AddFromDirectory(string directoryPath)
+        {
+            foreach (var file in Directory.GetFiles(directoryPath, "*.xml"))
+            {
+                this.Add(XDocument.Load(file));
+            }
         }
 
         /// <summary>

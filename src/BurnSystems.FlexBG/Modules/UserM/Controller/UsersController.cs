@@ -17,7 +17,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Controllers
         /// <summary>
         /// Gets or sets the usermanagement
         /// </summary>
-        [Inject]
+        [Inject(IsMandatory = true)]
         public IUserManagement UserManagement
         {
             get;
