@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BurnSystems.WebServer.Modules.UserManagement;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,15 +15,38 @@ namespace BurnSystems.FlexBG.Modules.UserM.Models
         public User()
         {
             this.PremiumTill = DateTime.Now;
+            this.TokenId = Guid.NewGuid();
         }
+
+        private long id;
+
+        private string username;
+
+        private string encryptedPassword;
+
+        private string eMail;
+
+        private string activationKey;
+
+        private string apiKey;
+
+        private DateTime premiumTill;
+
+        private bool isActive;
+
+        private bool hasAgreedToTOS;
+
+        private bool hasNoCredentials;
+
+        private Guid tokenId;
 
         /// <summary>
         /// Gets or sets the user id
         /// </summary>
         public virtual long Id
         {
-            get;
-            set;
+            get { return this.id; }
+            set { this.id = value; }
         }
 
         /// <summary>
@@ -30,8 +54,8 @@ namespace BurnSystems.FlexBG.Modules.UserM.Models
         /// </summary>
         public virtual string Username
         {
-            get;
-            set;
+            get { return this.username; }
+            set { this.username = value; }
         }
 
         /// <summary>
@@ -39,8 +63,8 @@ namespace BurnSystems.FlexBG.Modules.UserM.Models
         /// </summary>
         public virtual string EncryptedPassword
         {
-            get;
-            set;
+            get { return this.encryptedPassword; }
+            set { this.encryptedPassword = value; }
         }
 
         /// <summary>
@@ -48,8 +72,8 @@ namespace BurnSystems.FlexBG.Modules.UserM.Models
         /// </summary>
         public virtual string EMail
         {
-            get;
-            set;
+            get { return this.eMail; }
+            set { this.eMail = value; }
         }
 
         /// <summary>
@@ -57,8 +81,8 @@ namespace BurnSystems.FlexBG.Modules.UserM.Models
         /// </summary>
         public virtual string ActivationKey
         {
-            get;
-            set;
+            get { return this.activationKey; }
+            set { this.activationKey = value; }
         }
 
         /// <summary>
@@ -66,8 +90,8 @@ namespace BurnSystems.FlexBG.Modules.UserM.Models
         /// </summary>
         public virtual string APIKey
         {
-            get;
-            set;
+            get { return this.apiKey; }
+            set { this.apiKey = value; }
         }
 
         /// <summary>
@@ -83,8 +107,8 @@ namespace BurnSystems.FlexBG.Modules.UserM.Models
         /// </summary>
         public virtual DateTime PremiumTill
         {
-            get;
-            set;
+            get { return this.premiumTill; }
+            set { this.premiumTill = value; }
         }
 
         /// <summary>
@@ -92,8 +116,8 @@ namespace BurnSystems.FlexBG.Modules.UserM.Models
         /// </summary>
         public virtual bool IsActive
         {
-            get;
-            set;
+            get { return this.isActive; }
+            set { this.isActive = value; }
         }
 
         /// <summary>
@@ -101,8 +125,8 @@ namespace BurnSystems.FlexBG.Modules.UserM.Models
         /// </summary>
         public virtual bool HasAgreedToTOS
         {
-            get;
-            set;
+            get { return this.hasAgreedToTOS; }
+            set { this.hasAgreedToTOS = value; }
         }
 
         /// <summary>
@@ -111,8 +135,14 @@ namespace BurnSystems.FlexBG.Modules.UserM.Models
         /// </summary>
         public virtual bool HasNoCredentials
         {
-            get;
-            set;
+            get { return this.hasNoCredentials; }
+            set { this.hasNoCredentials = value; }
+        }
+
+        public Guid TokenId
+        {
+            get { return this.tokenId; }
+            set { this.tokenId = value; }
         }
     }
 }

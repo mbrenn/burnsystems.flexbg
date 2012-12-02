@@ -3,6 +3,7 @@ using BurnSystems.FlexBG.Modules.GameInfoM;
 using BurnSystems.FlexBG.Modules.UserM.Data;
 using BurnSystems.FlexBG.Modules.UserM.Interfaces;
 using BurnSystems.FlexBG.Modules.UserM.Models;
+using BurnSystems.FlexBG.Modules.UserQueryM;
 using BurnSystems.Logging;
 using BurnSystems.ObjectActivation;
 using System;
@@ -38,6 +39,16 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
 
         [Inject(IsMandatory = true)]
         public IGameInfoProvider GameInfoProvider
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Gets or sets the user query
+        /// </summary>
+        [Inject]
+        public IUserQuery UserQuery
         {
             get;
             set;
@@ -219,7 +230,18 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
             catch (Exception exc)
             {
                 classLogger.LogEntry(LogLevel.Fatal, "Loading for userdatabase failed: " + exc.Message);
-                throw;
+
+                if (this.UserQuery == null || this.UserQuery.Ask(
+                        "Shall a new database be created?",
+                        new[] { "y", "n" },
+                        "n") == "n")
+                {
+                    throw;
+                }
+                else
+                {
+                    classLogger.LogEntry(LogLevel.Message, "New database will be created");
+                }
             }
         }
 
@@ -245,9 +267,20 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         /// </summary>
         public void Start()
         {
-            classLogger.LogEntry(LogLevel.Message, "Starting up UserManagementLocal");
-
             this.LoadFromFile();
+
+            if (!this.IsUsernameExisting(AdminName))
+            {
+                if (this.UserQuery != null &&
+                    this.UserQuery.Ask(
+                        "No Administrator found. Shall an administrator be created?",
+                        new[] { "y", "n" },
+                        "y") == "y")
+                {
+                    classLogger.LogEntry(LogLevel.Message, "Administrator is initialized");
+                    this.InitAdmin();
+                }
+            }
         }
 
         /// <summary>
@@ -255,8 +288,6 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         /// </summary>
         public void Shutdown()
         {
-            classLogger.LogEntry(LogLevel.Message, "Shutting down UserManagementLocal");
-
             this.StoreToFile();
         }
     }
