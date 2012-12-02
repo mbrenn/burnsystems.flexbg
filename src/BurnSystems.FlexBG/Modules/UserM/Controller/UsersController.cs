@@ -45,7 +45,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Controllers
         }
 
         [WebMethod]
-        public void Login([PostModel] LoginModel model, string returnUrl)
+        public IActionResult Login([PostModel] LoginModel model, string returnUrl)
         {
             // Check, if we are ok
             //var user = this.UserManagement.GetUser(model.Username, model.Password);
@@ -78,7 +78,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Controllers
                 success = isLoggedIn
             };
 
-            this.TemplateOrJson(result);
+            return this.TemplateOrJson(result);
         }
 
         /*
@@ -91,19 +91,51 @@ namespace BurnSystems.FlexBG.Modules.UserM.Controllers
         }*/
 
         [WebMethod]
-        public void Register([PostModel] RegisterModel model)
+        public IActionResult Register([PostModel] RegisterModel model)
         {
-            var hasSuccess = true;
+            var hasSuccess = false;
 
             // Checks, if username already exists
             if (this.UserManagement.IsUsernameExisting(model.Username))
             {
-                //this.ModelState["Username"].Errors.Add("Der gewünschte Benutzername ist bereits belegt. Leider kannst du hier noch keinen Krieg gegen ihn erklären.");
+                throw new MVCProcessException(
+                    "usernameexisting",
+                    "The username is already existing");
             }
 
             if (model.AcceptTOS == false)
             {
-                //this.ModelState["AcceptTOS"].Errors.Add("Ohne Akzeptanz der Nutzungsbedingungen können wir dir leider keinen Einlass gewähren.");
+                throw new MVCProcessException(
+                    "noaccepttos",
+                    "The Terms of Services have not been accepted");
+            }
+
+            if (string.IsNullOrEmpty(model.Username))
+            {
+                throw new MVCProcessException(
+                    "nousername",
+                    "The username is empty");
+            }
+
+            if (string.IsNullOrEmpty(model.Password))
+            {
+                throw new MVCProcessException(
+                    "nopassword",
+                    "The password is empty");
+            }
+
+            if (string.IsNullOrEmpty(model.EMail))
+            {
+                throw new MVCProcessException(
+                    "noemail",
+                    "The email is empty");
+            }
+
+            if (model.Password != model.Password2)
+            {
+                throw new MVCProcessException(
+                    "passwordnotequal",
+                    "The given passwords are not equal");
             }
 
             //if (this.ModelState.IsValid)
@@ -116,7 +148,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Controllers
                 user.EMail = model.EMail;
 
                 this.UserManagement.AddUser(user);
-                //return View("RegisterSuccess");
+                hasSuccess = true;
             }
 
             var result = new
@@ -124,8 +156,9 @@ namespace BurnSystems.FlexBG.Modules.UserM.Controllers
                 success = hasSuccess
             };
 
-            this.TemplateOrJson(result );
+            return this.TemplateOrJson(result);
         }
+
         /*
         [WebMethod]
         public void PasswordForgotten([PostModel] ForgotPasswordModel model)
