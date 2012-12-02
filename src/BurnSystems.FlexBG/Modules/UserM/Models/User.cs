@@ -8,6 +8,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Models
     /// <summary>
     /// Stores the userinformation
     /// </summary>
+    [Serializable]
     public class User
     {
         public User()

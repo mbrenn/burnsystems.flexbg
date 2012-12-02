@@ -1,13 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using BurnSystems.FlexBG.Interfaces;
+using BurnSystems.FlexBG.Modules.GameInfoM;
+using BurnSystems.FlexBG.Modules.UserM.Data;
 using BurnSystems.FlexBG.Modules.UserM.Interfaces;
 using BurnSystems.FlexBG.Modules.UserM.Models;
-using BurnSystems.FlexBG.Modules.GameInfoM;
-using BurnSystems.FlexBG.Interfaces;
-using BurnSystems.FlexBG.Modules.UserM.Data;
+using BurnSystems.Logging;
 using BurnSystems.ObjectActivation;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace BurnSystems.FlexBG.Modules.UserM.Logic
 {
@@ -16,6 +18,11 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
     /// </summary>
     public class UserManagementLocal : IUserManagement, IFlexBgRuntimeModule
     {
+        /// <summary>
+        /// Stores the logger instance for this class
+        /// </summary>
+        private ILog classLogger = new ClassLogger(typeof(UserManagementLocal));
+
         /// <summary>
         /// Stores the database
         /// </summary>
@@ -186,11 +193,61 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         }
 
         /// <summary>
+        /// Stores the filepath to user data
+        /// </summary>
+        string filePath = "data/users.data";
+
+        /// <summary>
+        /// Loads database from file
+        /// </summary>
+        private void LoadFromFile()
+        {
+            if (!File.Exists(filePath))
+            {
+                classLogger.LogEntry(LogLevel.Message, "No file for UserManagementLocal existing, creating empty database");
+                return;
+            }
+
+            try
+            {
+                using (var stream = new FileStream(filePath, FileMode.Open))
+                {
+                    var formatter = new BinaryFormatter();
+                    this.userDb = formatter.Deserialize(stream) as UserDatabaseLocal;
+                }
+            }
+            catch (Exception exc)
+            {
+                classLogger.LogEntry(LogLevel.Fatal, "Loading for userdatabase failed: " + exc.Message);
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Stores database to file
+        /// </summary>
+        private void StoreToFile()
+        {
+            if (!Directory.Exists("data"))
+            {
+                Directory.CreateDirectory("data");
+            }
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                var formatter = new BinaryFormatter();
+                formatter.Serialize(stream, this.UserDb);
+            }
+        }
+
+        /// <summary>
         /// Starts the usermanagement
         /// </summary>
         public void Start()
         {
-            throw new NotImplementedException();
+            classLogger.LogEntry(LogLevel.Message, "Starting up UserManagementLocal");
+
+            this.LoadFromFile();
         }
 
         /// <summary>
@@ -198,7 +255,9 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         /// </summary>
         public void Shutdown()
         {
-            throw new NotImplementedException();
+            classLogger.LogEntry(LogLevel.Message, "Shutting down UserManagementLocal");
+
+            this.StoreToFile();
         }
     }
 }
