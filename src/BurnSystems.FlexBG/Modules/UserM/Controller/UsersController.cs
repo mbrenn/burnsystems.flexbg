@@ -4,6 +4,7 @@ using BurnSystems.FlexBG.Modules.UserM.Interfaces;
 using BurnSystems.Logging;
 using BurnSystems.ObjectActivation;
 using BurnSystems.WebServer.Modules.MVC;
+using BurnSystems.WebServer.Modules.UserManagement;
 
 namespace BurnSystems.FlexBG.Modules.UserM.Controllers
 {
@@ -24,10 +25,17 @@ namespace BurnSystems.FlexBG.Modules.UserM.Controllers
             set;
         }
 
+        [Inject(IsMandatory = true)]
+        public IAuthentication Authentication
+        {
+            get;
+            set;
+        }
+
         /// <summary>
         /// Sends the mail
         /// </summary>
-        [Inject]        
+        [Inject]
         public IMailSender MailSender
         {
             get;
@@ -48,37 +56,36 @@ namespace BurnSystems.FlexBG.Modules.UserM.Controllers
         public IActionResult Login([PostModel] LoginModel model, string returnUrl)
         {
             // Check, if we are ok
-            //var user = this.UserManagement.GetUser(model.Username, model.Password);
+            var user = this.UserManagement.GetUser(model.Username, model.Password);
 
             var isLoggedIn = false;
-            /*if (user != null)
+            if (user != null)
             {
                 isLoggedIn = true;
                 // Logged in! 
                 //FormsAuthentication.SetAuthCookie(user.Username, model.IsPersistant);
 
-                if (Url.IsLocalUrl(returnUrl) && returnUrl.Length > 1 && returnUrl.StartsWith("/")
-                    && !returnUrl.StartsWith("//") && !returnUrl.StartsWith("/\\"))
+                if (!string.IsNullOrEmpty(returnUrl) && returnUrl.StartsWith("/"))
                 {
-                    return Redirect(returnUrl);
+                    return new RedirectActionResult(returnUrl);
                 }
                 else
                 {
-                    return RedirectToAction("Index", "Home");
+                    var result = new
+                    {
+                        success = isLoggedIn
+                    };
+
+                    return this.TemplateOrJson(result);
                 }
             }
             else
             {
                 // Error in Login
-                //this.ModelState.AddModelError("", "Der angegebene Benutzername oder das angegebene Kennwort ist ungültig.");
-            }*/
-
-            var result = new
-            {
-                success = isLoggedIn
-            };
-
-            return this.TemplateOrJson(result);
+                throw new MVCProcessException(
+                    "unknowncredentials",
+                    "Unknown credentials of user");
+            }
         }
 
         /*
@@ -99,42 +106,42 @@ namespace BurnSystems.FlexBG.Modules.UserM.Controllers
             if (this.UserManagement.IsUsernameExisting(model.Username))
             {
                 throw new MVCProcessException(
-                    "usernameexisting",
+                    "register_usernameexisting",
                     "The username is already existing");
             }
 
             if (model.AcceptTOS == false)
             {
                 throw new MVCProcessException(
-                    "noaccepttos",
+                    "register_noaccepttos",
                     "The Terms of Services have not been accepted");
             }
 
             if (string.IsNullOrEmpty(model.Username))
             {
                 throw new MVCProcessException(
-                    "nousername",
+                    "register_nousername",
                     "The username is empty");
             }
 
             if (string.IsNullOrEmpty(model.Password))
             {
                 throw new MVCProcessException(
-                    "nopassword",
+                    "register_nopassword",
                     "The password is empty");
             }
 
             if (string.IsNullOrEmpty(model.EMail))
             {
                 throw new MVCProcessException(
-                    "noemail",
+                    "register_noemail",
                     "The email is empty");
             }
 
             if (model.Password != model.Password2)
             {
                 throw new MVCProcessException(
-                    "passwordnotequal",
+                    "register_passwordnotequal",
                     "The given passwords are not equal");
             }
 
@@ -144,7 +151,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Controllers
                 var user = new UserM.Models.User();
                 user.HasAgreedToTOS = true;
                 user.Username = model.Username;
-                this.UserManagement.EncryptPassword(user, model.Password);
+                this.UserManagement.SetPassword(user, model.Password);
                 user.EMail = model.EMail;
 
                 this.UserManagement.AddUser(user);

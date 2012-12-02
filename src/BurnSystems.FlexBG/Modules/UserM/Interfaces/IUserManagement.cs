@@ -20,7 +20,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Interfaces
 
         bool IsUsernameExisting(string username);
 
-        void EncryptPassword(User user, string password);
+        void SetPassword(User user, string password);
 
         bool IsPasswordCorrect(User user, string password);
         

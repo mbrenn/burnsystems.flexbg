@@ -158,7 +158,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         /// </summary>
         /// <param name="user">User whose password gets encrypted</param>
         /// <param name="password">Password to be encrypted</param>
-        public void EncryptPassword(User user, string password)
+        public void SetPassword(User user, string password)
         {
             var completePassword = user.Username + password + this.GameInfoProvider.GameInfo.PasswordSalt;
             user.EncryptedPassword = completePassword.Sha1();
@@ -198,7 +198,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
             user.HasNoCredentials = false;
             user.IsActive = true;
 
-            this.EncryptPassword(user, this.GameInfoProvider.GameInfo.PasswordSalt);
+            this.SetPassword(user, this.GameInfoProvider.GameInfo.PasswordSalt);
 
             this.AddUser(user);
         }

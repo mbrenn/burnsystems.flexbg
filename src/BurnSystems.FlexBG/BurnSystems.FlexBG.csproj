@@ -61,7 +61,9 @@
     <Compile Include="Modules\UserM\Interfaces\IUserManagement.cs" />
     <Compile Include="Modules\UserM\Logic\UserManagementLocal.cs" />
     <Compile Include="Modules\UserM\Logic\UserManagementException.cs" />
+    <Compile Include="Modules\UserM\Logic\WebUserManagementView.cs" />
     <Compile Include="Modules\UserM\Models\User.cs" />
+    <Compile Include="Modules\UserM\Models\WebUserView.cs" />
     <Compile Include="Modules\UserQueryM\IUserQuery.cs" />
     <Compile Include="Modules\UserQueryM\UserQueryConsole.cs" />
     <Compile Include="Modules\UserQueryM\UserQueryDefaultAnswer.cs" />
