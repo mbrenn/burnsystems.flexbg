@@ -62,8 +62,9 @@ namespace BurnSystems.FlexBG.Modules.UserM.Controllers
             if (user != null)
             {
                 isLoggedIn = true;
+
                 // Logged in! 
-                //FormsAuthentication.SetAuthCookie(user.Username, model.IsPersistant);
+                this.Authentication.LoginUser(model.Username, model.Password);
 
                 if (!string.IsNullOrEmpty(returnUrl) && returnUrl.StartsWith("/"))
                 {
@@ -73,7 +74,8 @@ namespace BurnSystems.FlexBG.Modules.UserM.Controllers
                 {
                     var result = new
                     {
-                        success = isLoggedIn
+                        success = isLoggedIn,
+                        username = model.Username
                     };
 
                     return this.TemplateOrJson(result);
@@ -83,19 +85,20 @@ namespace BurnSystems.FlexBG.Modules.UserM.Controllers
             {
                 // Error in Login
                 throw new MVCProcessException(
-                    "unknowncredentials",
+                    "login_unknowncredentials",
                     "Unknown credentials of user");
             }
         }
 
-        /*
+        
         [WebMethod]
-        public void Logout()
+        public IActionResult Logout()
         {
-            FormsAuthentication.SignOut();
+            this.Authentication.LogoutUser();
 
-            return RedirectToAction("Index", "Home");
-        }*/
+            return this.Json(
+                new { success = true });
+        }
 
         [WebMethod]
         public IActionResult Register([PostModel] RegisterModel model)
@@ -164,6 +167,30 @@ namespace BurnSystems.FlexBG.Modules.UserM.Controllers
             };
 
             return this.TemplateOrJson(result);
+        }
+
+        [WebMethod]
+        public IActionResult GetLoginStatus()
+        {
+            if (!this.Authentication.IsUserLoggedIn())
+            {
+                return this.TemplateOrJson(
+                    new
+                    {
+                        IsLoggedIn = false
+                    });
+            }
+            else
+            {
+                var user = this.Authentication.GetLoggedInUser();
+                return this.TemplateOrJson(
+                    new
+                    {
+                        isloggedin = true,
+                        username = user.Username,
+                        id = user.Id
+                    });
+            }
         }
 
         /*

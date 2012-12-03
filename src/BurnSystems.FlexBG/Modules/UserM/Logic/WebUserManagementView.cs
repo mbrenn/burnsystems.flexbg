@@ -1,5 +1,7 @@
-﻿using BurnSystems.FlexBG.Modules.UserM.Models;
+﻿using BurnSystems.FlexBG.Modules.UserM.Interfaces;
+using BurnSystems.FlexBG.Modules.UserM.Models;
 using BurnSystems.ObjectActivation;
+using BurnSystems.Test;
 using BurnSystems.WebServer.Modules.UserManagement;
 using System;
 using System.Collections.Generic;
@@ -14,11 +16,13 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
     /// </summary>
     public class WebUserManagementView : IWebUserManagement
     {
-        private UserManagementLocal usermanagement;
+        private IUserManagement usermanagement;
 
         [Inject]
-        public WebUserManagementView(UserManagementLocal local)
+        public WebUserManagementView(IUserManagement local)
         {
+            Ensure.That(local != null, "IUserManagement is null");
+
             this.usermanagement = local;
         }
     
