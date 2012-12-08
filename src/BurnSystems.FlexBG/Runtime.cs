@@ -104,6 +104,8 @@ namespace BurnSystems.FlexBG
         /// </summary>
         private void ActivatePlugins()
         {
+            logger.LogEntry(LogLevel.Notify, "Starting Modules");
+
             foreach (var runtimeModule in this.activationContainer.GetAll<IFlexBgRuntimeModule>())
             {
                 logger.LogEntry(LogLevel.Notify, "Starting Module: " + runtimeModule.GetType().ToString());

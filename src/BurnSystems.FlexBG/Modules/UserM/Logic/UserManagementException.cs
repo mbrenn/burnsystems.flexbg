@@ -7,7 +7,13 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
 {
     public enum UserManagementExceptionReason
     {
-        UsernameExisting
+        UsernameExisting,
+        NoAcceptTos,
+        NoUsername,
+        NoPassword,
+        NoEmail,
+        InvalidEmail,
+        InvalidUsername
     }
 
     public class UserManagementException : ApplicationException

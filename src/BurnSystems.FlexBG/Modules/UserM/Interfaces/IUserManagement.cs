@@ -25,5 +25,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Interfaces
         bool IsPasswordCorrect(User user, string password);
         
         void InitAdmin();
+
+        void SaveChanges();
     }
 }

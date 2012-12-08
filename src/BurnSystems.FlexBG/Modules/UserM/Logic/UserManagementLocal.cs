@@ -1,11 +1,13 @@
 ﻿using BurnSystems.FlexBG.Interfaces;
 using BurnSystems.FlexBG.Modules.GameInfoM;
+using BurnSystems.FlexBG.Modules.MailSenderM;
 using BurnSystems.FlexBG.Modules.UserM.Data;
 using BurnSystems.FlexBG.Modules.UserM.Interfaces;
 using BurnSystems.FlexBG.Modules.UserM.Models;
 using BurnSystems.FlexBG.Modules.UserQueryM;
 using BurnSystems.Logging;
 using BurnSystems.ObjectActivation;
+using BurnSystems.WebServer.Parser;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -25,20 +27,37 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         private ILog classLogger = new ClassLogger(typeof(UserManagementLocal));
 
         /// <summary>
-        /// Stores the database
-        /// </summary>
-        private UserDatabaseLocal userDb = new UserDatabaseLocal();
-
-        /// <summary>
         /// Gets the database storing the users. 
         /// </summary>
-        public UserDatabaseLocal UserDb
+        [Inject(IsMandatory = true)]
+        public UserDatabase UserDb
         {
-            get { return this.userDb; }
+            get;
+            set;
         }
 
         [Inject(IsMandatory = true)]
         public IGameInfoProvider GameInfoProvider
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Gets or sets the configuration of the usermanagement
+        /// </summary>
+        [Inject(IsMandatory = true)]
+        public UserManagementConfig Configuration
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Gets or sets the mailsender
+        /// </summary>
+        [Inject(IsMandatory = true)]
+        public IMailSender MailSender
         {
             get;
             set;
@@ -67,6 +86,34 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
                     "Username existing");
             }
 
+            if (user.HasAgreedToTOS == false)
+            {
+                throw new UserManagementException(
+                    UserManagementExceptionReason.NoAcceptTos,
+                    "The Terms of Services have not been accepted");
+            }
+
+            if (string.IsNullOrEmpty(user.Username))
+            {
+                throw new UserManagementException(
+                    UserManagementExceptionReason.NoUsername,
+                    "The username is empty");
+            }
+
+            if (string.IsNullOrEmpty(user.EMail))
+            {
+                throw new UserManagementException(
+                    UserManagementExceptionReason.NoEmail,
+                    "The email is empty");
+            }
+
+            if (!user.IsEmailValid)
+            {
+                throw new UserManagementException(
+                    UserManagementExceptionReason.InvalidEmail,
+                    "Invalid email address");
+            }
+
             if (string.IsNullOrEmpty(user.ActivationKey))
             {
                 user.ActivationKey = StringManipulation.SecureRandomString(32);
@@ -77,8 +124,10 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
                 user.APIKey = StringManipulation.SecureRandomString(32);
             }
 
-            this.UserDb.Users.Add(user);
-            this.UserDb.SaveChanges();
+            user.Id = this.UserDb.Data.GetNextUserId();
+
+            this.UserDb.Data.Users.Add(user);
+            this.UserDb.Data.SaveChanges();
         }
 
         /// <summary>
@@ -88,7 +137,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         /// <returns>Containing the user</returns>
         public User GetUser(long userId)
         {
-            return this.UserDb.Users.Where(x => x.Id == userId).FirstOrDefault();
+            return this.UserDb.Data.Users.Where(x => x.Id == userId).FirstOrDefault();
         }
 
         /// <summary>
@@ -98,7 +147,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         /// <returns>Containing the user</returns>
         public User GetUser(string username)
         {
-            return this.UserDb.Users.Where(x => x.Username == username).FirstOrDefault();
+            return this.UserDb.Data.Users.Where(x => x.Username == username).FirstOrDefault();
         }
 
         /// <summary>
@@ -129,7 +178,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         /// <returns></returns>
         public IEnumerable<User> GetAllUsers()
         {
-            return this.UserDb.Users.ToList();
+            return this.UserDb.Data.Users.ToList();
         }
 
         /// <summary>
@@ -137,7 +186,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         /// </summary>
         public void SaveChanges()
         {
-            this.UserDb.SaveChanges();
+            this.UserDb.Data.SaveChanges();
         }
 
         /// <summary>
@@ -147,7 +196,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         /// <returns>true, if username is existing</returns>
         public bool IsUsernameExisting(string username)
         {
-            var userCount = this.UserDb.Users.Where(x => x.Username == username).Count();
+            var userCount = this.UserDb.Data.Users.Where(x => x.Username == username).Count();
 
             return userCount > 0;
         }
@@ -177,6 +226,32 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         }
 
         /// <summary>
+        /// Starts the plugin
+        /// </summary>
+        public void Start()
+        {
+            if (!this.IsUsernameExisting(AdminName))
+            {
+                if (this.UserQuery != null &&
+                    this.UserQuery.Ask(
+                        "No Administrator found. Shall an administrator be created?",
+                        new[] { "y", "n" },
+                        "y") == "y")
+                {
+                    classLogger.LogEntry(LogLevel.Message, "Administrator is initialized");
+                    this.InitAdmin();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Performs a shutdown
+        /// </summary>
+        public void Shutdown()
+        {
+        }
+
+        /// <summary>
         /// Defines the name of the Administrator
         /// </summary>
         public string AdminName = "Admin";
@@ -201,94 +276,6 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
             this.SetPassword(user, this.GameInfoProvider.GameInfo.PasswordSalt);
 
             this.AddUser(user);
-        }
-
-        /// <summary>
-        /// Stores the filepath to user data
-        /// </summary>
-        string filePath = "data/users.data";
-
-        /// <summary>
-        /// Loads database from file
-        /// </summary>
-        private void LoadFromFile()
-        {
-            if (!File.Exists(filePath))
-            {
-                classLogger.LogEntry(LogLevel.Message, "No file for UserManagementLocal existing, creating empty database");
-                return;
-            }
-
-            try
-            {
-                using (var stream = new FileStream(filePath, FileMode.Open))
-                {
-                    var formatter = new BinaryFormatter();
-                    this.userDb = formatter.Deserialize(stream) as UserDatabaseLocal;
-                }
-            }
-            catch (Exception exc)
-            {
-                classLogger.LogEntry(LogLevel.Fatal, "Loading for userdatabase failed: " + exc.Message);
-
-                if (this.UserQuery == null || this.UserQuery.Ask(
-                        "Shall a new database be created?",
-                        new[] { "y", "n" },
-                        "n") == "n")
-                {
-                    throw;
-                }
-                else
-                {
-                    classLogger.LogEntry(LogLevel.Message, "New database will be created");
-                }
-            }
-        }
-
-        /// <summary>
-        /// Stores database to file
-        /// </summary>
-        private void StoreToFile()
-        {
-            if (!Directory.Exists("data"))
-            {
-                Directory.CreateDirectory("data");
-            }
-
-            using (var stream = new FileStream(filePath, FileMode.Create))
-            {
-                var formatter = new BinaryFormatter();
-                formatter.Serialize(stream, this.UserDb);
-            }
-        }
-
-        /// <summary>
-        /// Starts the usermanagement
-        /// </summary>
-        public void Start()
-        {
-            this.LoadFromFile();
-
-            if (!this.IsUsernameExisting(AdminName))
-            {
-                if (this.UserQuery != null &&
-                    this.UserQuery.Ask(
-                        "No Administrator found. Shall an administrator be created?",
-                        new[] { "y", "n" },
-                        "y") == "y")
-                {
-                    classLogger.LogEntry(LogLevel.Message, "Administrator is initialized");
-                    this.InitAdmin();
-                }
-            }
-        }
-
-        /// <summary>
-        /// Stops the usermanagement
-        /// </summary>
-        public void Shutdown()
-        {
-            this.StoreToFile();
         }
     }
 }

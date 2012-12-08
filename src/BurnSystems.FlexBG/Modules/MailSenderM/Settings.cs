@@ -38,5 +38,14 @@ namespace BurnSystems.FlexBG.Modules.MailSenderM
             get;
             set;
         }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether mailsending is deactivated
+        /// </summary>
+        public bool IsDeactivated
+        {
+            get;
+            set;
+        }
     }
 }

@@ -14,7 +14,9 @@ namespace BurnSystems.FlexBG.Modules.MailSenderM
         /// <summary>
         /// Sends a mail
         /// </summary>
-        /// <param name="mailMessage">Mail message to be sent</param>
-        void SendMail(MailMessage mailMessage);
+        /// <param name="receiver">The one, who shall receive the message</param>
+        /// <param name="subject">Subject of the message</param>
+        /// <param name="content">Content of the message</param>
+        void SendMail(string receiver, string subject, string content);
     }
 }

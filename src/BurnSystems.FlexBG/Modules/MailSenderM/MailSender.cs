@@ -8,6 +8,8 @@ using System.Net.Mail;
 using System.Xml.Serialization;
 using System.Net;
 using BurnSystems.Logging;
+using BurnSystems.FlexBG.Modules.GameInfoM;
+using BurnSystems.ObjectActivation;
 
 namespace BurnSystems.FlexBG.Modules.MailSenderM
 {
@@ -18,8 +20,16 @@ namespace BurnSystems.FlexBG.Modules.MailSenderM
     {
         private ILog logger = new ClassLogger(typeof(MailSender));
 
+        [Inject(IsMandatory = true)]
+        public IGameInfoProvider GameInfo
+        {
+            get;
+            set;
+        }
+
         private Settings settings;
 
+        [Inject]
         public MailSender(IConfigurationStorage storage)
         {
             var xmlSettings = storage.Documents
@@ -43,19 +53,37 @@ namespace BurnSystems.FlexBG.Modules.MailSenderM
         /// Sends a mail
         /// </summary>
         /// <param name="mailMessage">Mail message to be sent</param>
-        public void SendMail(MailMessage mailMessage)
+        public void SendMail(string receiver, string subject, string content)
         {
             var smtpClient = new System.Net.Mail.SmtpClient(this.settings.Host, this.settings.Port);
             smtpClient.Credentials = new NetworkCredential(settings.SmtpUsername, settings.SmtpPassword);
 
+            var mailMessage = new MailMessage(
+                this.GameInfo.GameInfo.AdminEMail,
+                receiver,
+                subject,
+                content);
+
             mailMessage.Subject = this.settings.SubjectPrefix + mailMessage.Subject;
 
             // Sends mail
-            smtpClient.SendAsync(mailMessage, null);
-            smtpClient.SendCompleted += (x, y) =>
+
+            if (this.settings.IsDeactivated)
+            {
+                smtpClient.SendCompleted += (x, y) =>
                 {
-                    logger.LogEntry(LogLevel.Message, "Mail " + mailMessage.Subject + " to " + mailMessage.To + " has been sent.");
+                    logger.LogEntry(LogLevel.Message, "Mail " + mailMessage.Subject + " to " + mailMessage.To + " has not been sent due to deactivation of mailsender.");
                 };
+            }
+            else
+            {
+                // smtpClient.SendAsync(mailMessage, null);
+                smtpClient.Send(mailMessage);
+                smtpClient.SendCompleted += (x, y) =>
+                    {
+                        logger.LogEntry(LogLevel.Message, "Mail " + mailMessage.Subject + " to " + mailMessage.To + " has been sent.");
+                    };
+            }
         }
     }
 }

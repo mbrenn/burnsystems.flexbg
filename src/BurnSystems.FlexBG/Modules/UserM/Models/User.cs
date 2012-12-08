@@ -144,5 +144,16 @@ namespace BurnSystems.FlexBG.Modules.UserM.Models
             get { return this.tokenId; }
             set { this.tokenId = value; }
         }
+
+        /// <summary>
+        /// Gets a value indicating whether the given email is valid
+        /// </summary>
+        public bool IsEmailValid
+        {
+            get
+            {
+                return this.EMail.IsValidEmail();
+            }
+        }
     }
 }

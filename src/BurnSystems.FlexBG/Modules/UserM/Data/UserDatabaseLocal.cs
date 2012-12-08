@@ -1,6 +1,7 @@
 ﻿using BurnSystems.FlexBG.Modules.UserM.Models;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace BurnSystems.FlexBG.Modules.UserM.Data
 {
@@ -10,6 +11,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Data
     [Serializable]
     public class UserDatabaseLocal
     {
+        private long lastUserId = 0;
         /// <summary>
         /// Stores a list of users
         /// </summary>
@@ -21,6 +23,21 @@ namespace BurnSystems.FlexBG.Modules.UserM.Data
         public List<User> Users
         {
             get { return this.users; }
+        }
+
+        public long LastUserId
+        {
+            get { return this.lastUserId; }
+            set { this.lastUserId = value; }
+        }
+
+        /// <summary>
+        /// Gets the next user id
+        /// </summary>
+        /// <returns></returns>
+        public long GetNextUserId()
+        {
+            return Interlocked.Increment(ref lastUserId);
         }
 
         /// <summary>
