@@ -8,6 +8,7 @@ using BurnSystems.ObjectActivation;
 using BurnSystems.WebServer.Modules.MVC;
 using BurnSystems.WebServer.Modules.UserManagement;
 using BurnSystems.WebServer.Parser;
+using BurnSystems.Test;
 
 namespace BurnSystems.FlexBG.Modules.UserM.Controllers
 {
@@ -84,6 +85,18 @@ namespace BurnSystems.FlexBG.Modules.UserM.Controllers
             var isLoggedIn = false;
             if (user != null)
             {
+                // Check, if user has agreed to tos and check, if user is active
+                if (!user.IsActive)
+                {
+                    throw new MVCProcessException("login_usernotactive", "User is not active");
+                }
+
+                if (!user.HasAgreedToTOS)
+                {
+                    throw new MVCProcessException("login_noaccepttos", "User has not accepted TOS");
+                }
+
+                // Everything ok
                 isLoggedIn = true;
 
                 // Logged in! 
@@ -259,40 +272,45 @@ namespace BurnSystems.FlexBG.Modules.UserM.Controllers
             return this.TemplateOrJson(result);
         }
 
-        /*
         [WebMethod]
-        public void PasswordForgotten([PostModel] ForgotPasswordModel model)
+        public IActionResult PasswordForgotten([PostModel] ForgotPasswordModel model)
         {
-            if (this.MailSender == null)
-            {
-                logger.Error("No Mailsender available");
-            }
-
-            Assert.That(this.MailSender, Is.Not.Null, "Keine Mailversende-Engine konfiguriert");
+            Ensure.That(this.MailSender != null, "No Mailsender available");
 
             var user = this.UserManagement.GetUser(model.Username);
             if (user == null)
             {
-                this.ModelState["Username"].Errors.Add("Dieser Nutzer ist uns nicht bekannt. Wer bist du?");
+                throw new MVCProcessException("forgot_unknownusername", "User is not known");
             }
 
-            if (this.ModelState.IsValid)
+            if (!user.IsActive)
             {
-                // Ok, we have user, create new activation key and send out mail
-                user.ActivationKey = StringManipulation.SecureRandomString(16);
-                this.UserManagement.SaveChanges();
-
-                var mailMessage = new MailMessage(
-                    this.GameInfo.GameInfo.AdminEMail,
-                    user.EMail,
-                    "Kennwort vergessen",
-                    this.GameInfo.GameInfo.Url + "Users/CreateNewPassword?u=" + user.Id.ToString() + "&a=" + user.ActivationKey);
-                this.MailSender.SendMail(mailMessage);
-
-                return this.View("PasswordForgottenSuccess");
+                throw new MVCProcessException("forgot_usernotactive", "User is not active");
             }
 
-            return View();
+            // Ok, we have user, create new activation key and send out mail
+            user.ActivationKey = StringManipulation.SecureRandomString(16);
+            this.UserManagement.SaveChanges();
+
+            // Creates mail to be send
+            var templateContent =
+                this.TemplateParser.Parse(
+                    this.Configuration.ForgotPwdMailTemplate,
+                    user,
+                    new System.Collections.Generic.Dictionary<string, object>()
+                        .With("ForgotLink", this.GameInfo.GameInfo.Url + "newpassword.bspx?u=" + user.Id.ToString() + "&a=" + user.ActivationKey));
+            this.MailSender.SendMail(
+                user.EMail,
+                this.Configuration.ForgotPwdMailSubject,
+                templateContent);
+
+            var result = new
+            {
+                User = user,
+                success = true
+            };
+
+            return this.TemplateOrJson(result);
         }
 
         /// <summary>
@@ -302,35 +320,33 @@ namespace BurnSystems.FlexBG.Modules.UserM.Controllers
         /// <param name="a">Activationkey of the user</param>
         /// <returns>Changed password</returns>
         [WebMethod]
-        public void CreateNewPassword(long u, string a)
+        public IActionResult CreateNewPassword(long u, string a)
         {
             // Gets user
             var user = this.UserManagement.GetUser(u);
-            if (user == null || user.ActivationKey != a)
+
+            if (user == null || !user.IsActive || user.ActivationKey != a)
             {
-                this.ModelState.AddModelError(string.Empty, "Irgendwie erscheint es uns komisch. Der Link schien nicht korrekt zu sein und wir konnten kein neues Kennwort erzeugen.");
+                throw new MVCProcessException("invalidactivationkey", "Unknown activationkey");
             }
 
-            if (this.ModelState.IsValid)
-            {
-                var newPassword = StringManipulation.SecureRandomString(8);
-                this.UserManagement.EncryptPassword(user, newPassword);
-                this.UserManagement.SaveChanges();
+            var newPassword = StringManipulation.SecureRandomString(8);
+            this.UserManagement.SetPassword(user, newPassword);
+            this.UserManagement.SaveChanges();
 
-                var model = new CreateNewPasswordModel();
-                model.Username = user.Username;
-                model.NewPassword = newPassword;
-
-                return this.View(model);
-            }
-            else
+            var model = new
             {
-                return this.View("CreateNewPasswordFailed");
-            }
+                username = user.Username,
+                newPassword = newPassword,
+                success = true
+            };
+
+            return this.TemplateOrJson(model);
         }
 
+        /*
         [WebMethod]
-        public ActionResult ChangePassword([PostModel] ChangePasswordModel model)
+        public IActionResult ChangePassword([PostModel] ChangePasswordModel model)
         {
             var user = this.UserManagement.GetUser(HttpContext.User.Identity.Name);
             Assert.That(user, Is.Not.Null);

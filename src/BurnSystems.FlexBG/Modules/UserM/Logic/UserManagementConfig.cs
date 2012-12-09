@@ -28,5 +28,23 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
             get;
             set;
         }
+
+        /// <summary>
+        /// Gets or sets the subject for the register done
+        /// </summary>
+        public string ForgotPwdMailSubject
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Gets or sets the template for the register done
+        /// </summary>
+        public string ForgotPwdMailTemplate
+        {
+            get;
+            set;
+        }
     }
 }

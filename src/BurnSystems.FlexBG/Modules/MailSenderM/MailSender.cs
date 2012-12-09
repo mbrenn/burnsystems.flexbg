@@ -20,6 +20,8 @@ namespace BurnSystems.FlexBG.Modules.MailSenderM
     {
         private ILog logger = new ClassLogger(typeof(MailSender));
 
+        private bool sendAsync = false;
+
         [Inject(IsMandatory = true)]
         public IGameInfoProvider GameInfo
         {
@@ -70,19 +72,23 @@ namespace BurnSystems.FlexBG.Modules.MailSenderM
 
             if (this.settings.IsDeactivated)
             {
-                smtpClient.SendCompleted += (x, y) =>
-                {
-                    logger.LogEntry(LogLevel.Message, "Mail " + mailMessage.Subject + " to " + mailMessage.To + " has not been sent due to deactivation of mailsender.");
-                };
+                logger.LogEntry(LogLevel.Message, "Mail " + mailMessage.Subject + " to " + mailMessage.To + " has not been sent due to deactivation of mailsender.");
             }
             else
             {
-                // smtpClient.SendAsync(mailMessage, null);
-                smtpClient.Send(mailMessage);
-                smtpClient.SendCompleted += (x, y) =>
+                if (sendAsync)
+                {
+                    smtpClient.SendAsync(mailMessage, null);
+                    smtpClient.SendCompleted += (x, y) =>
                     {
                         logger.LogEntry(LogLevel.Message, "Mail " + mailMessage.Subject + " to " + mailMessage.To + " has been sent.");
                     };
+                }
+                else
+                {
+                    smtpClient.Send(mailMessage);
+                    logger.LogEntry(LogLevel.Message, "Mail " + mailMessage.Subject + " to " + mailMessage.To + " has been sent.");
+                }
             }
         }
     }
