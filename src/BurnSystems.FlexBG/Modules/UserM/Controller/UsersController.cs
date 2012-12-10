@@ -9,6 +9,7 @@ using BurnSystems.WebServer.Modules.MVC;
 using BurnSystems.WebServer.Modules.UserManagement;
 using BurnSystems.WebServer.Parser;
 using BurnSystems.Test;
+using BurnSystems.FlexBG.Modules.UserM.Models;
 
 namespace BurnSystems.FlexBG.Modules.UserM.Controllers
 {
@@ -213,9 +214,9 @@ namespace BurnSystems.FlexBG.Modules.UserM.Controllers
         }
 
         [WebMethod]
-        public IActionResult GetLoginStatus()
+        public IActionResult GetLoginStatus([Inject(ByName = "CurrentUser")] User currentUser)
         {
-            if (!this.Authentication.IsUserLoggedIn())
+            if (currentUser == null)
             {
                 return this.TemplateOrJson(
                     new
@@ -225,13 +226,12 @@ namespace BurnSystems.FlexBG.Modules.UserM.Controllers
             }
             else
             {
-                var user = this.Authentication.GetLoggedInUser();
                 return this.TemplateOrJson(
                     new
                     {
                         isloggedin = true,
-                        username = user.Username,
-                        id = user.Id
+                        username = currentUser.Username,
+                        id = currentUser.Id
                     });
             }
         }
@@ -344,26 +344,22 @@ namespace BurnSystems.FlexBG.Modules.UserM.Controllers
             return this.TemplateOrJson(model);
         }
 
-        /*
         [WebMethod]
-        public IActionResult ChangePassword([PostModel] ChangePasswordModel model)
+        public IActionResult ChangePassword([PostModel] ChangePasswordModel model, [Inject(ByName = "CurrentUser", IsMandatory=true)] User currentUser)
         {
-            var user = this.UserManagement.GetUser(HttpContext.User.Identity.Name);
-            Assert.That(user, Is.Not.Null);
-            if (!this.UserManagement.IsPasswordCorrect(user, model.OldPassword))
+            if (!this.UserManagement.IsPasswordCorrect(currentUser, model.OldPassword))
             {
-                this.ModelState["OldPassword"].Errors.Add("Dieses Kennwort scheint nicht korrekt zu sein");
+                throw new MVCProcessException("changepassword_wrongpassword", "Old password is not correct");
             }
 
-            if (this.ModelState.IsValid)
-            {
-                this.UserManagement.EncryptPassword(user, model.NewPassword);
-                this.UserManagement.SaveChanges();
-                return this.View("ChangePasswordSuccess");
-            }
+            this.UserManagement.SetPassword(currentUser, model.NewPassword);
+            this.UserManagement.SaveChanges();
 
-            return this.View();
+            var result = new
+            {
+                success = true
+            };
+            return this.TemplateOrJson(result);
         }
-         * */
     }
 }
