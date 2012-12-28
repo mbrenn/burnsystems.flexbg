@@ -42,6 +42,16 @@
     <Compile Include="Interfaces\IFlexBgRuntimeModule.cs" />
     <Compile Include="Modules\ConfigurationStorageM\ConfigurationStorage.cs" />
     <Compile Include="Modules\ConfigurationStorageM\IConfigurationStorage.cs" />
+    <Compile Include="Modules\DeponNet\BuildingM\Building.cs" />
+    <Compile Include="Modules\DeponNet\EntityType.cs" />
+    <Compile Include="Modules\DeponNet\PlayerM\Player.cs" />
+    <Compile Include="Modules\DeponNet\RegionM\Region.cs" />
+    <Compile Include="Modules\DeponNet\ResourceSetM\Extension.cs" />
+    <Compile Include="Modules\DeponNet\ResourceSetM\ResourceSet.cs" />
+    <Compile Include="Modules\DeponNet\ResourceSetM\ResourceSetStore.cs" />
+    <Compile Include="Modules\DeponNet\ResourceSetM\ResourceType.cs" />
+    <Compile Include="Modules\DeponNet\TownM\Town.cs" />
+    <Compile Include="Modules\DeponNet\UnitM\Unit.cs" />
     <Compile Include="Modules\GameInfoM\GameInfo.cs" />
     <Compile Include="Modules\GameInfoM\GameInfoProvider.cs" />
     <Compile Include="Modules\GameInfoM\IGameInfoProvider.cs" />
