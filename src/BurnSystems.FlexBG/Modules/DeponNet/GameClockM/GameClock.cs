@@ -4,32 +4,35 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BurnSystems.FlexBG.Modules.DeponNet.UnitM
+namespace BurnSystems.FlexBG.Modules.DeponNet.GameClockM
 {
-    public class Unit
+    /// <summary>
+    /// Defines the game clock for one game
+    /// </summary>
+    public class GameClock
     {
         /// <summary>
-        /// Gets or sets the unit id
+        /// Gets or sets the id of the game clock
         /// </summary>
-        public long Id
+        public long GameId
         {
             get;
             set;
         }
 
         /// <summary>
-        /// Gets or sets the playerid
+        /// Gets or sets the time since start
         /// </summary>
-        public long PlayerId
+        public long Time
         {
             get;
             set;
         }
 
         /// <summary>
-        /// Gets or sets the field id
+        /// Gets or sets the date time, when the clock had been created
         /// </summary>
-        public long FieldId
+        public DateTime Created
         {
             get;
             set;

@@ -33,7 +33,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Data
         /// <summary>
         /// Stores the logger instance for this class
         /// </summary>
-        private ILog classLogger = new ClassLogger(typeof(UserDatabase));
+        private static ILog classLogger = new ClassLogger(typeof(UserDatabase));
 
         /// <summary>
         /// Stores the filepath to user data
@@ -45,7 +45,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Data
         /// </summary>
         private void LoadFromFile()
         {
-            if (!File.Exists(filePath))
+            if (!File.Exists(this.filePath))
             {
                 classLogger.LogEntry(LogLevel.Message, "No file for UserManagementLocal existing, creating empty database");
                 return;

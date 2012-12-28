@@ -12,7 +12,10 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
     /// </summary>
     public class PartitionLoader : IPartitionLoader
     {
-        private ILog logger = new ClassLogger(typeof(PartitionLoader));
+        /// <summary>
+        /// Defines the logger for the partition
+        /// </summary>
+        private static ILog logger = new ClassLogger(typeof(PartitionLoader));
 
         /// <summary>
         /// Gets the voxelmap info

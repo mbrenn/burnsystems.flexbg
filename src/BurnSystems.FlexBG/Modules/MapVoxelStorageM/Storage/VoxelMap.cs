@@ -11,6 +11,9 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
     /// </summary>
     public class VoxelMap : IVoxelMap
     {
+        /// <summary>
+        /// Stores the logger
+        /// </summary>
         private static ILog logger = new ClassLogger(typeof(VoxelMap));
 
         /// <summary>

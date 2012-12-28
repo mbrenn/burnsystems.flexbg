@@ -4,23 +4,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BurnSystems.FlexBG.Modules.DeponNet.RegionM
+namespace BurnSystems.FlexBG.Modules.DeponNet.MapM
 {
-    public class Region
+    /// <summary>
+    /// Stores the field coordinates of a unit, town, building
+    /// </summary>
+    public class FieldCoordinates
     {
-        public long Id
+        public long X
         {
             get;
             set;
         }
 
-        public long GameId
-        {
-            get;
-            set;
-        }
-
-        public string Title
+        public long Y
         {
             get;
             set;

@@ -25,5 +25,25 @@ namespace BurnSystems.FlexBG.Modules.DeponNet
         /// Stores the entity type id of the unit
         /// </summary>
         public const int Unit = 3;
+
+        /// <summary>
+        /// Stores the entity type id of game
+        /// </summary>
+        public const int Game = 4;
+
+        /// <summary>
+        /// Stores the entity type id of building
+        /// </summary>
+        public const int Building = 5;
+
+        /// <summary>
+        /// Stores the entity type id of region
+        /// </summary>
+        public const int Region = 6;
+
+        /// <summary>
+        /// Stores the entity type id of research
+        /// </summary>
+        public const int Research = 7;
     }
 }

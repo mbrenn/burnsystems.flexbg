@@ -4,32 +4,29 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BurnSystems.FlexBG.Modules.DeponNet.UnitM
+namespace BurnSystems.FlexBG.Modules.DeponNet.ResearchM
 {
-    public class Unit
+    public class Research
     {
-        /// <summary>
-        /// Gets or sets the unit id
-        /// </summary>
         public long Id
         {
             get;
             set;
         }
 
-        /// <summary>
-        /// Gets or sets the playerid
-        /// </summary>
         public long PlayerId
         {
             get;
             set;
         }
 
-        /// <summary>
-        /// Gets or sets the field id
-        /// </summary>
-        public long FieldId
+        public long ResearchTypeId
+        {
+            get;
+            set;
+        }
+
+        public int Level
         {
             get;
             set;

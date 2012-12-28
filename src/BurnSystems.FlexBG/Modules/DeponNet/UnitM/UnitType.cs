@@ -4,23 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BurnSystems.FlexBG.Modules.DeponNet.RegionM
+namespace BurnSystems.FlexBG.Modules.DeponNet.UnitM
 {
-    public class Region
+    public class UnitType
     {
-        public long Id
+        public int Id
         {
             get;
             set;
         }
 
-        public long GameId
-        {
-            get;
-            set;
-        }
-
-        public string Title
+        public string Token
         {
             get;
             set;
