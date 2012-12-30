@@ -44,10 +44,14 @@
     <Compile Include="Modules\ConfigurationStorageM\ConfigurationStorage.cs" />
     <Compile Include="Modules\ConfigurationStorageM\IConfigurationStorage.cs" />
     <Compile Include="Modules\DeponNet\BuildingM\Building.cs" />
+    <Compile Include="Modules\DeponNet\BuildingM\BuildingType.cs" />
     <Compile Include="Modules\DeponNet\EntityType.cs" />
     <Compile Include="Modules\DeponNet\GameClockM\GameClock.cs" />
     <Compile Include="Modules\DeponNet\GameClockM\GameClockManager.cs" />
     <Compile Include="Modules\DeponNet\GameM\Game.cs" />
+    <Compile Include="Modules\DeponNet\GameM\GameDb.cs" />
+    <Compile Include="Modules\DeponNet\GameM\GameInfo.cs" />
+    <Compile Include="Modules\DeponNet\MapM\FieldCoordinates.cs" />
     <Compile Include="Modules\DeponNet\PlayerM\Player.cs" />
     <Compile Include="Modules\DeponNet\RegionM\Region.cs" />
     <Compile Include="Modules\DeponNet\ResearchM\Research.cs" />
@@ -57,6 +61,7 @@
     <Compile Include="Modules\DeponNet\ResourceSetM\ResourceType.cs" />
     <Compile Include="Modules\DeponNet\TownM\Town.cs" />
     <Compile Include="Modules\DeponNet\UnitM\Unit.cs" />
+    <Compile Include="Modules\DeponNet\UnitM\UnitType.cs" />
     <Compile Include="Modules\GameInfoM\GameInfo.cs" />
     <Compile Include="Modules\GameInfoM\GameInfoProvider.cs" />
     <Compile Include="Modules\GameInfoM\IGameInfoProvider.cs" />

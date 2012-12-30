@@ -34,5 +34,17 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.UnitM
             get;
             set;
         }
+
+        public int UnitTypeId
+        {
+            get;
+            set;
+        }
+
+        public long Amount
+        {
+            get;
+            set;
+        }
     }
 }
