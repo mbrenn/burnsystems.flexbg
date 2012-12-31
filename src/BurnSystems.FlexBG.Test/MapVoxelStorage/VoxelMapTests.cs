@@ -42,8 +42,8 @@ namespace BurnSystems.FlexBG.Test.MapVoxelStorage
             var info = new VoxelMapInfo()
             {
                 PartitionLength = 100,
-                SizeX = 1000,
-                SizeY = 1000
+                SizeX = 500,
+                SizeY = 500
             };
 
             var database = new PartitionLoader(
@@ -80,8 +80,8 @@ namespace BurnSystems.FlexBG.Test.MapVoxelStorage
             var info = new VoxelMapInfo()
             {
                 PartitionLength = 100,
-                SizeX = 1000,
-                SizeY = 1000
+                SizeX = 500,
+                SizeY = 500
             };
 
             var database = new PartitionLoader(
@@ -144,6 +144,172 @@ namespace BurnSystems.FlexBG.Test.MapVoxelStorage
             var voxelMap = new VoxelMap();
             voxelMap.Loader = cache;
             voxelMap.CreateMap(0, info);
+        }
+
+        [Test]
+        public void TestInstanceInfosWithoutCache()
+        {
+            var info1 = new VoxelMapInfo()
+            {
+                PartitionLength = 100,
+                SizeX = 500,
+                SizeY = 500
+            };
+
+            var info2 = new VoxelMapInfo()
+            {
+                PartitionLength = 50,
+                SizeX = 500,
+                SizeY = 500
+            };
+
+            var database = new PartitionLoader(
+                Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
+                    "MapTests"));
+            database.Clear();
+            //var cache = new PartitionCache(database, 5);
+
+            var voxelMap = new VoxelMap();
+            voxelMap.Loader = database;
+
+            voxelMap.CreateMap(0, info1);
+            voxelMap.CreateMap(1, info2);
+
+            var newInfo1 = database.LoadInfoData(0);
+            var newInfo2 = database.LoadInfoData(1);
+
+            Assert.That(newInfo1.PartitionLength, Is.EqualTo(info1.PartitionLength));
+            Assert.That(newInfo1.SizeX, Is.EqualTo(info1.SizeX));
+            Assert.That(newInfo1.SizeY, Is.EqualTo(info1.SizeY));
+
+            Assert.That(newInfo2.PartitionLength, Is.EqualTo(info2.PartitionLength));
+            Assert.That(newInfo2.SizeX, Is.EqualTo(info2.SizeX));
+            Assert.That(newInfo2.SizeY, Is.EqualTo(info2.SizeY));
+        }
+
+        [Test]
+        public void TestInstanceInfosWithCache()
+        {
+            var info1 = new VoxelMapInfo()
+            {
+                PartitionLength = 100,
+                SizeX = 500,
+                SizeY = 500
+            };
+
+            var info2 = new VoxelMapInfo()
+            {
+                PartitionLength = 50,
+                SizeX = 500,
+                SizeY = 500
+            };
+
+            var database = new PartitionLoader(
+                Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
+                    "MapTests"));
+            database.Clear();
+            var cache = new PartitionCache(database, 5);
+
+            var voxelMap = new VoxelMap();
+            voxelMap.Loader = database;
+
+            voxelMap.CreateMap(0, info1);
+            voxelMap.CreateMap(1, info2);
+
+            var newInfo1 = cache.LoadInfoData(0);
+            var newInfo2 = cache.LoadInfoData(1);
+
+            Assert.That(newInfo1.PartitionLength, Is.EqualTo(info1.PartitionLength));
+            Assert.That(newInfo1.SizeX, Is.EqualTo(info1.SizeX));
+            Assert.That(newInfo1.SizeY, Is.EqualTo(info1.SizeY));
+
+            Assert.That(newInfo2.PartitionLength, Is.EqualTo(info2.PartitionLength));
+            Assert.That(newInfo2.SizeX, Is.EqualTo(info2.SizeX));
+            Assert.That(newInfo2.SizeY, Is.EqualTo(info2.SizeY));
+        }
+
+        [Test]
+        public void TestFieldTypeWithoutCache()
+        {
+            var info1 = new VoxelMapInfo()
+            {
+                PartitionLength = 100,
+                SizeX = 500,
+                SizeY = 500
+            };
+
+            var info2 = new VoxelMapInfo()
+            {
+                PartitionLength = 50,
+                SizeX = 500,
+                SizeY = 500
+            };
+
+            var database = new PartitionLoader(
+                Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
+                    "MapTests"));
+            database.Clear();
+            //var cache = new PartitionCache(database, 5);
+
+            var voxelMap = new VoxelMap();
+            voxelMap.Loader = database;
+
+            voxelMap.CreateMap(0, info1);
+            voxelMap.CreateMap(1, info2);
+
+            voxelMap.SetFieldType(0, 1, 1, 1, 20, 50);
+            voxelMap.SetFieldType(1, 1, 1, 2, 20, 50);
+
+
+            var fieldType1 = voxelMap.GetFieldType(0, 1, 1, 30);
+            var fieldType2 = voxelMap.GetFieldType(1, 1, 1, 30);
+
+            Assert.That(fieldType1, Is.EqualTo(1));
+            Assert.That(fieldType2, Is.EqualTo(2));
+        }
+
+        [Test]
+        public void TestFieldTypeWithCache()
+        {
+            var info1 = new VoxelMapInfo()
+            {
+                PartitionLength = 100,
+                SizeX = 500,
+                SizeY = 500
+            };
+
+            var info2 = new VoxelMapInfo()
+            {
+                PartitionLength = 50,
+                SizeX = 500,
+                SizeY = 500
+            };
+
+            var database = new PartitionLoader(
+                Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
+                    "MapTests"));
+            database.Clear();
+            var cache = new PartitionCache(database, 5);
+
+            var voxelMap = new VoxelMap();
+            voxelMap.Loader = cache;
+
+            voxelMap.CreateMap(0, info1);
+            voxelMap.CreateMap(1, info2);
+
+            voxelMap.SetFieldType(0, 1, 1, 1, 20, 50);
+            voxelMap.SetFieldType(1, 1, 1, 2, 20, 50);
+
+
+            var fieldType1 = voxelMap.GetFieldType(0, 1, 1, 30);
+            var fieldType2 = voxelMap.GetFieldType(1, 1, 1, 30);
+
+            Assert.That(fieldType1, Is.EqualTo(1));
+            Assert.That(fieldType2, Is.EqualTo(2));
         }
     }
 }
