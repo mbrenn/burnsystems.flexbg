@@ -18,16 +18,6 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
         private static ILog logger = new ClassLogger(typeof(PartitionLoader));
 
         /// <summary>
-        /// Gets the voxelmap info
-        /// </summary>
-        [Inject]
-        public VoxelMapInfo VoxelMapInfo
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
         /// Gets the path to database
         /// </summary>
         public string DatabasePath
@@ -41,10 +31,9 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
         /// </summary>
         /// <param name="info">Voxelmap info</param>
         [Inject]
-        public PartitionLoader(VoxelMapInfo info)
-            : this(info, "data/map/")
+        public PartitionLoader()
+            : this("data/map/")
         {
-            this.VoxelMapInfo = info;
         }
 
         /// <summary>
@@ -52,9 +41,8 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
         /// </summary>
         /// <param name="info">Voxelmap info</param>
         /// <param name="databasePath">Path of database</param>
-        public PartitionLoader(VoxelMapInfo info, string databasePath)
+        public PartitionLoader(string databasePath)
         {
-            this.VoxelMapInfo = info;
             this.DatabasePath = databasePath;
 
             if (!Directory.Exists(databasePath))
@@ -68,10 +56,9 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
         /// </summary>
         public void Clear()
         {
-            var mapInfoPath = Path.Combine(this.DatabasePath, "mapinfo.xml");
-            if (File.Exists(mapInfoPath))
+            foreach (var file in Directory.GetFiles(this.DatabasePath, "mapinfo-*.xml"))
             {
-                File.Delete(mapInfoPath);
+                File.Delete(Path.Combine(this.DatabasePath, file));
             }
 
             foreach (var file in Directory.GetFiles(this.DatabasePath, "*.vox"))
@@ -86,23 +73,44 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
         /// <param name="x">X Coordinate</param>
         /// <param name="y">Y Coordinate</param>
         /// <returns>Path to partition</returns>
-        public string GetPathForPartition(int x, int y)
+        public string GetPathForPartition(int instanceId, int x, int y)
         {
             return Path.Combine(
                 this.DatabasePath,
-                string.Format("{0}-{1}.vox", x, y));
+                string.Format("{2}-{0}-{1}.vox", x, y, instanceId));
+        }
+
+        /// <summary>
+        /// Gets the path and filename for a certain partition
+        /// </summary>
+        /// <param name="x">X Coordinate</param>
+        /// <param name="y">Y Coordinate</param>
+        /// <returns>Path to partition</returns>
+        public string GetPathForPartition(Partition partition)
+        {
+            return this.GetPathForPartition(partition.InstanceId, partition.PartitionX, partition.PartitionY);
+        }
+
+        /// <summary>
+        /// Gets the path for info file
+        /// </summary>
+        /// <param name="instanceId">Id of the instance</param>
+        /// <returns>Path for file</returns>
+        private string GetPathForInfoFile(int instanceId)
+        {
+            return Path.Combine(this.DatabasePath, "mapinfo-" + instanceId + ".xml");
         }
 
         /// <summary>
         /// Stores the info data
         /// </summary>
-        public void StoreInfoData()
+        public void StoreInfoData(int instanceId, VoxelMapInfo info)
         {
             var serializer = new XmlSerializer(typeof(VoxelMapInfo));
 
-            using (var fileStream = new FileStream(Path.Combine(this.DatabasePath, "mapinfo.xml"), FileMode.Create))
+            using (var fileStream = new FileStream(this.GetPathForInfoFile(instanceId), FileMode.Create))
             {
-                serializer.Serialize(fileStream, this.VoxelMapInfo);
+                serializer.Serialize(fileStream, info);
             }
         }
 
@@ -110,13 +118,12 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
         /// Loads the info data from generic file
         /// </summary>
         /// <returns></returns>
-        public VoxelMapInfo LoadInfoData()
+        public VoxelMapInfo LoadInfoData(int instanceId)
         {
-            var path = Path.Combine(this.DatabasePath, "mapinfo.xml");
+            var path = Path.Combine(this.DatabasePath, this.GetPathForInfoFile(instanceId));
             if (File.Exists(path))
             {
-                this.VoxelMapInfo = LoadInfoData(path);
-                return this.VoxelMapInfo;
+                return LoadInfoData(path);
             }
 
             return null;
@@ -143,15 +150,17 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
         /// <param name="x">X-Coordinate of the partition</param>
         /// <param name="y">Y-Coordinate of the partition</param>
         /// <returns>Loaded partition</returns>
-        public Partition LoadPartition(int x, int y)
+        public Partition LoadPartition(int instanceId, int x, int y)
         {
+            var info = this.LoadInfoData(instanceId);
+            Ensure.That(info != null, "info == null, Map-Info not stored?");
             Ensure.That(
-                x >= 0 && x < this.VoxelMapInfo.SizeX / this.VoxelMapInfo.PartitionLength &&
-                y >= 0 && y < this.VoxelMapInfo.SizeY / this.VoxelMapInfo.PartitionLength);
+                x >= 0 && x < info.SizeX / info.PartitionLength &&
+                y >= 0 && y < info.SizeY / info.PartitionLength);
 
-            var partition = new Partition(x, y, this.VoxelMapInfo.PartitionLength);
+            var partition = new Partition(instanceId, x, y, info.PartitionLength);
 
-            var filePath = this.GetPathForPartition(x, y);
+            var filePath = this.GetPathForPartition(instanceId, x, y);
             if (File.Exists(filePath))
             {
                 using (var fileStream = new FileStream(filePath, FileMode.Open))
@@ -177,12 +186,12 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
         /// <param name="partition">Partition to be stored</param>
         public void StorePartition(Partition partition)
         {
-            var filePath = this.GetPathForPartition(partition.PartitionX, partition.PartitionY);
+            var filePath = this.GetPathForPartition(partition);
             using (var fileStream = new FileStream(filePath, FileMode.Create))
             {
                 partition.Store(fileStream);
 
-                logger.LogEntry(LogLevel.Verbose, "Stored Partition: " + partition.PartitionX + ", " + partition.PartitionY);
+                logger.LogEntry(LogLevel.Verbose, "Stored Partition: " + partition.ToString());
             }
         }
     }

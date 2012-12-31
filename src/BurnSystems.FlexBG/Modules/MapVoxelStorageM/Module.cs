@@ -20,7 +20,7 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM
             var configurationStorage = container.Get<IConfigurationStorage>();
             var voxelMapInfo = VoxelMapInfo.Configurate(configurationStorage);
 
-            var loader = new PartitionLoader(voxelMapInfo);
+            var loader = new PartitionLoader();
             var cache = new PartitionCache(loader);
 
             container.Bind<VoxelMapInfo>().ToConstant(voxelMapInfo);
@@ -29,7 +29,6 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM
             container.Bind<IVoxelMapConfiguration>().To<VoxelMapConfiguration>();
 
             container.Bind<IVoxelMap>().To<VoxelMap>();
-            container.Bind<IFlexBgRuntimeModule>().To<AutoMap.AutoMapModule>();
         }
     }
 }

@@ -26,13 +26,22 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Controllers
             set;
         }
 
-        public IActionResult MapInfo()
+        public IActionResult MapInfo(int i)
         {
-            var info = this.VoxelMap.GetInfo();
+            var info = this.VoxelMap.GetInfo(i);
             return this.Json(info);
         }
 
-        public IActionResult Surface(int x1, int x2, int y1, int y2)
+        /// <summary>
+        /// Gets the surface for the map
+        /// </summary>
+        /// <param name="i">Instance of the map</param>
+        /// <param name="x1">Left-X-Coordinate of the map</param>
+        /// <param name="x2">Right-X-Coordinate of the map</param>
+        /// <param name="y1">Top-Y-Coordinate of the map</param>
+        /// <param name="y2">Bottom-Y-Coordinate of the map</param>
+        /// <returns></returns>
+        public IActionResult Surface(int i, int x1, int x2, int y1, int y2)
         {
             if (x2 < x1 || y2 < y1)
             {
@@ -45,7 +54,7 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Controllers
                 throw new ArgumentException("(x2 - x1) * (y2 - y1) > 10000");
             }
 
-            var surface = this.VoxelMap.GetSurfaceInfo(x1, y1, x2, y2);
+            var surface = this.VoxelMap.GetSurfaceInfo(i, x1, y1, x2, y2);
 
             var result = new List<object>();
 

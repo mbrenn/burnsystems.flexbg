@@ -38,26 +38,26 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Generator
         /// <summary>
         /// Executes the fill
         /// </summary>
-        public void Execute()
+        public void Execute(int instanceId)
         {
-            var dx = this.VoxelMap.GetInfo().SizeX;
-            var dy = this.VoxelMap.GetInfo().SizeY;
+            var dx = this.VoxelMap.GetInfo(instanceId).SizeX;
+            var dy = this.VoxelMap.GetInfo(instanceId).SizeY;
 
             for (var x = 0; x < dx; x++)
             {
                 for (var y = 0; y < dy; y++)
                 {
-                    var column = this.VoxelMap.GetColumn(x, y);
+                    var column = this.VoxelMap.GetColumn(instanceId, x, y);
                     column.SetFieldType(this.FieldType, float.MaxValue, float.MinValue);
-                    this.VoxelMap.SetColumn(x, y, column);
+                    this.VoxelMap.SetColumn(instanceId, x, y, column);
                 }
             }
         }
 
-        public static void Execute(IVoxelMap voxelMap, byte fieldType)
+        public static void Execute(IVoxelMap voxelMap, int instanceId, byte fieldType)
         {
             var fill = new CompleteFill(voxelMap, fieldType);
-            fill.Execute();
+            fill.Execute(instanceId);
         }
     }
 }

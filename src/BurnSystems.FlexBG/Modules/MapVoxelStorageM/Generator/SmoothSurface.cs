@@ -54,16 +54,16 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Generator
         /// <summary>
         /// Executes the smoothing
         /// </summary>
-        public void Execute()
+        public void Execute(int instanceId)
         {
-            var dx = this.VoxelMap.GetInfo().SizeX;
-            var dy = this.VoxelMap.GetInfo().SizeY;
+            var dx = this.VoxelMap.GetInfo(instanceId).SizeX;
+            var dy = this.VoxelMap.GetInfo(instanceId).SizeY;
 
             for (var x = 0; x < dx; x++)
             {
                 for (var y = 0; y < dy; y++)
                 {
-                    this.Smooth(x, y);
+                    this.Smooth(instanceId, x, y);
                 }
             }
         }
@@ -73,10 +73,12 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Generator
         /// </summary>
         /// <param name="x">X-Coordinate of the column to be smoothed</param>
         /// <param name="y">Y-Coordinate of the column to be smoothed</param>
-        private void Smooth(int x, int y)
+        private void Smooth(int instanceId, int x, int y)
         {
             double total = 0;
             var totalCount = 0;
+
+            var info = this.VoxelMap.GetInfo(instanceId);
 
             // Calculates the average of all columns within the smoothradius
             for (var dx = -this.SmoothRadius; dx <= this.SmoothRadius; dx++)
@@ -85,15 +87,15 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Generator
                 {
                     var absX = x + dx;
                     var absY = y + dy;
-                    if (absX < 0 || absX >= this.VoxelMap.GetInfo().SizeX
-                        || absY < 0 || absY >= this.VoxelMap.GetInfo().SizeY)
+                    if (absX < 0 || absX >= info.SizeX
+                        || absY < 0 || absY >= info.SizeY)
                     {
                         // Out Of Map
                         continue;
                     }
 
                     // Get height of type
-                    var column = this.VoxelMap.GetColumn(absX, absY);
+                    var column = this.VoxelMap.GetColumn(instanceId, absX, absY);
                     var heights = column.GetHeightsOfFieldType(this.FieldType).ToList();
 
                     if (heights.Count == 0 || heights[0] == float.MinValue)
@@ -117,7 +119,7 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Generator
             var newHeight = (float)(total / totalCount);
 
             // Get currentheight of the changed block within our column
-            var relevantColumn = this.VoxelMap.GetColumn(x, y);
+            var relevantColumn = this.VoxelMap.GetColumn(instanceId, x, y);
             var hit = false;
             var startingHeight = float.MinValue;
             var endingHeight = float.MinValue;
@@ -169,7 +171,7 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Generator
             }
 
             // Hope everything went well
-            this.VoxelMap.SetColumn(x, y, relevantColumn);
+            this.VoxelMap.SetColumn(instanceId, x, y, relevantColumn);
         }
     }
 }

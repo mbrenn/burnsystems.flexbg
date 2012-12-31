@@ -11,6 +11,15 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
     public class Partition
     {
         /// <summary>
+        /// Gets or sets the instance id
+        /// </summary>
+        public int InstanceId
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
         /// Stores the size of partition. 
         /// It has PartitionSize * PartitionSize elements.
         /// </summary>
@@ -43,8 +52,9 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
         /// <param name="x">X-Coordinate of the Partition (number of partition, not real position)</param>
         /// <param name="y">Y-Coordinate of the Partition (number of partition, not real position)</param>
         /// <param name="partitionSize">Size of the partition</param>
-        public Partition(int x, int y, int partitionSize)
+        public Partition(int instanceId, int x, int y, int partitionSize)
         {
+            this.InstanceId = instanceId;
             this.PartitionX = x;
             this.PartitionY = y;
             this.PartitionSize = partitionSize;
@@ -268,7 +278,7 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
         /// <returns>Converted string</returns>
         public override string ToString()
         {
-            return string.Format("{0}-{1}", this.PartitionX, this.PartitionY);
+            return string.Format("{2}: {0}-{1}", this.PartitionX, this.PartitionY, this.InstanceId);
         }
     }
 }

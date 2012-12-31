@@ -1,6 +1,7 @@
 ﻿using BurnSystems.FlexBG.Interfaces;
 using BurnSystems.Logging;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 
 namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
@@ -17,6 +18,11 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
         /// Defines the lock
         /// </summary>
         private ReaderWriterLockSlim sync = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
+
+        /// <summary>
+        /// Stores the info cache
+        /// </summary>
+        private Dictionary<int, VoxelMapInfo> infoCache = new Dictionary<int, VoxelMapInfo>();
 
         /// <summary>
         /// Stores a list of cached partitions
@@ -68,9 +74,9 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
         /// <param name="x">X-Coordinate of the partition</param>
         /// <param name="y">Y-Coordinate of the partition</param>
         /// <returns>Loaded partition</returns>
-        public Partition LoadPartition(int x, int y)
+        public Partition LoadPartition(int instanceId, int x, int y)
         {
-            var cachedItem = this.FindOrLoadPartition(x, y);
+            var cachedItem = this.FindOrLoadPartition(instanceId, x, y);
             return cachedItem.Partition;
         }
 
@@ -79,7 +85,7 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
         /// </summary>
         /// <param name="x">X-Coordinate of the partition (not real)</param>
         /// <param name="y">Y-Coordinate of the partition (not real)</param>
-        private PartitionCacheItem FindOrLoadPartition(int x, int y)
+        private PartitionCacheItem FindOrLoadPartition(int instanceId, int x, int y)
         {
             try
             {
@@ -90,6 +96,7 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
                     var item = this.cachedPartitions[n];
 
                     if (item != null &&
+                        item.Partition.InstanceId == instanceId &&
                         item.Partition.PartitionX == x &&
                         item.Partition.PartitionY == y)
                     {
@@ -107,7 +114,7 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
                     this.sync.EnterWriteLock();
                     var cachePosition = this.FindFreePosition();
 
-                    var partition = this.Database.LoadPartition(x, y);
+                    var partition = this.Database.LoadPartition(instanceId, x, y);
                     var cachedItem = new PartitionCacheItem()
                     {
                         AccessCountInCache = 1,
@@ -154,13 +161,13 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
                         item.IsModified = true;
                         item.AccessCountInCache++;
 
-                        // logger.Debug("Stored in Cache: " + partition.PartitionX + ", " + partition.PartitionY);
+                        logger.LogEntry(LogLevel.Notify, "Stored in Cache: " + partition.ToString());
                         // Done
                         return;
                     }
                 }
 
-                // logger.Debug("Direct Store: " + partition.PartitionX + ", " + partition.PartitionY);
+                logger.LogEntry(LogLevel.Notify, "Direct Store: " + partition.ToString());
                 // Not in cache... (could have been removed while this the partition had been modified). Just store it
                 this.Database.StorePartition(partition);
             }
@@ -203,8 +210,8 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
             var oldestItem = this.cachedPartitions[positionLastAccess];
             if (oldestItem.IsModified)
             {
-                /*logger.Debug("Store of partition due to cache request: " 
-                    + oldestItem.Partition.PartitionX + ", " + oldestItem.Partition.PartitionY);*/
+                logger.LogEntry(LogLevel.Notify, "Store of partition due to cache request: " 
+                    + oldestItem.Partition.ToString());
                 this.Database.StorePartition(oldestItem.Partition);
             }
 
@@ -247,12 +254,16 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
         /// <summary>
         /// Stores the info data
         /// </summary>
-        public void StoreInfoData()
+        public void StoreInfoData(int instanceId, VoxelMapInfo info)
         {
             try
             {
                 this.sync.EnterWriteLock();
-                this.Database.StoreInfoData();
+
+                this.infoCache[instanceId] = info;
+
+                logger.LogEntry(LogLevel.Notify, "Storing VoxelMapInfo for instance: " + instanceId);
+                this.Database.StoreInfoData(instanceId, info);
             }
             finally
             {
@@ -264,12 +275,21 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
         /// Loads the info data from generic file
         /// </summary>
         /// <returns>Loaded info data</returns>
-        public VoxelMapInfo LoadInfoData()
+        public VoxelMapInfo LoadInfoData(int instanceId)
         {
             try
             {
                 this.sync.EnterWriteLock();
-                return this.Database.LoadInfoData();
+
+                VoxelMapInfo result;
+                if (this.infoCache.TryGetValue(instanceId, out result))
+                {
+                    return result;
+                }
+
+                result = this.Database.LoadInfoData(instanceId);
+                this.infoCache[instanceId] = result;
+                return result;
             }
             finally
             {

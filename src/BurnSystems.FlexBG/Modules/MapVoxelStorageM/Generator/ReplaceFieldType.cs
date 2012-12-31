@@ -48,16 +48,16 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Generator
         /// <summary>
         /// Performs the replacement
         /// </summary>
-        public void Execute()
+        public void Execute(int instanceId)
         {
-            var dx = this.VoxelMap.GetInfo().SizeX;
-            var dy = this.VoxelMap.GetInfo().SizeY;
+            var dx = this.VoxelMap.GetInfo(instanceId).SizeX;
+            var dy = this.VoxelMap.GetInfo(instanceId).SizeY;
 
             for (var x = 0; x < dx; x++)
             {
                 for (var y = 0; y < dy; y++)
                 {
-                    var column = this.VoxelMap.GetColumn(x, y);
+                    var column = this.VoxelMap.GetColumn(instanceId, x, y);
 
                     var modified = false;
                     for (var n = 0; n < column.Count; n++)
@@ -73,16 +73,16 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Generator
 
                     if (modified)
                     {
-                        this.VoxelMap.SetColumn(x, y, column);
+                        this.VoxelMap.SetColumn(instanceId, x, y, column);
                     }
                 }
             }
         }
 
-        public static void Execute(IVoxelMap voxelMap, byte oldFieldType, byte newFieldType)
+        public static void Execute(IVoxelMap voxelMap, int instanceId, byte oldFieldType, byte newFieldType)
         {
             var replace = new ReplaceFieldType(voxelMap, oldFieldType, newFieldType);
-            replace.Execute();
+            replace.Execute(instanceId);
         }
     }
 }

@@ -74,7 +74,6 @@
     <Compile Include="Modules\MailSenderM\MailSender.cs" />
     <Compile Include="Modules\MailSenderM\Settings.cs" />
     <Compile Include="Modules\MailSenderM\DummyMailSenderHandler.cs" />
-    <Compile Include="Modules\MapVoxelStorageM\AutoMap\AutoMapModule.cs" />
     <Compile Include="Modules\MapVoxelStorageM\Configuration\IVoxelMapConfiguration.cs" />
     <Compile Include="Modules\MapVoxelStorageM\Configuration\MapInfo.cs" />
     <Compile Include="Modules\MapVoxelStorageM\Configuration\VoxelMapConfiguration.cs" />

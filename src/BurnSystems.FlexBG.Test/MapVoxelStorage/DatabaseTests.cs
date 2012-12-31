@@ -20,7 +20,7 @@ namespace BurnSystems.FlexBG.Test.MapVoxelStorage
         [Test]
         public void TestInitializationOfPartition()
         {
-            var partition = new Partition(1, 1, 100);
+            var partition = new Partition(0, 1, 1, 100);
             partition.InitFields();
             for (var x = 0; x < 99; x++)
             {
@@ -39,7 +39,7 @@ namespace BurnSystems.FlexBG.Test.MapVoxelStorage
         [Test]
         public void TestLoadingAndStoring()
         {
-            var partition = new Partition(1, 1, 100);
+            var partition = new Partition(0, 1, 1, 100);
             partition.InitFields();
             partition.SetFieldType(2, 2, 1, 1000, 50);
             partition.SetFieldType(5, 20, 2, 2000, 1000);
@@ -58,7 +58,7 @@ namespace BurnSystems.FlexBG.Test.MapVoxelStorage
             }
 
             // Partition creation
-            var partitionLoad = new Partition(1, 1, 100);
+            var partitionLoad = new Partition(0, 1, 1, 100);
 
             // Load stream
             using (var memoryStream = new MemoryStream(byteBuffer))
@@ -78,7 +78,7 @@ namespace BurnSystems.FlexBG.Test.MapVoxelStorage
         [Test]
         public void TestConversion()
         {
-            var partition = new Partition(3, 1, 100);
+            var partition = new Partition(0, 3, 1, 100);
             int absX, absY;
             partition.ConvertToAbsolute(5, 2, out absX, out absY);
 
@@ -103,21 +103,21 @@ namespace BurnSystems.FlexBG.Test.MapVoxelStorage
             };
 
             var database = new PartitionLoader(
-                info,
                 Path.Combine(
                     Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
                     "MapTests"));
             database.Clear();
+            database.StoreInfoData(0, info);
 
             PerformDatabaseLoaderTests(database);
         }
 
         public static void PerformDatabaseLoaderTests(IPartitionLoader database)
         {
-            var partition1 = new Partition(0, 0, 100);
-            var partition2 = new Partition(1, 0, 100);
-            var partition3 = new Partition(1, 1, 100);
-            var partition4 = new Partition(0, 1, 100);
+            var partition1 = new Partition(0, 0, 0, 100);
+            var partition2 = new Partition(0, 1, 0, 100);
+            var partition3 = new Partition(0, 1, 1, 100);
+            var partition4 = new Partition(0, 0, 1, 100);
 
             partition1.InitFields();
             partition2.InitFields();
@@ -132,15 +132,14 @@ namespace BurnSystems.FlexBG.Test.MapVoxelStorage
             database.StorePartition(partition2);
             database.StorePartition(partition3);
             database.StorePartition(partition4);
-            database.StoreInfoData();
 
-            var partitionLoad1 = database.LoadPartition(0, 0);
-            var partitionLoad2 = database.LoadPartition(1, 0);
-            var partitionLoad3 = database.LoadPartition(1, 1);
-            var partitionLoad4 = database.LoadPartition(0, 1);
-            var partitionLoad5 = database.LoadPartition(2, 1);
+            var partitionLoad1 = database.LoadPartition(0, 0, 0);
+            var partitionLoad2 = database.LoadPartition(0, 1, 0);
+            var partitionLoad3 = database.LoadPartition(0, 1, 1);
+            var partitionLoad4 = database.LoadPartition(0, 0, 1);
+            var partitionLoad5 = database.LoadPartition(0, 2, 1);
 
-            var infoDataLoaded = database.LoadInfoData();
+            var infoDataLoaded = database.LoadInfoData(0);
 
             Assert.That(infoDataLoaded.PartitionLength, Is.EqualTo(100));
             Assert.That(infoDataLoaded.SizeX, Is.EqualTo(10000));

@@ -21,15 +21,14 @@ namespace BurnSystems.FlexBG.Test.MapVoxelStorage
             };
 
             var database = new PartitionLoader(
-                info,
                 Path.Combine(
                     Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
                     "MapTests"));
             database.Clear();
             var cache = new PartitionCache(database);
-            var voxelMap = new VoxelMap(info);
+            var voxelMap = new VoxelMap();
             voxelMap.Loader = cache;
-            voxelMap.CreateMap();
+            voxelMap.CreateMap(0, info);
 
             return voxelMap;
         }

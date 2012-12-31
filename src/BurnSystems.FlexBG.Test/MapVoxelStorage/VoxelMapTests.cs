@@ -19,21 +19,20 @@ namespace BurnSystems.FlexBG.Test.MapVoxelStorage
             };
 
             var database = new PartitionLoader(
-                info,
                 Path.Combine(
                     Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
                     "MapTests"));
             database.Clear();
             var cache = new PartitionCache(database, 5);
 
-            var voxelMap = new VoxelMap(info);
+            var voxelMap = new VoxelMap();
             voxelMap.Loader = cache;
 
-            voxelMap.CreateMap();
+            voxelMap.CreateMap(0, info);
 
             for (var x = 0; x < 1000; x += 10)
             {
-                Assert.That(voxelMap.GetFieldType(x, x / 2, 100), Is.EqualTo(0));
+                Assert.That(voxelMap.GetFieldType(0, x, x / 2, 100), Is.EqualTo(0));
             }
         }
 
@@ -48,21 +47,20 @@ namespace BurnSystems.FlexBG.Test.MapVoxelStorage
             };
 
             var database = new PartitionLoader(
-                info,
                 Path.Combine(
                     Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
                     "MapTests"));
             database.Clear();
             var cache = new PartitionCache(database);
-            var voxelMap = new VoxelMap(info);
+            var voxelMap = new VoxelMap();
             voxelMap.Loader = cache;
-            voxelMap.CreateMap();
+            voxelMap.CreateMap(0, info);
 
             for (var x = 0; x < info.SizeX; x ++)
             {
                 for (var y = 0; y < info.SizeY; y++)
                 {
-                    voxelMap.SetFieldType(x, y, 2, ((float)x) * ((float)y) + 1, 0);
+                    voxelMap.SetFieldType(0, x, y, 2, ((float)x) * ((float)y) + 1, 0);
                 }
             }
 
@@ -70,8 +68,8 @@ namespace BurnSystems.FlexBG.Test.MapVoxelStorage
             {
                 for (var y = 0; y < info.SizeY; y++)
                 {
-                    Assert.That(voxelMap.GetFieldType(x, y, (((float)x) * ((float)y) + 1) / 2), Is.EqualTo(2));
-                    Assert.That(voxelMap.GetFieldType(x, y, (((float)x) * ((float)y) + 1) * 2), Is.EqualTo(0));
+                    Assert.That(voxelMap.GetFieldType(0, x, y, (((float)x) * ((float)y) + 1) / 2), Is.EqualTo(2));
+                    Assert.That(voxelMap.GetFieldType(0, x, y, (((float)x) * ((float)y) + 1) * 2), Is.EqualTo(0));
                 }
             }
         }
@@ -87,25 +85,24 @@ namespace BurnSystems.FlexBG.Test.MapVoxelStorage
             };
 
             var database = new PartitionLoader(
-                info,
                 Path.Combine(
                     Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
                     "MapTests"));
             database.Clear();
             var cache = new PartitionCache(database);
-            var voxelMap = new VoxelMap(info);
+            var voxelMap = new VoxelMap();
             voxelMap.Loader = cache;
-            voxelMap.CreateMap();
+            voxelMap.CreateMap(0, info);
 
             for (var x = 0; x < info.SizeX; x++)
             {
                 for (var y = 0; y < info.SizeY; y++)
                 {
-                    voxelMap.SetFieldType(x, y, 2, ((float)x) * ((float)y) + 1, 0);
+                    voxelMap.SetFieldType(0, x, y, 2, ((float)x) * ((float)y) + 1, 0);
                 }
             }
 
-            var surfaceInfo = voxelMap.GetSurfaceInfo(0, 0, 200, 200);
+            var surfaceInfo = voxelMap.GetSurfaceInfo(0, 0, 0, 200, 200);
 
             for (var x = 0; x < 200; x++)
             {
@@ -116,7 +113,7 @@ namespace BurnSystems.FlexBG.Test.MapVoxelStorage
                 }
             }
 
-            var surfaceInfo2 = voxelMap.GetSurfaceInfo(200, 200, 400, 400);
+            var surfaceInfo2 = voxelMap.GetSurfaceInfo(0, 200, 200, 400, 400);
 
             for (var x = 0; x < 200; x++)
             {
@@ -139,15 +136,14 @@ namespace BurnSystems.FlexBG.Test.MapVoxelStorage
             };
 
             var database = new PartitionLoader(
-                info,
                 Path.Combine(
                     Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
                     "MapTests"));
             database.Clear();
             var cache = new PartitionCache(database);
-            var voxelMap = new VoxelMap(info);
+            var voxelMap = new VoxelMap();
             voxelMap.Loader = cache;
-            voxelMap.CreateMap();
+            voxelMap.CreateMap(0, info);
         }
     }
 }

@@ -55,10 +55,10 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Generator
             this.NoiseGeneratorBottom = noiseGeneratorBottom;
         }
 
-        public void Execute()
+        public void Execute(int instanceId)
         {
-            var dx = this.VoxelMap.GetInfo().SizeX;
-            var dy = this.VoxelMap.GetInfo().SizeY;
+            var dx = this.VoxelMap.GetInfo(instanceId).SizeX;
+            var dy = this.VoxelMap.GetInfo(instanceId).SizeY;
 
             for (var x = 0; x < dx; x++)
             {
@@ -67,7 +67,7 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Generator
                     var top = this.NoiseGeneratorTop();
                     var bottom = this.NoiseGeneratorBottom();
 
-                    this.VoxelMap.SetFieldType(x, y, this.FieldType, top, bottom);
+                    this.VoxelMap.SetFieldType(instanceId, x, y, this.FieldType, top, bottom);
                 }
             }
         }

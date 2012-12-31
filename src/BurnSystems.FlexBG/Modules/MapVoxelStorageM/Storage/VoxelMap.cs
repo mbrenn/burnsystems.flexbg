@@ -1,6 +1,7 @@
 ﻿using BurnSystems.Logging;
 using BurnSystems.ObjectActivation;
 using BurnSystems.Test;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 
@@ -26,38 +27,25 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
             set;
         }
 
-        /// <summary>
-        /// Gets the information about the voxelmap
-        /// </summary>
-        [Inject]
-        public VoxelMapInfo Info
+        public VoxelMapInfo GetInfo(int instanceId)
         {
-            get;
-            private set;
-        }
-
-        public VoxelMapInfo GetInfo()
-        {
-            return this.Info;
+            return this.Loader.LoadInfoData(instanceId);
         }
 
         /// <summary>
         /// Gets the info, if map has been created
         /// </summary>
-        public bool IsMapCreated()
+        public bool IsMapCreated(int instanceId)
         {
-            return this.Loader.LoadInfoData() != null;
+            return this.Loader.LoadInfoData(instanceId) != null;
         }
 
         /// <summary>
         /// Initializes a new instance of the voxelmap
         /// </summary>
         /// <param name="info">Information about voxelmap</param>
-        [Inject]
-        public VoxelMap(VoxelMapInfo info)
+        public VoxelMap()
         {
-            Ensure.That(info != null, "info is null");
-            this.Info = info;
         }
 
         /// <summary>
@@ -74,12 +62,14 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
         /// <param name="partitionY">Y Coordinate of the partition itself</param>
         /// <param name="relX">Relative X coordinate of the column on the partition</param>
         /// <param name="relY">Relative Y coordinate of the column on the partition</param>
-        public void CalculatePartitionCoordinates(int columnX, int columnY, out int partitionX, out int partitionY, out int relX, out int relY)
+        public void CalculatePartitionCoordinates(int instanceId, int columnX, int columnY, out int partitionX, out int partitionY, out int relX, out int relY)
         {
-            partitionX = columnX / this.Info.PartitionLength;
-            partitionY = columnY / this.Info.PartitionLength;
-            relX = columnX % this.Info.PartitionLength;
-            relY = columnY % this.Info.PartitionLength;
+            var info = this.Loader.LoadInfoData(instanceId);
+
+            partitionX = columnX / info.PartitionLength;
+            partitionY = columnY / info.PartitionLength;
+            relX = columnX % info.PartitionLength;
+            relY = columnY % info.PartitionLength;
         }
 
 
@@ -92,32 +82,34 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
         /// <param name="relY">Relative Y coordinate of the column on the partition</param>
         /// <param name="columnX">X-Coordinate of queried column</param>
         /// <param name="columnY">Y-Coordinate of queried column</param>
-        public void CalculateFieldCoordinates(int partitionX, int partitionY, int relX, int relY, out int columnX, out int columnY)
+        public void CalculateFieldCoordinates(int instanceId, int partitionX, int partitionY, int relX, int relY, out int columnX, out int columnY)
         {
-            columnX = this.Info.PartitionLength * partitionX + relX;
-            columnY = this.Info.PartitionLength * partitionY + relY;
+            var info = this.Loader.LoadInfoData(instanceId);
+
+            columnX = info.PartitionLength * partitionX + relX;
+            columnY = info.PartitionLength * partitionY + relY;
         }
 
         /// <summary>
         /// Creates a simple mal just containing air
         /// </summary>
-        public void CreateMap()
+        public void CreateMap(int instanceId, VoxelMapInfo info)
         {
             // Creates the map by creating partition and storing them
-            var partitionCountX = this.Info.SizeX / this.Info.PartitionLength;
-            var partitionCountY = this.Info.SizeY / this.Info.PartitionLength;
+            var partitionCountX = info.SizeX / info.PartitionLength;
+            var partitionCountY = info.SizeY / info.PartitionLength;
+
+            this.Loader.StoreInfoData(instanceId, info);
 
             for (var x = 0; x < partitionCountX; x++)
             {
                 for (var y = 0; y < partitionCountY; y++)
                 {
-                    var partition = this.Loader.LoadPartition(x, y);
+                    var partition = this.Loader.LoadPartition(instanceId, x, y);
                     partition.InitFields();
                     this.Loader.StorePartition(partition);
                 }
             }
-
-            this.Loader.StoreInfoData();
         }
 
         /// <summary>
@@ -127,11 +119,11 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
         /// <param name="fieldType">Fieldtype to be set</param>
         /// <param name="startingHeight">Starting Height of new field type</param>
         /// <param name="endingHeight">Ending height of new field type</param>
-        public void SetFieldType(int x, int y, byte fieldType, float startingHeight, float endingHeight)
+        public void SetFieldType(int instanceId, int x, int y, byte fieldType, float startingHeight, float endingHeight)
         {
             // 1: Convert partition
             int relX, relY;
-            var partition = this.GetPartitionFor(x, y, out relX, out relY);
+            var partition = this.GetPartitionFor(instanceId, x, y, out relX, out relY);
 
             // 3. Change partition
             partition.SetFieldType(relX, relY, fieldType, startingHeight, endingHeight);
@@ -147,11 +139,11 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
         /// <param name="fieldType">Fieldtype to be set</param>
         /// <param name="startingHeight">Starting Height of new field type</param>
         /// <param name="endingHeight">Ending height of new field type</param>
-        public byte GetFieldType(int x, int y, float height)
+        public byte GetFieldType(int instanceId, int x, int y, float height)
         {
             int relX;
             int relY;
-            var partition = GetPartitionFor(x, y, out relX, out relY);
+            var partition = GetPartitionFor(instanceId, x, y, out relX, out relY);
 
             // 3. Change partition
             return partition.GetFieldType(relX, relY, height);
@@ -165,7 +157,7 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
         /// <param name="x2">Lower right X-Coordinate</param>
         /// <param name="y2">Lower right Y-Coordinate</param>
         /// <returns>Information about the fieldtypes. This array is starting with 0 relative to x1/y1.First coordinate is x-coordinate</returns>
-        public FieldTypeChangeInfo[][] GetSurfaceInfo(int x1, int y1, int x2, int y2)
+        public FieldTypeChangeInfo[][] GetSurfaceInfo(int instanceId, int x1, int y1, int x2, int y2)
         {
             Ensure.That(x1 <= x2);
             Ensure.That(y1 <= y2);
@@ -182,9 +174,9 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
                 for (var y = y1; y <= y2; y++)
                 {
                     int partitionX, partitionY, relX, relY;
-                    this.CalculatePartitionCoordinates(x, y, out partitionX, out partitionY, out relX, out relY);
+                    this.CalculatePartitionCoordinates(instanceId, x, y, out partitionX, out partitionY, out relX, out relY);
 
-                    var partition = this.Loader.LoadPartition(partitionX, partitionY);
+                    var partition = this.Loader.LoadPartition(instanceId, partitionX, partitionY);
                     var column = partition.GetColumn(relX, relY);
 
                     if (column.Count == 1)
@@ -209,10 +201,10 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        public List<FieldTypeChangeInfo> GetColumn(int x, int y)
+        public List<FieldTypeChangeInfo> GetColumn(int instanceId, int x, int y)
         {
             int relX, relY;
-            var partition = GetPartitionFor(x, y, out relX, out relY);
+            var partition = GetPartitionFor(instanceId, x, y, out relX, out relY);
 
             // 3. Change partition
             return partition.GetColumn(relX, relY);
@@ -224,10 +216,10 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        public void SetColumn(int x, int y, List<FieldTypeChangeInfo> column)
+        public void SetColumn(int instanceId, int x, int y, List<FieldTypeChangeInfo> column)
         {
             int relX, relY;
-            var partition = GetPartitionFor(x, y, out relX, out relY);
+            var partition = GetPartitionFor(instanceId, x, y, out relX, out relY);
 
             // 3. Change partition
             partition.SetColumn(relX, relY, column);
@@ -241,16 +233,16 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
         /// <param name="relX">Relative X-Coordinate</param>
         /// <param name="relY">Relative Y-Coordinate</param>
         /// <returns>Loaded partition</returns>
-        private Partition GetPartitionFor(int x, int y, out int relX, out int relY)
+        private Partition GetPartitionFor(int instanceId, int x, int y, out int relX, out int relY)
         {
             // 1: Convert partition
             int partitionX;
             int partitionY;
 
-            this.CalculatePartitionCoordinates(x, y, out partitionX, out partitionY, out relX, out relY);
+            this.CalculatePartitionCoordinates(instanceId, x, y, out partitionX, out partitionY, out relX, out relY);
 
             // 2. Get Partition
-            var partition = this.Loader.LoadPartition(partitionX, partitionY);
+            var partition = this.Loader.LoadPartition(instanceId, partitionX, partitionY);
             Ensure.That(partition != null);
 
             return partition;
@@ -261,7 +253,7 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
         /// </summary>
         /// <param name="x">X-Coordinate of the column</param>
         /// <param name="y">Y-Coordinate of the column</param>
-        public void AcquireReadLock(int x1, int y1, int x2, int y2)
+        public void AcquireReadLock(int instanceId, int x1, int y1, int x2, int y2)
         {
             sync.EnterReadLock();
         }
@@ -271,7 +263,7 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
         /// </summary>
         /// <param name="x">X-Coordinate of the column</param>
         /// <param name="y">Y-Coordinate of the column</param>
-        public void AcquireWriteLock(int x1, int y1, int x2, int y2)
+        public void AcquireWriteLock(int instanceId, int x1, int y1, int x2, int y2)
         {
             sync.EnterWriteLock();
         }
@@ -281,7 +273,7 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
         /// </summary>
         /// <param name="x">X-Coordinate of the column</param>
         /// <param name="y">Y-Coordinate of the column</param>
-        public void ReleaseReadLock(int x1, int y1, int x2, int y2)
+        public void ReleaseReadLock(int instanceId, int x1, int y1, int x2, int y2)
         {
             sync.ExitReadLock();
         }
@@ -291,7 +283,7 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
         /// </summary>
         /// <param name="x">X-Coordinate of the column</param>
         /// <param name="y">Y-Coordinate of the column</param>
-        public void ReleaseWriteLock(int x1, int y1, int x2, int y2)
+        public void ReleaseWriteLock(int instanceId, int x1, int y1, int x2, int y2)
         {
             sync.ExitWriteLock();
         }
