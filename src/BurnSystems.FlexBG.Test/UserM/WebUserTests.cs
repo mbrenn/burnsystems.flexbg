@@ -21,7 +21,7 @@ namespace BurnSystems.FlexBG.Test.UserM
         private static UserManagementLocal PrepareTests()
         {
             var result = new UserManagementLocal();
-            result.UserDb = new UserDatabase();
+            result.Db = new UserDatabase();
 
             return result;
         }
@@ -64,7 +64,7 @@ namespace BurnSystems.FlexBG.Test.UserM
             mgmt.AddUser(user);
 
             var group = new Group();
-            group.Title = "Test";
+            group.Name = "Test";
             mgmt.AddGroup(group);
 
             mgmt.AddToGroup(group, user);

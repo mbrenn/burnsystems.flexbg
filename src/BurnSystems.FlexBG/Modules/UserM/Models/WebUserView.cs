@@ -57,7 +57,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Models
                     result.Add(
                         new Token(
                             group.TokenId,
-                            group.Title));
+                            group.Name));
                 }
 
                 return result;

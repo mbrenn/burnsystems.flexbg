@@ -12,7 +12,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Models
         /// <summary>
         /// Stores the Id of token for the administrator group
         /// </summary>
-        public readonly static Guid AdministratorToken = Guid.Parse(
+        public readonly static Guid AdministratorsToken = Guid.Parse(
             "A6DA521C-229F-41A0-B247-B28A979504F6");
 
         /// <summary>
@@ -23,7 +23,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Models
         /// <summary>
         /// Stores the title
         /// </summary>
-        private string title;
+        private string name;
 
         /// <summary>
         /// Stores the id of the token
@@ -50,10 +50,10 @@ namespace BurnSystems.FlexBG.Modules.UserM.Models
         /// <summary>
         /// Gets or sets the title of the 
         /// </summary>
-        public string Title
+        public string Name
         {
-            get { return this.title; }
-            set { this.title = value; }
+            get { return this.name; }
+            set { this.name = value; }
         }
 
         /// <summary>
@@ -63,6 +63,11 @@ namespace BurnSystems.FlexBG.Modules.UserM.Models
         {
             get { return this.tokenId; }
             set { this.tokenId = value; }
+        }
+
+        public override string ToString()
+        {
+            return this.Name;
         }
     }
 }

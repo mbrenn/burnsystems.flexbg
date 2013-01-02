@@ -41,7 +41,15 @@ namespace BurnSystems.FlexBG.Modules.UserM.Data
         /// </summary>
         public List<User> Users
         {
-            get { return this.users; }
+            get
+            {
+                if (this.users == null)
+                {
+                    this.users = new List<User>();
+                }
+
+                return this.users;
+            }
         }
 
         /// <summary>
@@ -49,7 +57,15 @@ namespace BurnSystems.FlexBG.Modules.UserM.Data
         /// </summary>
         public List<Group> Groups
         {
-            get { return this.groups; }
+            get
+            {
+                if (this.groups == null)
+                {
+                    this.groups = new List<Group>();
+                }
+
+                return this.groups;
+            }
         }
 
         /// <summary>
@@ -57,7 +73,15 @@ namespace BurnSystems.FlexBG.Modules.UserM.Data
         /// </summary>
         public List<Membership> Memberships
         {
-            get { return this.memberships; }
+            get
+            {
+                if (this.memberships == null)
+                {
+                    this.memberships = new List<Membership>();
+                }
+
+                return this.memberships;
+            }
         }
 
         /// <summary>

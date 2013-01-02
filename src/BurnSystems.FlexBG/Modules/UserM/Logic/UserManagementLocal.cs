@@ -31,7 +31,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         /// Gets the database storing the users. 
         /// </summary>
         [Inject(IsMandatory = true)]
-        public UserDatabase UserDb
+        public UserDatabase Db
         {
             get;
             set;
@@ -70,55 +70,58 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         /// <param name="user">Information of user to be added</param>
         public void AddUser(User user)
         {
-            if (this.IsUsernameExisting(user.Username))
+            using (this.Db.Sync.GetWriteLock())
             {
-                throw new UserManagementException(
-                    UserManagementExceptionReason.UsernameExisting,
-                    "Username existing");
+                if (this.IsUsernameExisting(user.Username))
+                {
+                    throw new UserManagementException(
+                        UserManagementExceptionReason.UsernameExisting,
+                        "Username existing");
+                }
+
+                if (user.HasAgreedToTOS == false)
+                {
+                    throw new UserManagementException(
+                        UserManagementExceptionReason.NoAcceptTos,
+                        "The Terms of Services have not been accepted");
+                }
+
+                if (string.IsNullOrEmpty(user.Username))
+                {
+                    throw new UserManagementException(
+                        UserManagementExceptionReason.NoUsername,
+                        "The username is empty");
+                }
+
+                if (string.IsNullOrEmpty(user.EMail))
+                {
+                    throw new UserManagementException(
+                        UserManagementExceptionReason.NoEmail,
+                        "The email is empty");
+                }
+
+                if (!user.IsEmailValid)
+                {
+                    throw new UserManagementException(
+                        UserManagementExceptionReason.InvalidEmail,
+                        "Invalid email address");
+                }
+
+                if (string.IsNullOrEmpty(user.ActivationKey))
+                {
+                    user.ActivationKey = StringManipulation.SecureRandomString(32);
+                }
+
+                if (string.IsNullOrEmpty(user.APIKey))
+                {
+                    user.APIKey = StringManipulation.SecureRandomString(32);
+                }
+
+                user.Id = this.Db.Data.GetNextUserId();
+
+                this.Db.Data.Users.Add(user);
+                this.Db.Data.SaveChanges();
             }
-
-            if (user.HasAgreedToTOS == false)
-            {
-                throw new UserManagementException(
-                    UserManagementExceptionReason.NoAcceptTos,
-                    "The Terms of Services have not been accepted");
-            }
-
-            if (string.IsNullOrEmpty(user.Username))
-            {
-                throw new UserManagementException(
-                    UserManagementExceptionReason.NoUsername,
-                    "The username is empty");
-            }
-
-            if (string.IsNullOrEmpty(user.EMail))
-            {
-                throw new UserManagementException(
-                    UserManagementExceptionReason.NoEmail,
-                    "The email is empty");
-            }
-
-            if (!user.IsEmailValid)
-            {
-                throw new UserManagementException(
-                    UserManagementExceptionReason.InvalidEmail,
-                    "Invalid email address");
-            }
-
-            if (string.IsNullOrEmpty(user.ActivationKey))
-            {
-                user.ActivationKey = StringManipulation.SecureRandomString(32);
-            }
-
-            if (string.IsNullOrEmpty(user.APIKey))
-            {
-                user.APIKey = StringManipulation.SecureRandomString(32);
-            }
-
-            user.Id = this.UserDb.Data.GetNextUserId();
-
-            this.UserDb.Data.Users.Add(user);
-            this.UserDb.Data.SaveChanges();
         }
 
         /// <summary>
@@ -128,7 +131,10 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         /// <returns>Containing the user</returns>
         public User GetUser(long userId)
         {
-            return this.UserDb.Data.Users.Where(x => x.Id == userId).FirstOrDefault();
+            using (this.Db.Sync.GetReadLock())
+            {
+                return this.Db.Data.Users.Where(x => x.Id == userId).FirstOrDefault();
+            }
         }
 
         /// <summary>
@@ -138,7 +144,10 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         /// <returns>Containing the user</returns>
         public User GetUser(string username)
         {
-            return this.UserDb.Data.Users.Where(x => x.Username == username).FirstOrDefault();
+            using (this.Db.Sync.GetReadLock())
+            {
+                return this.Db.Data.Users.Where(x => x.Username == username).FirstOrDefault();
+            }
         }
 
         /// <summary>
@@ -148,62 +157,21 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         /// <returns>Containing the user</returns>
         public User GetUser(string username, string password)
         {
-            var user = this.GetUser(username);
-            if (user == null)
+            using (this.Db.Sync.GetReadLock())
             {
+                var user = this.GetUser(username);
+                if (user == null)
+                {
+                    return null;
+                }
+
+                if (this.IsPasswordCorrect(user, password))
+                {
+                    return user;
+                }
+
+                // Password is not correct
                 return null;
-            }
-
-            if (this.IsPasswordCorrect(user, password))
-            {
-                return user;
-            }
-
-            // Password is not correct
-            return null;
-        }
-
-        /// <summary>
-        /// Gets all users
-        /// </summary>
-        /// <returns></returns>
-        public IEnumerable<User> GetAllUsers()
-        {
-            return this.UserDb.Data.Users.ToList();
-        }
-
-        /// <summary>
-        /// Adds group to usermanagement
-        /// </summary>
-        /// <param name="group">Group to be added</param>
-        public void AddGroup(Group group)
-        {
-            Ensure.IsNotNull(group);
-
-            if (string.IsNullOrEmpty(group.Title))
-            {
-                throw new UserManagementException(
-                    UserManagementExceptionReason.NoGroupTitle,
-                    "No group title");
-            }
-
-            group.Id = this.UserDb.Data.GetNextGroupId();
-
-            this.UserDb.Data.Groups.Add(group);
-            this.UserDb.Data.SaveChanges();
-        }
-
-        /// <summary>
-        /// Removes a group from database
-        /// </summary>
-        /// <param name="group">Group to be removed</param>
-        public void RemoveGroup(Group group)
-        {
-            this.UserDb.Data.Groups.Remove(group);
-
-            foreach (var found in this.UserDb.Data.Memberships.Where(x => x.GroupId == group.Id).ToList())
-            {
-                this.UserDb.Data.Memberships.Remove(found);
             }
         }
 
@@ -213,11 +181,91 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         /// <param name="user">User to be removed</param>
         public void RemoveUser(User user)
         {
-            this.UserDb.Data.Users.Remove(user);
-
-            foreach (var found in this.UserDb.Data.Memberships.Where(x => x.UserId == user.Id).ToList())
+            using (this.Db.Sync.GetWriteLock())
             {
-                this.UserDb.Data.Memberships.Remove(found);
+                this.Db.Data.Users.Remove(user);
+
+                foreach (var found in this.Db.Data.Memberships.Where(x => x.UserId == user.Id).ToList())
+                {
+                    this.Db.Data.Memberships.Remove(found);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets all users
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<User> GetAllUsers()
+        {
+            using (this.Db.Sync.GetReadLock())
+            {
+                return this.Db.Data.Users.ToList();
+            }
+        }
+
+        /// <summary>
+        /// Adds group to usermanagement
+        /// </summary>
+        /// <param name="group">Group to be added</param>
+        public void AddGroup(Group group)
+        {
+            using (this.Db.Sync.GetWriteLock())
+            {
+                Ensure.IsNotNull(group);
+
+                if (string.IsNullOrEmpty(group.Name))
+                {
+                    throw new UserManagementException(
+                        UserManagementExceptionReason.NoGroupTitle,
+                        "No group title");
+                }
+
+                group.Id = this.Db.Data.GetNextGroupId();
+
+                this.Db.Data.Groups.Add(group);
+                this.Db.Data.SaveChanges();
+            }
+        }
+
+        /// <summary>
+        /// Gets the group
+        /// </summary>
+        /// <param name="groupId">Id of the group</param>
+        public Group GetGroup(long groupId)
+        {
+            using (this.Db.Sync.GetReadLock())
+            {
+                return this.Db.Data.Groups.FirstOrDefault(x => x.Id == groupId);
+            }
+        }
+
+        /// <summary>
+        /// Gets the group
+        /// </summary>
+        /// <param name="groupName">NAme of the group</param>
+        public Group GetGroup(string groupName)
+        {
+            using (this.Db.Sync.GetReadLock())
+            {
+                return this.Db.Data.Groups.FirstOrDefault(x => x.Name == groupName);
+            }
+        }
+
+        /// <summary>
+        /// Removes a group from database
+        /// </summary>
+        /// <param name="group">Group to be removed</param>
+        public void RemoveGroup(Group group)
+        {
+            using (this.Db.Sync.GetWriteLock())
+            {
+                this.Db.Data.Groups.Remove(group);
+
+                foreach (var found in this.Db.Data.Memberships.Where(x => x.GroupId == group.Id).ToList())
+                {
+                    this.Db.Data.Memberships.Remove(found);
+                }
             }
         }
 
@@ -228,15 +276,18 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         /// <param name="user">User to be associated</param>
         public void AddToGroup(Group group, User user)
         {
-            this.RemoveFromGroup(group, user);
-
-            var membership = new Membership()
+            using (this.Db.Sync.GetWriteLock())
             {
-                GroupId = group.Id,
-                UserId = user.Id
-            };
+                this.RemoveFromGroup(group, user);
 
-            this.UserDb.Data.Memberships.Add(membership);
+                var membership = new Membership()
+                {
+                    GroupId = group.Id,
+                    UserId = user.Id
+                };
+
+                this.Db.Data.Memberships.Add(membership);
+            }
         }
 
         /// <summary>
@@ -246,9 +297,12 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         /// <param name="user">User of membership to be removed</param>
         public void RemoveFromGroup(Group group, User user)
         {
-            foreach (var found in this.UserDb.Data.Memberships.Where(x => x.GroupId == group.Id && x.UserId == user.Id).ToList())
+            using (this.Db.Sync.GetWriteLock())
             {
-                this.UserDb.Data.Memberships.Remove(found);
+                foreach (var found in this.Db.Data.Memberships.Where(x => x.GroupId == group.Id && x.UserId == user.Id).ToList())
+                {
+                    this.Db.Data.Memberships.Remove(found);
+                }
             }
         }
 
@@ -259,7 +313,10 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         /// <param name="user">User to be checked</param>
         public bool IsInGroup(Group group, User user)
         {
-            return this.UserDb.Data.Memberships.Any(x => x.GroupId == group.Id && x.UserId == user.Id);
+            using (this.Db.Sync.GetReadLock())
+            {
+                return this.Db.Data.Memberships.Any(x => x.GroupId == group.Id && x.UserId == user.Id);
+            }
         }
 
         /// <summary>
@@ -269,11 +326,14 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         /// <returns>Enumeration of users</returns>
         public IEnumerable<Group> GetGroupsOfUser(User user)
         {
-            return this.UserDb.Data.Memberships
-                .Where(x => x.UserId == user.Id)
-                .Select(x => this.UserDb.Data.Groups.Where(y => y.Id == x.GroupId).FirstOrDefault())
-                .Where(x => x != null)
-                .ToList();
+            using (this.Db.Sync.GetReadLock())
+            {
+                return this.Db.Data.Memberships
+                    .Where(x => x.UserId == user.Id)
+                    .Select(x => this.Db.Data.Groups.Where(y => y.Id == x.GroupId).FirstOrDefault())
+                    .Where(x => x != null)
+                    .ToList();
+            }
         }
 
         /// <summary>
@@ -281,7 +341,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         /// </summary>
         public void SaveChanges()
         {
-            this.UserDb.Data.SaveChanges();
+            this.Db.Data.SaveChanges();
         }
 
         /// <summary>
@@ -291,9 +351,23 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         /// <returns>true, if username is existing</returns>
         public bool IsUsernameExisting(string username)
         {
-            var userCount = this.UserDb.Data.Users.Where(x => x.Username == username).Count();
+            using (this.Db.Sync.GetReadLock())
+            {
+                return this.Db.Data.Users.Any(x => x.Username == username);
+            }
+        }
 
-            return userCount > 0;
+        /// <summary>
+        /// Checks, if group is existing
+        /// </summary>
+        /// <param name="groupName">Name of the group</param>
+        /// <returns>True, if group is existing</returns>
+        public bool IsGroupExisting(string groupName)
+        {
+            using (this.Db.Sync.GetReadLock())
+            {
+                return this.Db.Data.Groups.Any(x => x.Name == groupName);
+            }
         }
 
         /// <summary>
@@ -304,8 +378,11 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         /// <param name="password">Password to be encrypted</param>
         public void SetPassword(User user, string password)
         {
-            var completePassword = user.Username + password + this.GameInfoProvider.GameInfo.PasswordSalt;
-            user.EncryptedPassword = completePassword.Sha1();
+            using (this.Db.Sync.GetWriteLock())
+            {
+                var completePassword = user.Username + password + this.GameInfoProvider.GameInfo.PasswordSalt;
+                user.EncryptedPassword = completePassword.Sha1();
+            }
         }
 
         /// <summary>
@@ -316,8 +393,11 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         /// <returns>true, if password is correct</returns>
         public bool IsPasswordCorrect(User user, string password)
         {
-            var completePassword = user.Username + password + this.GameInfoProvider.GameInfo.PasswordSalt;
-            return user.EncryptedPassword == completePassword.Sha1();
+            using (this.Db.Sync.GetReadLock())
+            {
+                var completePassword = user.Username + password + this.GameInfoProvider.GameInfo.PasswordSalt;
+                return user.EncryptedPassword == completePassword.Sha1();
+            }
         }
 
         /// <summary>
@@ -325,7 +405,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         /// </summary>
         public void Start()
         {
-            if (!this.IsUsernameExisting(AdminName))
+            if (!this.IsUsernameExisting(AdminName) || !this.IsGroupExisting(GroupAdminName))
             {
                 if (this.UserQuery != null &&
                     this.UserQuery.Ask(
@@ -349,28 +429,48 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         /// <summary>
         /// Defines the name of the Administrator
         /// </summary>
-        public string AdminName = "Admin";
+        public const string AdminName = "Admin";
+
+        /// <summary>
+        /// Defines the name of the Administrator
+        /// </summary>
+        public const string GroupAdminName = "Administrators";
 
         /// <summary>
         /// Initializes the admin, if necessary
         /// </summary>
         public void InitAdmin()
         {
-            if (this.IsUsernameExisting(AdminName))
+            using (this.Db.Sync.GetWriteLock())
             {
-                return;
+                if (!this.IsUsernameExisting(AdminName))
+                {
+                    var user = new User();
+                    user.Username = AdminName;
+                    user.EMail = this.GameInfoProvider.GameInfo.AdminEMail;
+                    user.HasAgreedToTOS = true;
+                    user.HasNoCredentials = false;
+                    user.IsActive = true;
+
+                    this.SetPassword(user, this.GameInfoProvider.GameInfo.PasswordSalt);
+
+                    this.AddUser(user);
+                }
+
+                if (!this.IsGroupExisting(GroupAdminName))
+                {
+                    var group = new Group();
+                    group.Name = GroupAdminName;
+                    group.TokenId = Group.AdministratorsToken;
+
+                    this.AddGroup(group);
+                }
+
+                var adminUser = this.GetUser(AdminName);
+                var adminGroup = this.GetGroup(GroupAdminName);
+
+                this.AddToGroup(adminGroup, adminUser);
             }
-
-            var user = new User();
-            user.Username = "Admin";
-            user.EMail = this.GameInfoProvider.GameInfo.AdminEMail;
-            user.HasAgreedToTOS = true;
-            user.HasNoCredentials = false;
-            user.IsActive = true;
-
-            this.SetPassword(user, this.GameInfoProvider.GameInfo.PasswordSalt);
-
-            this.AddUser(user);
         }
     }
 }

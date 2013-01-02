@@ -155,5 +155,10 @@ namespace BurnSystems.FlexBG.Modules.UserM.Models
                 return this.EMail.IsValidEmail();
             }
         }
+
+        public override string ToString()
+        {
+            return this.Username;
+        }
     }
 }
