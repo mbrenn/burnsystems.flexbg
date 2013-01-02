@@ -110,6 +110,8 @@
     <Compile Include="Modules\UserM\Logic\UserManagementLocal.cs" />
     <Compile Include="Modules\UserM\Logic\UserManagementException.cs" />
     <Compile Include="Modules\UserM\Logic\WebUserManagementView.cs" />
+    <Compile Include="Modules\UserM\Models\Group.cs" />
+    <Compile Include="Modules\UserM\Models\Membership.cs" />
     <Compile Include="Modules\UserM\Models\User.cs" />
     <Compile Include="Modules\UserM\Models\WebUserView.cs" />
     <Compile Include="Modules\UserQueryM\IUserQuery.cs" />

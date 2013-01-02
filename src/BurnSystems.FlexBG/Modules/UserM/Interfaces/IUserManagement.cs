@@ -10,6 +10,8 @@ namespace BurnSystems.FlexBG.Modules.UserM.Interfaces
     {
         void AddUser(User user);
 
+        void RemoveUser(User user);
+
         User GetUser(long userId);
 
         User GetUser(string username);
@@ -23,7 +25,17 @@ namespace BurnSystems.FlexBG.Modules.UserM.Interfaces
         void SetPassword(User user, string password);
 
         bool IsPasswordCorrect(User user, string password);
-        
+
+        void AddGroup(Group group);
+
+        void RemoveGroup(Group group);
+
+        void AddToGroup(Group group, User user);
+
+        void RemoveFromGroup(Group group, User user);
+
+        IEnumerable<Group> GetGroupsOfUser(User user);
+
         void InitAdmin();
 
         void SaveChanges();

@@ -13,7 +13,9 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         NoPassword,
         NoEmail,
         InvalidEmail,
-        InvalidUsername
+        InvalidUsername,
+
+        NoGroupTitle
     }
 
     public class UserManagementException : ApplicationException

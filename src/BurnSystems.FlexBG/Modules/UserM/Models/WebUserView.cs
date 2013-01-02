@@ -50,8 +50,17 @@ namespace BurnSystems.FlexBG.Modules.UserM.Models
         {
             get
             {
-                return new TokenSet(
+                var result = new TokenSet(
                     this.Token);
+                foreach (var group in this.userManagement.GetGroupsOfUser(this.user))
+                {
+                    result.Add(
+                        new Token(
+                            group.TokenId,
+                            group.Title));
+                }
+
+                return result;
             }
         }
 

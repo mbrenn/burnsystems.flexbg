@@ -2,6 +2,7 @@
 using BurnSystems.FlexBG.Modules.UserQueryM;
 using BurnSystems.Logging;
 using BurnSystems.ObjectActivation;
+using BurnSystems.Synchronisation;
 using System;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -16,11 +17,24 @@ namespace BurnSystems.FlexBG.Modules.UserM.Data
         private UserDatabaseLocal data = new UserDatabaseLocal();
 
         /// <summary>
+        /// Stores the sync object
+        /// </summary>
+        private ReadWriteLock sync = new ReadWriteLock();
+
+        /// <summary>
         /// Gets the users
         /// </summary>
         public UserDatabaseLocal Data 
         {
             get { return this.data; }
+        }
+
+        /// <summary>
+        /// Gets the synchronization object
+        /// </summary>
+        public ReadWriteLock Sync
+        {
+            get { return this.sync; }
         }
 
         [Inject]

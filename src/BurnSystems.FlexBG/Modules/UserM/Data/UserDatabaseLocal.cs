@@ -11,11 +11,30 @@ namespace BurnSystems.FlexBG.Modules.UserM.Data
     [Serializable]
     public class UserDatabaseLocal
     {
+        /// <summary>
+        /// Stores the id of the last group
+        /// </summary>
+        private long lastGroupId = 0;
+
+        /// <summary>
+        /// Stores the id of the last user
+        /// </summary>
         private long lastUserId = 0;
+
         /// <summary>
         /// Stores a list of users
         /// </summary>
         private List<User> users = new List<User>();
+
+        /// <summary>
+        /// Stores the groups
+        /// </summary>
+        private List<Group> groups = new List<Group>();
+
+        /// <summary>
+        /// Stores the memberships between user and group
+        /// </summary>
+        private List<Membership> memberships = new List<Membership>();
 
         /// <summary>
         /// Gets a list of users
@@ -25,10 +44,20 @@ namespace BurnSystems.FlexBG.Modules.UserM.Data
             get { return this.users; }
         }
 
-        public long LastUserId
+        /// <summary>
+        /// Gets a list of users
+        /// </summary>
+        public List<Group> Groups
         {
-            get { return this.lastUserId; }
-            set { this.lastUserId = value; }
+            get { return this.groups; }
+        }
+
+        /// <summary>
+        /// Gets a list of users
+        /// </summary>
+        public List<Membership> Memberships
+        {
+            get { return this.memberships; }
         }
 
         /// <summary>
@@ -38,6 +67,15 @@ namespace BurnSystems.FlexBG.Modules.UserM.Data
         public long GetNextUserId()
         {
             return Interlocked.Increment(ref lastUserId);
+        }
+
+        /// <summary>
+        /// Gets the next user id
+        /// </summary>
+        /// <returns></returns>
+        public long GetNextGroupId()
+        {
+            return Interlocked.Increment(ref lastGroupId);
         }
 
         /// <summary>

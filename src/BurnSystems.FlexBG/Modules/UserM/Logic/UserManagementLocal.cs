@@ -7,6 +7,7 @@ using BurnSystems.FlexBG.Modules.UserM.Models;
 using BurnSystems.FlexBG.Modules.UserQueryM;
 using BurnSystems.Logging;
 using BurnSystems.ObjectActivation;
+using BurnSystems.Test;
 using BurnSystems.WebServer.Parser;
 using System;
 using System.Collections.Generic;
@@ -48,16 +49,6 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         /// </summary>
         [Inject(IsMandatory = true)]
         public UserManagementConfig Configuration
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// Gets or sets the mailsender
-        /// </summary>
-        [Inject(IsMandatory = true)]
-        public IMailSender MailSender
         {
             get;
             set;
@@ -182,6 +173,110 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         }
 
         /// <summary>
+        /// Adds group to usermanagement
+        /// </summary>
+        /// <param name="group">Group to be added</param>
+        public void AddGroup(Group group)
+        {
+            Ensure.IsNotNull(group);
+
+            if (string.IsNullOrEmpty(group.Title))
+            {
+                throw new UserManagementException(
+                    UserManagementExceptionReason.NoGroupTitle,
+                    "No group title");
+            }
+
+            group.Id = this.UserDb.Data.GetNextGroupId();
+
+            this.UserDb.Data.Groups.Add(group);
+            this.UserDb.Data.SaveChanges();
+        }
+
+        /// <summary>
+        /// Removes a group from database
+        /// </summary>
+        /// <param name="group">Group to be removed</param>
+        public void RemoveGroup(Group group)
+        {
+            this.UserDb.Data.Groups.Remove(group);
+
+            foreach (var found in this.UserDb.Data.Memberships.Where(x => x.GroupId == group.Id).ToList())
+            {
+                this.UserDb.Data.Memberships.Remove(found);
+            }
+        }
+
+        /// <summary>
+        /// Remvoes user from database
+        /// </summary>
+        /// <param name="user">User to be removed</param>
+        public void RemoveUser(User user)
+        {
+            this.UserDb.Data.Users.Remove(user);
+
+            foreach (var found in this.UserDb.Data.Memberships.Where(x => x.UserId == user.Id).ToList())
+            {
+                this.UserDb.Data.Memberships.Remove(found);
+            }
+        }
+
+        /// <summary>
+        /// Adds membership
+        /// </summary>
+        /// <param name="group">Group to be associated</param>
+        /// <param name="user">User to be associated</param>
+        public void AddToGroup(Group group, User user)
+        {
+            this.RemoveFromGroup(group, user);
+
+            var membership = new Membership()
+            {
+                GroupId = group.Id,
+                UserId = user.Id
+            };
+
+            this.UserDb.Data.Memberships.Add(membership);
+        }
+
+        /// <summary>
+        /// Removes membership
+        /// </summary>
+        /// <param name="group">Group of membership to be removed</param>
+        /// <param name="user">User of membership to be removed</param>
+        public void RemoveFromGroup(Group group, User user)
+        {
+            foreach (var found in this.UserDb.Data.Memberships.Where(x => x.GroupId == group.Id && x.UserId == user.Id).ToList())
+            {
+                this.UserDb.Data.Memberships.Remove(found);
+            }
+        }
+
+        /// <summary>
+        /// Checks if user is in group
+        /// </summary>
+        /// <param name="group">Group to be checked</param>
+        /// <param name="user">User to be checked</param>
+        public bool IsInGroup(Group group, User user)
+        {
+            return this.UserDb.Data.Memberships.Any(x => x.GroupId == group.Id && x.UserId == user.Id);
+        }
+
+        /// <summary>
+        /// Gets all groups where user is member
+        /// </summary>
+        /// <param name="user">User to be checked</param>
+        /// <returns>Enumeration of users</returns>
+        public IEnumerable<Group> GetGroupsOfUser(User user)
+        {
+            return this.UserDb.Data.Memberships
+                .Where(x => x.UserId == user.Id)
+                .Select(x => this.UserDb.Data.Groups.Where(y => y.Id == x.GroupId).FirstOrDefault())
+                .Where(x => x != null)
+                .ToList();
+        }
+
+        /// <summary>
         /// Saves the changes
         /// </summary>
         public void SaveChanges()
@@ -203,7 +298,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
 
         /// <summary>
         /// Encrypts the password for a certain user. 
-        /// It is important that the username does not change after encryption
+        /// It is important that the username does not get changed after encryption
         /// </summary>
         /// <param name="user">User whose password gets encrypted</param>
         /// <param name="password">Password to be encrypted</param>
