@@ -13,12 +13,12 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
     /// <summary>
     /// Helper to retrieve the current user
     /// </summary>
-    public class CurrentUserHelper
+    public class CurrentWebUserHelper
     {
         /// <summary>
         /// Name of the current user
         /// </summary>
-        public const string Name = "CurrentUser";
+        public const string Name = "CurrentWebUser";
 
         /// <summary>
         /// Gets or sets the authentication
@@ -34,7 +34,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         /// Gets or sets the user management
         /// </summary>
         [Inject]
-        public IUserManagement UserManagement
+        public IWebUserManagement UserManagement
         {
             get;
             set;
@@ -45,17 +45,10 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         /// </summary>
         /// <param name="activates">Activation container to be used</param>
         /// <returns>User to be retrieved</returns>
-        public static User GetCurrentUser(IActivates activates)
+        public static IWebUser GetCurrentUser(IActivates activates)
         {
-            var helper = activates.Create<CurrentUserHelper>();
-            var webUser = helper.Authentication.GetLoggedInUser();
-            if (webUser == null)
-            {
-                return null;
-            }
-
-            var user = helper.UserManagement.GetUser(webUser.Id);
-            return user;
+            var helper = activates.Create<CurrentWebUserHelper>();
+            return helper.Authentication.GetLoggedInUser();
         }
     }
 }
