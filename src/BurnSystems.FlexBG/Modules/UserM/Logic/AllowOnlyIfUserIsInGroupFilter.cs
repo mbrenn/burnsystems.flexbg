@@ -16,7 +16,8 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
     public class AllowOnlyIfUserIsInGroupFilter : IRequestFilter
     {
         /// <summary>
-        /// Gets or sets the required tokenset
+        /// Gets or sets the required tokenset.
+        /// If current logged on user does not have the tokenset, access will be denied
         /// </summary>
         public TokenSet RequiredTokenSet
         {
@@ -25,7 +26,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         }
 
         /// <summary>
-        /// Gets or sets the request filter
+        /// Gets or sets the request filter. This predicate shall return true, if the filter shall be applied
         /// </summary>
         public Func<ContextDispatchInformation, bool> RequestFilter
         {
@@ -46,6 +47,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
 
         public void BeforeDispatch(IActivates container, ContextDispatchInformation information, out bool cancel)
         {
+            // Is this request relevant for us?
             if (!this.RequestFilter(information))
             {
                 // No match
@@ -53,25 +55,33 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
                 return;
             }
 
+            // Gets the current user
             var user = container.GetByName<IWebUser>(CurrentWebUserHelper.Name);
             if (user == null)
             {
                 // User is not logged in
-                cancel = this.Cancel(container, information);
+                cancel = Cancel(container, information);
                 return;
             }
 
+            // Checks, if we have all credentials
             if (!TokenSet.IsSubsetOf(this.RequiredTokenSet, user.CredentialTokenSet))
             {
                 // Too less credentials
-                cancel = this.Cancel(container, information);
+                cancel = Cancel(container, information);
                 return;
             }
 
             cancel = false;
         }
 
-        private bool Cancel(IActivates container, ContextDispatchInformation information)
+        /// <summary>
+        /// Cancels the request and returns an errorresponse to browser
+        /// </summary>
+        /// <param name="container">Activation context</param>
+        /// <param name="information">Current Http context</param>
+        /// <returns>true for cancellation. </returns>
+        private static bool Cancel(IActivates container, ContextDispatchInformation information)
         {
             var errorResponse = container.Create<ErrorResponse>();
             errorResponse.Set(HttpStatusCode.Forbidden);
