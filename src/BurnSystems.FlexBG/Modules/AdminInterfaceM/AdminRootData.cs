@@ -10,8 +10,13 @@ namespace BurnSystems.FlexBG.Modules.AdminInterfaceM
     /// <summary>
     /// Root object for data
     /// </summary>
-    public class AdminRootData  : ITreeViewItem
+    public class AdminRootData : ITreeViewItem
     {
+        /// <summary>
+        /// Stores the name 
+        /// </summary>
+        public const string Name = "AdminRootData";
+
         public long Id
         {
             get { return 1; }
