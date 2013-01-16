@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BurnSystems.FlexBG.Modules.UserM.Logic
+namespace BurnSystems.FlexBG.Modules.UserM.Logic.Admin
 {
     /// <summary>
     /// Initializes a new instance of the admin interface
@@ -38,7 +38,16 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         /// </summary>
         public void Start()
         {
-            
+            this.Data.Children.Add(
+                new UsersTreeView()
+                {
+                    Id = this.Data.GetNextChildrenId()
+                });
+            this.Data.Children.Add(
+                new GroupsTreeView()
+                {
+                    Id = this.Data.GetNextChildrenId()
+                });
         }
 
         /// <summary>

@@ -229,6 +229,18 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         }
 
         /// <summary>
+        /// Gets all users
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<Group> GetAllGroups()
+        {
+            using (this.Db.Sync.GetReadLock())
+            {
+                return this.Db.Data.Groups.ToList();
+            }
+        }
+
+        /// <summary>
         /// Gets the group
         /// </summary>
         /// <param name="groupId">Id of the group</param>

@@ -30,6 +30,8 @@ namespace BurnSystems.FlexBG.Modules.UserM.Interfaces
 
         void RemoveGroup(Group group);
 
+        IEnumerable<Group> GetAllGroups();
+
         Group GetGroup(long groupId);
 
         Group GetGroup(string groupName);
