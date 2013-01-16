@@ -106,6 +106,7 @@
     <Compile Include="Modules\UserM\Data\UserDatabase.cs" />
     <Compile Include="Modules\UserM\Data\UserDatabaseLocal.cs" />
     <Compile Include="Modules\UserM\Interfaces\IUserManagement.cs" />
+    <Compile Include="Modules\UserM\Logic\UserAdminInterface.cs" />
     <Compile Include="Modules\UserM\Logic\AllowOnlyIfUserIsInGroupFilter.cs" />
     <Compile Include="Modules\UserM\Logic\CurrentUserHelper.cs" />
     <Compile Include="Modules\UserM\Logic\CurrentWebUserHelper.cs" />

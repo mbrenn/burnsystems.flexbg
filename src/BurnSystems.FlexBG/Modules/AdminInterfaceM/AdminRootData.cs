@@ -1,4 +1,5 @@
-﻿using BurnSystems.WebServer.Umbra.Views.Treeview;
+﻿using BurnSystems.ObjectActivation;
+using BurnSystems.WebServer.Umbra.Views.Treeview;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,9 +38,9 @@ namespace BurnSystems.FlexBG.Modules.AdminInterfaceM
             get { return true; }
         }
 
-        public IEnumerable<ITreeViewItem> Children
+        public IEnumerable<ITreeViewItem> GetChildren(IActivates activates)
         {
-            get { return null; }
+            return null;
         }
 
         public override string ToString()
