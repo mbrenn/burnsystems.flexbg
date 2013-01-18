@@ -11,7 +11,7 @@ namespace BurnSystems.FlexBG.Modules.AdminInterfaceM
     /// <summary>
     /// Root object for data
     /// </summary>
-    public class AdminRootData : ITreeViewItem
+    public class AdminRootData : BaseTreeViewItem
     {
         /// <summary>
         /// Stores the children
@@ -26,7 +26,7 @@ namespace BurnSystems.FlexBG.Modules.AdminInterfaceM
         /// <summary>
         /// Gets the unique id
         /// </summary>
-        public long Id
+        public override long Id
         {
             get { return 1; }
         }
@@ -34,25 +34,9 @@ namespace BurnSystems.FlexBG.Modules.AdminInterfaceM
         /// <summary>
         /// Gets the title
         /// </summary>
-        public string Title
+        public override string Title
         {
             get { return "FlexBG"; }
-        }
-
-        /// <summary>
-        /// Gets the image url
-        /// </summary>
-        public string ImageUrl
-        {
-            get { return string.Empty; }
-        }
-
-        /// <summary>
-        /// Gets a value as true
-        /// </summary>
-        public bool IsExpandable
-        {
-            get { return true; }
         }
 
         /// <summary>
@@ -72,7 +56,7 @@ namespace BurnSystems.FlexBG.Modules.AdminInterfaceM
             return this.Children.Count + 1;
         }
 
-        IEnumerable<ITreeViewItem> ITreeViewItem.GetChildren(IActivates activates)
+        public override IEnumerable<ITreeViewItem> GetChildren(IActivates activates)
         {
             return this.children;
         }

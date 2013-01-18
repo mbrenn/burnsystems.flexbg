@@ -13,30 +13,15 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic.Admin
     /// <summary>
     /// Gets the users treeview
     /// </summary>
-    public class GroupsTreeView : ITreeViewItem
+    public class GroupsTreeView : BaseTreeViewItem
     {
-        public long Id
-        {
-            get;
-            set;
-        }
-
-        public string Title
+        public override string Title
         {
             get { return "Groups"; }
+            // set { throw new NotImplementedException(); }
         }
 
-        public string ImageUrl
-        {
-            get { return string.Empty; }
-        }
-
-        public bool IsExpandable
-        {
-            get { return true; }
-        }
-
-        public IEnumerable<ITreeViewItem> GetChildren(IActivates activates)
+        public override IEnumerable<ITreeViewItem> GetChildren(IActivates activates)
         {
             var userManagement = activates.Get<IUserManagement>();
             Ensure.IsNotNull(userManagement, "No IUserManagement bound");
@@ -46,7 +31,8 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic.Admin
                 new GenericTreeViewItem()
             {
                 Id = x.Id,
-                Title = x.Name
+                Title = x.Name,
+                Entity = x
             });
         }
     }
