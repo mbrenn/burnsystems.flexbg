@@ -1,6 +1,9 @@
 ﻿using BurnSystems.FlexBG.Interfaces;
 using BurnSystems.FlexBG.Modules.AdminInterfaceM;
+using BurnSystems.FlexBG.Modules.UserM.Models;
 using BurnSystems.ObjectActivation;
+using BurnSystems.WebServer.Umbra.Views.DetailView;
+using BurnSystems.WebServer.Umbra.Views.DetailView.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +23,16 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic.Admin
         /// </summary>
         [Inject(ByName = AdminRootData.Name)]
         public AdminRootData Data
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Gets or sets the view resolver
+        /// </summary>
+        [Inject(IsMandatory=true)]
+        public BasicDetailViewResolver ViewResolver
         {
             get;
             set;
@@ -48,6 +61,38 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic.Admin
                 {
                     Id = this.Data.GetNextChildrenId()
                 });
+
+            // Creates Entity View for Users
+            this.ViewResolver.Add(
+                (x) => x.Entity is User,
+                (x) => new EntityView<User>(
+                    new EntityViewConfig<User>()
+                        .AddElement(EntityViewElementProperty.Create()
+                            .Labelled("Id")
+                            .For("Id")
+                            .AsInteger()
+                            .AsReadOnly())
+                        .AddElement(EntityViewElementProperty.Create()
+                            .Labelled("Username")
+                            .For("Username")
+                            .AsString())
+                        .AddElement(EntityViewElementProperty.Create()
+                            .Labelled("E-Mail")
+                            .For("EMail")
+                            .AsString())
+                        .AddElement(EntityViewElementProperty.Create()
+                            .Labelled("Activation Key")
+                            .For("ActivationKey")
+                            .WithWidth(20)
+                            .AsString())
+                        .AddElement(EntityViewElementProperty.Create()
+                            .Labelled("Is active")
+                            .For("IsActive")
+                            .AsBoolean())
+                        .AddElement(EntityViewElementProperty.Create()
+                            .Labelled("Has agreed to TOS")
+                            .For("HasAgreedToTOS")
+                            .AsBoolean())));
         }
 
         /// <summary>
