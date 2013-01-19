@@ -93,6 +93,21 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic.Admin
                             .Labelled("Has agreed to TOS")
                             .For("HasAgreedToTOS")
                             .AsBoolean())));
+
+            // Creates entity view for groups
+            this.ViewResolver.Add(
+                (x) => x.Entity is Group,
+                (x) => new EntityView<Group>(
+                    new EntityViewConfig<Group>()
+                        .AddElement(EntityViewElementProperty.Create()
+                            .Labelled("Id")
+                            .For("Id")
+                            .AsInteger()
+                            .AsReadOnly())
+                        .AddElement(EntityViewElementProperty.Create()
+                            .Labelled("Name")
+                            .For("Name")
+                            .AsString())));
         }
 
         /// <summary>
