@@ -1,22 +1,22 @@
-﻿using BurnSystems.FlexBG.Modules.GameInfoM;
+﻿using BurnSystems.Extensions;
+using BurnSystems.FlexBG.Modules.GameInfoM;
 using BurnSystems.FlexBG.Modules.MailSenderM;
 using BurnSystems.FlexBG.Modules.UserM.Interfaces;
 using BurnSystems.FlexBG.Modules.UserM.Logic;
+using BurnSystems.FlexBG.Modules.UserM.Models;
 using BurnSystems.Logging;
-using BurnSystems.Extensions;
 using BurnSystems.ObjectActivation;
+using BurnSystems.Test;
 using BurnSystems.WebServer.Modules.MVC;
 using BurnSystems.WebServer.Modules.UserManagement;
 using BurnSystems.WebServer.Parser;
-using BurnSystems.Test;
-using BurnSystems.FlexBG.Modules.UserM.Models;
 
 namespace BurnSystems.FlexBG.Modules.UserM.Controllers
 {
     /// <summary>
     /// Defines the usercontroller offering Login, Register, etc
     /// </summary>
-    public class UsersController : Controller
+    public class UsersController : BurnSystems.WebServer.Modules.MVC.Controller
     {
         private ILog logger = new ClassLogger(typeof(UsersController));
 

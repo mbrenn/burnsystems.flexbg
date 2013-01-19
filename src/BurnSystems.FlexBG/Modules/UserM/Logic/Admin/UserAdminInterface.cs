@@ -96,8 +96,18 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic.Admin
                                 .For("HasAgreedToTOS")
                                 .AsBoolean()),
                         new EntityViewTable(
-                            "SetPassword"
-                            ))));
+                            "SetPassword",
+                            EntityViewElementProperty.Create()
+                                .Labelled("User Id")
+                                .For("Id")
+                                .AsString()
+                                .AsReadOnly(),
+                            EntityViewElementProperty.Create()
+                                .Labelled("New Password")
+                                .For("NewPassword")
+                                .AsString()
+                                .AsWriteOnly())
+                            .WithOverrideUrl("users/SetPassword"))));
 
             // Creates entity view for groups
             this.ViewResolver.Add(
