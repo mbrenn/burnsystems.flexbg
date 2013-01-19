@@ -66,48 +66,55 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic.Admin
             this.ViewResolver.Add(
                 (x) => x.Entity is User,
                 (x) => new EntityView<User>(
-                    new EntityViewConfig<User>()
-                        .AddElement(EntityViewElementProperty.Create()
-                            .Labelled("Id")
-                            .For("Id")
-                            .AsInteger()
-                            .AsReadOnly())
-                        .AddElement(EntityViewElementProperty.Create()
-                            .Labelled("Username")
-                            .For("Username")
-                            .AsString())
-                        .AddElement(EntityViewElementProperty.Create()
-                            .Labelled("E-Mail")
-                            .For("EMail")
-                            .AsString())
-                        .AddElement(EntityViewElementProperty.Create()
-                            .Labelled("Activation Key")
-                            .For("ActivationKey")
-                            .WithWidth(20)
-                            .AsString())
-                        .AddElement(EntityViewElementProperty.Create()
-                            .Labelled("Is active")
-                            .For("IsActive")
-                            .AsBoolean())
-                        .AddElement(EntityViewElementProperty.Create()
-                            .Labelled("Has agreed to TOS")
-                            .For("HasAgreedToTOS")
-                            .AsBoolean())));
+                    new EntityViewConfig<User>(
+                        new EntityViewTable(
+                            "Info", 
+                            EntityViewElementProperty.Create()
+                                .Labelled("Id")
+                                .For("Id")
+                                .AsInteger()
+                                .AsReadOnly(),
+                            EntityViewElementProperty.Create()
+                                .Labelled("Username")
+                                .For("Username")
+                                .AsString(),
+                            EntityViewElementProperty.Create()
+                                .Labelled("E-Mail")
+                                .For("EMail")
+                                .AsString(),
+                            EntityViewElementProperty.Create()
+                                .Labelled("Activation Key")
+                                .For("ActivationKey")
+                                .WithWidth(20)
+                                .AsString(),
+                            EntityViewElementProperty.Create()
+                                .Labelled("Is active")
+                                .For("IsActive")
+                                .AsBoolean(),
+                            EntityViewElementProperty.Create()
+                                .Labelled("Has agreed to TOS")
+                                .For("HasAgreedToTOS")
+                                .AsBoolean()),
+                        new EntityViewTable(
+                            "SetPassword"
+                            ))));
 
             // Creates entity view for groups
             this.ViewResolver.Add(
                 (x) => x.Entity is Group,
                 (x) => new EntityView<Group>(
-                    new EntityViewConfig<Group>()
-                        .AddElement(EntityViewElementProperty.Create()
-                            .Labelled("Id")
-                            .For("Id")
-                            .AsInteger()
-                            .AsReadOnly())
-                        .AddElement(EntityViewElementProperty.Create()
-                            .Labelled("Name")
-                            .For("Name")
-                            .AsString())));
+                    new EntityViewConfig<Group>(
+                        new EntityViewTable(
+                            "Info", 
+                            EntityViewElementProperty.Create()
+                                .Labelled("Id")
+                                .For("Id")
+                                .AsInteger()
+                                .AsReadOnly(),
+                            EntityViewElementProperty.Create()
+                                .Labelled("Name")
+                                .For("Name")
+                                .AsString()))));
         }
 
         /// <summary>
