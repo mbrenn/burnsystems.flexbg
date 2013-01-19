@@ -63,6 +63,7 @@
     <Compile Include="Modules\DeponNet\TownM\Town.cs" />
     <Compile Include="Modules\DeponNet\UnitM\Unit.cs" />
     <Compile Include="Modules\DeponNet\UnitM\UnitType.cs" />
+    <Compile Include="Modules\FlexBgModule.cs" />
     <Compile Include="Modules\GameInfoM\GameInfo.cs" />
     <Compile Include="Modules\GameInfoM\GameInfoProvider.cs" />
     <Compile Include="Modules\GameInfoM\IGameInfoProvider.cs" />

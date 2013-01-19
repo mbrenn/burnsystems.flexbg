@@ -108,7 +108,7 @@ namespace BurnSystems.FlexBG
 
             foreach (var runtimeModule in this.activationContainer.GetAll<IFlexBgRuntimeModule>())
             {
-                logger.LogEntry(LogLevel.Notify, "Starting Module: " + runtimeModule.GetType().ToString());
+                logger.LogEntry(LogLevel.Notify, "Starting Module: " + runtimeModule.ToString());
                 runtimeModule.Start();
             }
         }
@@ -122,7 +122,7 @@ namespace BurnSystems.FlexBG
 
             foreach (var runtimeModule in this.activationContainer.GetAll<IFlexBgRuntimeModule>())
             {
-                logger.LogEntry(LogLevel.Notify, "Shutdown of Module: " + runtimeModule.GetType().ToString());
+                logger.LogEntry(LogLevel.Notify, "Shutdown of Module: " + runtimeModule.ToString());
                 runtimeModule.Shutdown();
             }
         }
