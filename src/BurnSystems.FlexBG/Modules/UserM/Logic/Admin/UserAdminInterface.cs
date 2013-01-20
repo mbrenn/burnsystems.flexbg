@@ -68,7 +68,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic.Admin
                 (x) => new EntityView<User>(
                     new EntityViewConfig<User>(
                         new EntityViewTable(
-                            "Info", 
+                            "Info",
                             EntityViewElementProperty.Create()
                                 .Labelled("Id")
                                 .For("Id")
@@ -94,7 +94,16 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic.Admin
                             EntityViewElementProperty.Create()
                                 .Labelled("Has agreed to TOS")
                                 .For("HasAgreedToTOS")
-                                .AsBoolean()),
+                                .AsBoolean(),
+                            EntityViewElementProperty.Create()
+                                .Labelled("Premium Till")
+                                .For("PremiumTill")
+                                .AsDateTime(),
+                            EntityViewElementProperty.Create()
+                                .Labelled("Token")
+                                .For("TokenId")
+                                .As((z) => z.ToString(), null, PropertyDataType.String)
+                                .AsReadOnly()),
                         new EntityViewTable(
                             "SetPassword",
                             EntityViewElementProperty.Create()
@@ -124,7 +133,12 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic.Admin
                             EntityViewElementProperty.Create()
                                 .Labelled("Name")
                                 .For("Name")
-                                .AsString()))));
+                                .AsString(),
+                            EntityViewElementProperty.Create()
+                                .Labelled("Token")
+                                .For("TokenId")
+                                .As((z) => z.ToString(), null, PropertyDataType.String)
+                                .AsReadOnly()))));
         }
 
         /// <summary>
