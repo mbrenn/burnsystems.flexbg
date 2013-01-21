@@ -4,6 +4,7 @@ using BurnSystems.FlexBG.Modules.UserM.Models;
 using BurnSystems.ObjectActivation;
 using BurnSystems.WebServer.Umbra.Views.DetailView;
 using BurnSystems.WebServer.Umbra.Views.DetailView.Entities;
+using BurnSystems.WebServer.Umbra.Views.Treeview;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -64,10 +65,42 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic.Admin
 
             // Creates Entity View for Users
             this.ViewResolver.Add(
+                (x) => x is UsersTreeView,
+                (x) => new EntityView(
+                    new EntityViewConfig(
+                        new EntityViewListTable<UsersTreeView>(
+                            "Users",
+                            EntityViewElementProperty.Create()
+                                .Labelled("Id")
+                                .For("Id")
+                                .AsInteger(),
+                            EntityViewElementProperty.Create()
+                                .Labelled("Username")
+                                .For("Username")
+                                .AsString())
+                        .SetSelector((a, y) => y.GetChildren(a).Select(z => z.Entity)))));
+
+            this.ViewResolver.Add(
+                (x) => x is GroupsTreeView,
+                (x) => new EntityView(
+                    new EntityViewConfig(
+                        new EntityViewListTable<GroupsTreeView>(
+                            "Groups",
+                            EntityViewElementProperty.Create()
+                                .Labelled("Id")
+                                .For("Id")
+                                .AsInteger(),
+                            EntityViewElementProperty.Create()
+                                .Labelled("Name")
+                                .For("Name")
+                                .AsString())
+                        .SetSelector((a, y) => y.GetChildren(a).Select(z => z.Entity)))));
+
+            this.ViewResolver.Add(
                 (x) => x.Entity is User,
-                (x) => new EntityView<User>(
-                    new EntityViewConfig<User>(
-                        new EntityViewTable(
+                (x) => new EntityView(
+                    new EntityViewConfig(
+                        new EntityViewDetailTable(
                             "Info",
                             EntityViewElementProperty.Create()
                                 .Labelled("Id")
@@ -104,7 +137,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic.Admin
                                 .For("TokenId")
                                 .As((z) => z.ToString(), null, PropertyDataType.String)
                                 .AsReadOnly()),
-                        new EntityViewTable(
+                        new EntityViewDetailTable(
                             "SetPassword",
                             EntityViewElementProperty.Create()
                                 .Labelled("User Id")
@@ -121,9 +154,9 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic.Admin
             // Creates entity view for groups
             this.ViewResolver.Add(
                 (x) => x.Entity is Group,
-                (x) => new EntityView<Group>(
-                    new EntityViewConfig<Group>(
-                        new EntityViewTable(
+                (x) => new EntityView(
+                    new EntityViewConfig(
+                        new EntityViewDetailTable(
                             "Info", 
                             EntityViewElementProperty.Create()
                                 .Labelled("Id")
@@ -146,6 +179,11 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic.Admin
         /// </summary>
         public void Shutdown()
         {
+        }
+
+        public override string ToString()
+        {
+            return "Users";
         }
     }
 }

@@ -15,11 +15,6 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic.Admin
     /// </summary>
     public class UsersTreeView : BaseTreeViewItem
     {
-        public override string Title
-        {
-            get { return "Users"; }
-        }
-
         public override IEnumerable<ITreeViewItem> GetChildren(IActivates activates)
         {
             var userManagement = activates.Get<IUserManagement>();
@@ -33,6 +28,11 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic.Admin
                 Title = x.Username,
                 Entity = x
             });
+        }
+
+        public override string ToString()
+        {
+            return "Users";
         }
     }
 }

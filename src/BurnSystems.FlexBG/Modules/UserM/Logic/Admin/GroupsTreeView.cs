@@ -15,10 +15,9 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic.Admin
     /// </summary>
     public class GroupsTreeView : BaseTreeViewItem
     {
-        public override string Title
+        public override string ToString()
         {
-            get { return "Groups"; }
-            // set { throw new NotImplementedException(); }
+            return "Groups";
         }
 
         public override IEnumerable<ITreeViewItem> GetChildren(IActivates activates)
