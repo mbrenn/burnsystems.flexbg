@@ -20,6 +20,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
     /// <summary>
     /// Defines the usermanagement
     /// </summary>
+    [BindAlsoTo(typeof(IFlexBgRuntimeModule))]
     public class UserManagementLocal : IUserManagement, IFlexBgRuntimeModule
     {
         /// <summary>

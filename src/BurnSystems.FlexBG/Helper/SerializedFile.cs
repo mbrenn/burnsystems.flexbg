@@ -22,14 +22,14 @@ namespace BurnSystems.FlexBG.Helper
         /// <summary>
         /// Loads database from file
         /// </summary>
-        public static T LoadFromFile<T>(string filename) where T : class
+        public static T LoadFromFile<T>(string filename, Func<T> createDefault) where T : class
         {
             var filePath = Path.Combine("data", filename);
 
             if (!File.Exists(filePath))
             {
                 classLogger.LogEntry(LogLevel.Message, "No file for " + filename);
-                return default(T);
+                return createDefault();
             }
 
             try
@@ -49,7 +49,7 @@ namespace BurnSystems.FlexBG.Helper
             {
                 classLogger.LogEntry(LogLevel.Fatal, "Loading for " + filename + " failed: " + exc.Message);
 
-                return default(T);
+                return createDefault();
             }
         }
 

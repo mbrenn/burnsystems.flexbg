@@ -49,9 +49,15 @@
     <Compile Include="Modules\DeponNet\EntityType.cs" />
     <Compile Include="Modules\DeponNet\GameClockM\GameClock.cs" />
     <Compile Include="Modules\DeponNet\GameClockM\GameClockManager.cs" />
+    <Compile Include="Modules\DeponNet\GameM\Admin\DeponCreateGameModel.cs" />
+    <Compile Include="Modules\DeponNet\GameM\Admin\DeponGameAdminInterface.cs" />
+    <Compile Include="Modules\DeponNet\GameM\Admin\GamesTreeView.cs" />
+    <Compile Include="Modules\DeponNet\GameM\Controllers\DeponGamesAdminController.cs" />
     <Compile Include="Modules\DeponNet\GameM\Game.cs" />
-    <Compile Include="Modules\DeponNet\GameM\GameDb.cs" />
+    <Compile Include="Modules\DeponNet\GameM\LocalGameDatabase.cs" />
     <Compile Include="Modules\DeponNet\GameM\GameInfo.cs" />
+    <Compile Include="Modules\DeponNet\GameM\GameManagement.cs" />
+    <Compile Include="Modules\DeponNet\GameM\Interface\IGameManagement.cs" />
     <Compile Include="Modules\DeponNet\MapM\FieldCoordinates.cs" />
     <Compile Include="Modules\DeponNet\PlayerM\Player.cs" />
     <Compile Include="Modules\DeponNet\RegionM\Region.cs" />

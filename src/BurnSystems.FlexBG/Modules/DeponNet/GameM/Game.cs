@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 
 namespace BurnSystems.FlexBG.Modules.DeponNet.GameM
 {
+    [Serializable]
     public class Game
     {
         /// <summary>
         /// Gets or sets the game id
         /// </summary>
-        public long GameId
+        public long Id
         {
             get;
             set;
@@ -42,18 +43,6 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.GameM
         }
 
         public int MaxPlayers
-        {
-            get;
-            set;
-        }
-
-        public int MapWidth
-        {
-            get;
-            set;
-        }
-
-        public int MapHeight
         {
             get;
             set;

@@ -9,6 +9,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 namespace BurnSystems.FlexBG.Modules.UserM.Data
 {
+    [BindAlsoTo(typeof(IFlexBgRuntimeModule))]
     public class UserDatabase : IFlexBgRuntimeModule
     {
         /// <summary>

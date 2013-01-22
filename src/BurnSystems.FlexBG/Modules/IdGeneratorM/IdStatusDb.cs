@@ -21,12 +21,7 @@ namespace BurnSystems.FlexBG.Modules.IdGeneratorM
         /// </summary>
         public void Start()
         {
-            this.Status = SerializedFile.LoadFromFile<IdStatus>("ids.db");
-
-            if (this.Status == null)
-            {
-                this.Status = new IdStatus();
-            }
+            this.Status = SerializedFile.LoadFromFile<IdStatus>("ids.db", () => new IdStatus());
         }
 
         /// <summary>

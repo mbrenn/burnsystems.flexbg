@@ -1,5 +1,6 @@
 ﻿using BurnSystems.FlexBG.Helper;
 using BurnSystems.FlexBG.Interfaces;
+using BurnSystems.ObjectActivation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,9 +9,10 @@ using System.Threading.Tasks;
 
 namespace BurnSystems.FlexBG.Modules.DeponNet.GameM
 {
-    public class GameDb : IFlexBgRuntimeModule
+    [BindAlsoTo(typeof(IFlexBgRuntimeModule))]
+    public class LocalGameDatabase : IFlexBgRuntimeModule
     {
-        public GameInfo Games
+        public GameInfo GameStore
         {
             get;
             set;
@@ -21,12 +23,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.GameM
         /// </summary>
         public void Start()
         {
-            this.Games = SerializedFile.LoadFromFile<GameInfo>("games.db");
-
-            if (this.Games == null)
-            {
-                this.Games = new GameInfo();
-            }
+            this.GameStore = SerializedFile.LoadFromFile<GameInfo>("games.db", () => new GameInfo());
         }
 
         /// <summary>
@@ -34,8 +31,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.GameM
         /// </summary>
         public void Shutdown()
         {
-            SerializedFile.StoreToFile("ids.db", this.Games);
+            SerializedFile.StoreToFile("games.db", this.GameStore);
         }
-
     }
 }
