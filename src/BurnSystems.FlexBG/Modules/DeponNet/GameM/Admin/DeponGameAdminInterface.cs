@@ -52,45 +52,18 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.GameM.Admin
                     new EntityViewConfig(
                         new EntityViewListTable<GamesTreeView>(
                             "Games",
-                            EntityViewElementProperty.Create()
-                                .Labelled("Id")
-                                .For("Id")
-                                .AsInteger(),
-                            EntityViewElementProperty.Create()
-                                .Labelled("Title")
-                                .For("Title")
-                                .AsString(),
-                            EntityViewElementProperty.Create()
-                                .Labelled("Paused")
-                                .For("IsPaused")
-                                .AsBoolean(),
-                            EntityViewElementProperty.Create()
-                                .Labelled("Max Players")
-                                .For("MaxPlayers")
-                                .AsInteger())
+                            EntityViewElementProperty.Create().Labelled("Id").For("Id").AsInteger(),
+                            EntityViewElementProperty.Create().Labelled("Title").For("Title").AsString(),
+                            EntityViewElementProperty.Create().Labelled("Paused").For("IsPaused").AsBoolean(),
+                            EntityViewElementProperty.Create().Labelled("Max Players").For("MaxPlayers").AsInteger())
                         .SetSelector((a, y) => y.GetChildren(a).Select(z => z.Entity)),
                         new EntityViewDetailTable(
                             "CreateGame",
-                            EntityViewElementProperty.Create()
-                                .Labelled("Title")
-                                .For("Title")
-                                .AsString(),
-                            EntityViewElementProperty.Create()
-                                .Labelled("Description")
-                                .For("Description")
-                                .AsString(),
-                            EntityViewElementProperty.Create()
-                                .Labelled("MaxPlayers")
-                                .For("MaxPlayers")
-                                .AsInteger(),
-                            EntityViewElementProperty.Create()
-                                .Labelled("Width of Map")
-                                .For("MapWidth")
-                                .AsInteger(),
-                            EntityViewElementProperty.Create()
-                                .Labelled("Height of Map")
-                                .For("MapHeight")
-                                .AsInteger())
+                            EntityViewElementProperty.Create().Labelled("Title").For("Title").AsString(),
+                            EntityViewElementProperty.Create().Labelled("Description").For("Description").AsString(),
+                            EntityViewElementProperty.Create().Labelled("MaxPlayers").For("MaxPlayers").AsInteger(),
+                            EntityViewElementProperty.Create().Labelled("Width of Map").For("MapWidth").AsInteger(),
+                            EntityViewElementProperty.Create().Labelled("Height of Map").For("MapHeight").AsInteger())
                             .WithOverrideUrl("games/Create"))));
         }
 
