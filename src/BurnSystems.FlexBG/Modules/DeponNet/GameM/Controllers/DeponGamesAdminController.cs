@@ -56,6 +56,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.GameM.Controllers
             logger.LogEntry(LogLevel.Notify, "Add Ground for game " + gameId.ToString());
             new AddNoiseLayer(this.VoxelMap, FieldTypes.Grass, () => 0, () => float.MinValue).Execute(gameId);
 
+            logger.LogEntry(LogLevel.Notify, "Finished map creation for game " + gameId.ToString());
             return this.SuccessJson();
         }
     }
