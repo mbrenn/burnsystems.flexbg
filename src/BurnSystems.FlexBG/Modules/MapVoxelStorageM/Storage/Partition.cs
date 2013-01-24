@@ -13,7 +13,7 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
         /// <summary>
         /// Gets or sets the instance id
         /// </summary>
-        public int InstanceId
+        public long InstanceId
         {
             get;
             private set;
@@ -52,7 +52,7 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
         /// <param name="x">X-Coordinate of the Partition (number of partition, not real position)</param>
         /// <param name="y">Y-Coordinate of the Partition (number of partition, not real position)</param>
         /// <param name="partitionSize">Size of the partition</param>
-        public Partition(int instanceId, int x, int y, int partitionSize)
+        public Partition(long instanceId, int x, int y, int partitionSize)
         {
             this.InstanceId = instanceId;
             this.PartitionX = x;

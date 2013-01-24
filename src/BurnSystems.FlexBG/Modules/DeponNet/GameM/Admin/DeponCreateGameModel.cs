@@ -29,13 +29,13 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.GameM.Admin
             set;
         }
 
-        public long MapWidth
+        public int MapWidth
         {
             get;
             set;
         }
 
-        public long MapHeight
+        public int MapHeight
         {
             get;
             set;

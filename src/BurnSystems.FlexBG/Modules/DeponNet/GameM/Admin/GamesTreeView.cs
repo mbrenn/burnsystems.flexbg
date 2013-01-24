@@ -28,12 +28,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.GameM.Admin
         public override IEnumerable<ITreeViewItem> GetChildren(IActivates activates)
         {
             return this.GetGames(activates)
-                .Select(x => new BaseTreeViewItem()
-                {
-                    Id = x.Id,
-                    IsExpandable = false,
-                    Entity = x
-                });
+                .Select(x => new GameTreeView(x));
         }
     }
 }

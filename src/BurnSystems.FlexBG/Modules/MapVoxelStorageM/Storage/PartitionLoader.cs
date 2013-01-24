@@ -73,7 +73,7 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
         /// <param name="x">X Coordinate</param>
         /// <param name="y">Y Coordinate</param>
         /// <returns>Path to partition</returns>
-        public string GetPathForPartition(int instanceId, int x, int y)
+        public string GetPathForPartition(long instanceId, int x, int y)
         {
             return Path.Combine(
                 this.DatabasePath,
@@ -96,7 +96,7 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
         /// </summary>
         /// <param name="instanceId">Id of the instance</param>
         /// <returns>Path for file</returns>
-        private string GetPathForInfoFile(int instanceId)
+        private string GetPathForInfoFile(long instanceId)
         {
             return Path.Combine(this.DatabasePath, "mapinfo-" + instanceId + ".xml");
         }
@@ -104,7 +104,7 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
         /// <summary>
         /// Stores the info data
         /// </summary>
-        public void StoreInfoData(int instanceId, VoxelMapInfo info)
+        public void StoreInfoData(long instanceId, VoxelMapInfo info)
         {
             var serializer = new XmlSerializer(typeof(VoxelMapInfo));
 
@@ -118,9 +118,9 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
         /// Loads the info data from generic file
         /// </summary>
         /// <returns></returns>
-        public VoxelMapInfo LoadInfoData(int instanceId)
+        public VoxelMapInfo LoadInfoData(long instanceId)
         {
-            var path = Path.Combine(this.DatabasePath, this.GetPathForInfoFile(instanceId));
+            var path = this.GetPathForInfoFile(instanceId);
             if (File.Exists(path))
             {
                 return LoadInfoData(path);
@@ -150,7 +150,7 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
         /// <param name="x">X-Coordinate of the partition</param>
         /// <param name="y">Y-Coordinate of the partition</param>
         /// <returns>Loaded partition</returns>
-        public Partition LoadPartition(int instanceId, int x, int y)
+        public Partition LoadPartition(long instanceId, int x, int y)
         {
             var info = this.LoadInfoData(instanceId);
             Ensure.That(info != null, "info == null, Map-Info not stored?");

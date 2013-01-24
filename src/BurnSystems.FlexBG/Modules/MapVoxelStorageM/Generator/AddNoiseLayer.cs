@@ -55,7 +55,7 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Generator
             this.NoiseGeneratorBottom = noiseGeneratorBottom;
         }
 
-        public void Execute(int instanceId)
+        public void Execute(long instanceId)
         {
             var dx = this.VoxelMap.GetInfo(instanceId).SizeX;
             var dy = this.VoxelMap.GetInfo(instanceId).SizeY;

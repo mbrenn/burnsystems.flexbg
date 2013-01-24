@@ -14,7 +14,7 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
         /// <summary>
         /// Size of the voxel map in X
         /// </summary>
-        public int SizeX
+        public long SizeX
         {
             get;
             set;
@@ -23,7 +23,7 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
         /// <summary>
         /// Size of the voxel map in Y
         /// </summary>
-        public int SizeY
+        public long SizeY
         {
             get;
             set;

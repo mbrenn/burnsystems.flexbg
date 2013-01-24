@@ -15,16 +15,10 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM
         /// Binds the voxelmap
         /// </summary>
         /// <param name="container">Container to be used</param>
-        public void Load(ActivationContainer container)
+        public static void Load(ActivationContainer container)
         {
-            var configurationStorage = container.Get<IConfigurationStorage>();
-            var voxelMapInfo = VoxelMapInfo.Configurate(configurationStorage);
-
             var loader = new PartitionLoader();
             var cache = new PartitionCache(loader);
-
-            container.Bind<VoxelMapInfo>().ToConstant(voxelMapInfo);
-            container.Bind<IFlexBgRuntimeModule>().ToConstant(cache);
             container.Bind<IPartitionLoader>().ToConstant(cache);
             container.Bind<IVoxelMapConfiguration>().To<VoxelMapConfiguration>();
 

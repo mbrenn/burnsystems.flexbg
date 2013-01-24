@@ -54,7 +54,7 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Generator
         /// <summary>
         /// Executes the smoothing
         /// </summary>
-        public void Execute(int instanceId)
+        public void Execute(long instanceId)
         {
             var dx = this.VoxelMap.GetInfo(instanceId).SizeX;
             var dy = this.VoxelMap.GetInfo(instanceId).SizeY;
@@ -73,7 +73,7 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Generator
         /// </summary>
         /// <param name="x">X-Coordinate of the column to be smoothed</param>
         /// <param name="y">Y-Coordinate of the column to be smoothed</param>
-        private void Smooth(int instanceId, int x, int y)
+        private void Smooth(long instanceId, int x, int y)
         {
             double total = 0;
             var totalCount = 0;

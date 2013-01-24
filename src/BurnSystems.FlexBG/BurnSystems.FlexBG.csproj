@@ -52,13 +52,17 @@
     <Compile Include="Modules\DeponNet\GameM\Admin\DeponCreateGameModel.cs" />
     <Compile Include="Modules\DeponNet\GameM\Admin\DeponGameAdminInterface.cs" />
     <Compile Include="Modules\DeponNet\GameM\Admin\GamesTreeView.cs" />
+    <Compile Include="Modules\DeponNet\GameM\Admin\GameTreeView.cs" />
     <Compile Include="Modules\DeponNet\GameM\Controllers\DeponGamesAdminController.cs" />
     <Compile Include="Modules\DeponNet\GameM\Game.cs" />
     <Compile Include="Modules\DeponNet\GameM\LocalGameDatabase.cs" />
     <Compile Include="Modules\DeponNet\GameM\GameInfo.cs" />
     <Compile Include="Modules\DeponNet\GameM\GameManagement.cs" />
     <Compile Include="Modules\DeponNet\GameM\Interface\IGameManagement.cs" />
+    <Compile Include="Modules\DeponNet\MapM\Admin\MapAdminInterface.cs" />
+    <Compile Include="Modules\DeponNet\MapM\Admin\MapTreeViewItem.cs" />
     <Compile Include="Modules\DeponNet\MapM\FieldCoordinates.cs" />
+    <Compile Include="Modules\DeponNet\MapM\FieldTypes.cs" />
     <Compile Include="Modules\DeponNet\PlayerM\Player.cs" />
     <Compile Include="Modules\DeponNet\RegionM\Region.cs" />
     <Compile Include="Modules\DeponNet\ResearchM\Research.cs" />

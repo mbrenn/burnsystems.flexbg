@@ -14,7 +14,7 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
         /// <param name="x">X-Coordinate of the partition</param>
         /// <param name="y">Y-Coordinate of the partition</param>
         /// <returns>Loaded partition</returns>
-        Partition LoadPartition(int instanceId, int x, int y);
+        Partition LoadPartition(long instanceId, int x, int y);
 
         /// <summary>
         /// Stores a certain partition on drive
@@ -25,12 +25,12 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
         /// <summary>
         /// Stores the info data
         /// </summary>
-        void StoreInfoData(int instanceId, VoxelMapInfo info);
+        void StoreInfoData(long instanceId, VoxelMapInfo info);
 
         /// <summary>
         /// Loads the info data from generic file
         /// </summary>
         /// <returns></returns>
-        VoxelMapInfo LoadInfoData(int instanceId);
+        VoxelMapInfo LoadInfoData(long instanceId);
     }
 }

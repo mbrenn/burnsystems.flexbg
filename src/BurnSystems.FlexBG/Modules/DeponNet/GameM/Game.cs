@@ -47,5 +47,10 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.GameM
             get;
             set;
         }
+
+        public override string ToString()
+        {
+            return this.Title;
+        }
     }
 }
