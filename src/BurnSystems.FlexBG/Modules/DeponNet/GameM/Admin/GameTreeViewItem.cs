@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace BurnSystems.FlexBG.Modules.DeponNet.GameM.Admin
 {
-    public class GameTreeView : BaseTreeViewItem
+    public class GameTreeViewItem : BaseTreeViewItem
     {
         /// <summary>
         /// Gets or sets the game
@@ -34,7 +34,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.GameM.Admin
         /// Gets the game tree view
         /// </summary>
         /// <param name="game">Game to be calculated</param>
-        public GameTreeView(Game game)
+        public GameTreeViewItem(Game game)
         {
             this.Id = game.Id;
             this.Game = game;
@@ -50,7 +50,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.GameM.Admin
         {
             return new ITreeViewItem[]
             {
-                new MapTreeViewItem ( container, (this.Entity as Game).Id )
+                new MapTreeViewItem(container, (this.Entity as Game).Id)
             };
         }
     }

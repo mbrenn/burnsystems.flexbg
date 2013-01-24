@@ -36,12 +36,18 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.GameM
             set;
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether the game is paused
+        /// </summary>
         public bool IsPaused
         {
             get;
             set;
         }
 
+        /// <summary>
+        /// Gets or sets the maximum player count
+        /// </summary>
         public int MaxPlayers
         {
             get;

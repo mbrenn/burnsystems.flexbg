@@ -40,17 +40,17 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.GameM.Admin
         public void Start()
         {
             this.Data.Children.Add(
-                new GamesTreeView()
+                new GamesTreeViewItem()
                 {
                     Id = this.Data.GetNextChildrenId()
                 });
 
             // Creates Entity View for Users
             this.ViewResolver.Add(
-                (x) => x is GamesTreeView,
+                (x) => x is GamesTreeViewItem,
                 (x) => new EntityView(
                     new EntityViewConfig(
-                        new EntityViewListTable<GamesTreeView>(
+                        new EntityViewListTable<GamesTreeViewItem>(
                             "Games",
                             EntityViewElementProperty.Create().Labelled("Id").For("Id").AsInteger(),
                             EntityViewElementProperty.Create().Labelled("Title").For("Title").AsString(),
@@ -65,6 +65,14 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.GameM.Admin
                             EntityViewElementProperty.Create().Labelled("Width of Map").For("MapWidth").AsInteger(),
                             EntityViewElementProperty.Create().Labelled("Height of Map").For("MapHeight").AsInteger())
                             .WithOverrideUrl("games/Create"))));
+
+            this.ViewResolver.Add(
+                (x) => x is GameTreeViewItem,
+                (x) => new EntityView(
+                    new EntityViewConfig(
+                        new EntityViewDetailTable(
+                            "GetColumn",
+                            EntityViewElementProperty.Create().Labelled("Id").For("Id").AsReadOnly().AsInteger()))));
         }
 
         public void Shutdown()

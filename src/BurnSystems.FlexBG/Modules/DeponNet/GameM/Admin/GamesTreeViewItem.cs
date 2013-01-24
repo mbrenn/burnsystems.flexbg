@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace BurnSystems.FlexBG.Modules.DeponNet.GameM.Admin
 {
-    public class GamesTreeView : BaseTreeViewItem
+    public class GamesTreeViewItem : BaseTreeViewItem
     {
         public override string ToString()
         {
@@ -28,7 +28,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.GameM.Admin
         public override IEnumerable<ITreeViewItem> GetChildren(IActivates activates)
         {
             return this.GetGames(activates)
-                .Select(x => new GameTreeView(x));
+                .Select(x => new GameTreeViewItem(x));
         }
     }
 }
