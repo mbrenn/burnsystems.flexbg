@@ -6,7 +6,12 @@ using System.Threading.Tasks;
 
 namespace BurnSystems.FlexBG.Modules.DeponNet.ResourceSetM
 {
-    public class ResourceSetStore
+    /// <summary>
+    /// Defines the associated properties of one ResourceSet
+    /// One ResourceSet may be associated to a certain entity and entity type
+    /// </summary>
+    [Serializable]
+    public class ResourceSetBag
     {
         /// <summary>
         /// Stores the resource set

@@ -10,7 +10,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.GameM
     /// Entites that are persisted
     /// </summary>
     [Serializable]
-    public class GameInfo
+    public class GamesData
     {
         /// <summary>
         /// Stores the list of games

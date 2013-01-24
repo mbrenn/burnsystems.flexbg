@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace BurnSystems.FlexBG.Modules.DeponNet.PlayerM
 {
+    [Serializable]
     public class Player
     {
         /// <summary>

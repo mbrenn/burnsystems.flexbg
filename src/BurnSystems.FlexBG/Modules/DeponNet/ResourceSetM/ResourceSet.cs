@@ -10,6 +10,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.ResourceSetM
     /// <summary>
     /// Stores the container of resources
     /// </summary>
+    [Serializable]
     public class ResourceSet
     {
         /// <summary>

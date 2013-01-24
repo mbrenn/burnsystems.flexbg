@@ -7,27 +7,22 @@ using System.Threading.Tasks;
 namespace BurnSystems.FlexBG.Modules.DeponNet.ResourceSetM
 {
     /// <summary>
-    /// Defines the list of existing resource types. 
-    /// Internally, the id is used
+    /// Entites that are persisted
     /// </summary>
-    public class ResourceType
+    [Serializable]
+    public class ResourcesData
     {
         /// <summary>
-        /// Gets or sets the id
+        /// Stores the list of games
         /// </summary>
-        public long Id
-        {
-            get;
-            set;
-        }
+        private List<ResourceSetBag> resources = new List<ResourceSetBag>();
 
         /// <summary>
-        /// Gets or sets the token
+        /// Gets the games
         /// </summary>
-        public string Token
+        public List<ResourceSetBag> Resources
         {
-            get;
-            set;
+            get { return this.resources; }
         }
     }
 }
