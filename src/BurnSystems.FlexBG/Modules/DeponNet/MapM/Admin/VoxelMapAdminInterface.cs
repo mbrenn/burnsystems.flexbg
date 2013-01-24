@@ -34,11 +34,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.MapM.Admin
         {
             this.ViewResolver.Add(
                 (x) => x is MapTreeViewItem,
-                (x) => new EntityView(
-                    new EntityViewConfig(
-                        new EntityViewDetailTable(
-                            "GetColumn",
-                            EntityViewElementProperty.Create().Labelled("Id").For("Id").AsReadOnly().AsInteger()))));
+                (x) => new MapTreeView());
         }
 
         /// <summary>
