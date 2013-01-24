@@ -65,6 +65,7 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
         public void CalculatePartitionCoordinates(long instanceId, int columnX, int columnY, out int partitionX, out int partitionY, out int relX, out int relY)
         {
             var info = this.Loader.LoadInfoData(instanceId);
+            Ensure.That(info != null, "No Info Data for instance " + instanceId);
 
             partitionX = columnX / info.PartitionLength;
             partitionY = columnY / info.PartitionLength;

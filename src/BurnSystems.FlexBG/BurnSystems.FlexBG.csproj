@@ -59,6 +59,7 @@
     <Compile Include="Modules\DeponNet\GameM\GameInfo.cs" />
     <Compile Include="Modules\DeponNet\GameM\GameManagement.cs" />
     <Compile Include="Modules\DeponNet\GameM\Interface\IGameManagement.cs" />
+    <Compile Include="Modules\DeponNet\MapM\Admin\VoxelMapAdminController.cs" />
     <Compile Include="Modules\DeponNet\MapM\Admin\VoxelMapAdminInterface.cs" />
     <Compile Include="Modules\DeponNet\MapM\Admin\MapTreeViewItem.cs" />
     <Compile Include="Modules\DeponNet\MapM\FieldCoordinates.cs" />

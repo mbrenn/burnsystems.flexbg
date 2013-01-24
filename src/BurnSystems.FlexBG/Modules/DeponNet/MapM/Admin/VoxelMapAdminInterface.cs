@@ -35,6 +35,8 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.MapM.Admin
             this.ViewResolver.Add(
                 (x) => x is MapTreeViewItem,
                 (x) => new MapTreeView());
+
+
         }
 
         /// <summary>

@@ -59,5 +59,13 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
             XmlSerializer serializer = new XmlSerializer(typeof(VoxelMapInfo));
             return (VoxelMapInfo) serializer.Deserialize(xmlVoxelMapInfo.CreateReader());
         }
+
+        public override string ToString()
+        {
+            return string.Format(
+                "VoxelMap: {0}, {1}", 
+                this.SizeX, 
+                this.SizeY);
+        }
     }
 }

@@ -147,7 +147,7 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
                 return y.ChangeHeight.CompareTo(x.ChangeHeight);
             });
 
-            if (column.GetFieldType(endingHeight) != endingFieldType)
+            if (column.GetFieldType(endingHeight) != endingFieldType && endingHeight > float.MinValue)
             {
                 // Adds bottom changing back to old field type
                 var endField = new FieldTypeChangeInfo();
