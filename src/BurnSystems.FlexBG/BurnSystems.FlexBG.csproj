@@ -30,6 +30,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -147,6 +148,9 @@
     <Compile Include="Modules\UserQueryM\IUserQuery.cs" />
     <Compile Include="Modules\UserQueryM\UserQueryConsole.cs" />
     <Compile Include="Modules\UserQueryM\UserQueryDefaultAnswer.cs" />
+    <Compile Include="Modules\WayPointCalculationM\IWayPointCalculation.cs" />
+    <Compile Include="Modules\WayPointCalculationM\OnlyHeight\NodeInfo.cs" />
+    <Compile Include="Modules\WayPointCalculationM\OnlyHeight\WayPointCalculation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Runtime.cs" />
   </ItemGroup>
