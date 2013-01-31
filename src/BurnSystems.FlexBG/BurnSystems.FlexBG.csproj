@@ -48,8 +48,11 @@
     <Compile Include="Modules\DeponNet\BuildingM\Building.cs" />
     <Compile Include="Modules\DeponNet\BuildingM\BuildingType.cs" />
     <Compile Include="Modules\DeponNet\EntityType.cs" />
-    <Compile Include="Modules\DeponNet\GameClockM\GameClock.cs" />
+    <Compile Include="Modules\DeponNet\GameClockM\GameClockInfo.cs" />
     <Compile Include="Modules\DeponNet\GameClockM\GameClockManager.cs" />
+    <Compile Include="Modules\DeponNet\GameClockM\GameClocksData.cs" />
+    <Compile Include="Modules\DeponNet\GameClockM\Interface\IGameClockManager.cs" />
+    <Compile Include="Modules\DeponNet\GameClockM\LocalGameClockDatabase.cs" />
     <Compile Include="Modules\DeponNet\GameM\Admin\DeponCreateGameModel.cs" />
     <Compile Include="Modules\DeponNet\GameM\Admin\DeponGameAdminInterface.cs" />
     <Compile Include="Modules\DeponNet\GameM\Admin\GamesTreeViewItem.cs" />

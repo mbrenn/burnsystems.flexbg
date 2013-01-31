@@ -9,12 +9,13 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.GameClockM
     /// <summary>
     /// Defines the game clock for one game
     /// </summary>
-    public class GameClock
+    [Serializable]
+    public class GameClockInfo
     {
         /// <summary>
         /// Gets or sets the id of the game clock
         /// </summary>
-        public long GameId
+        public long InstanceId
         {
             get;
             set;
