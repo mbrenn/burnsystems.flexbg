@@ -36,7 +36,7 @@ namespace BurnSystems.FlexBG.Modules.WayPointCalculationM.OnlyHeight
             set;
         }
 
-        private List<NodeInfo> closedSet;
+        private HashSet<NodeInfo> closedSet;
 
         private PriorityQueue<NodeInfo> openSet;
 
@@ -68,6 +68,16 @@ namespace BurnSystems.FlexBG.Modules.WayPointCalculationM.OnlyHeight
         private NodeInfo endNode;
 
         /// <summary>
+        /// Maximum X-Position
+        /// </summary>
+        private long maxX;
+
+        /// <summary>
+        /// Maximum Y-Position
+        /// </summary>
+        private long maxY;
+
+        /// <summary>
         /// Performs the calculation
         /// </summary>
         /// <param name="startPosition">Start Position</param>
@@ -82,7 +92,7 @@ namespace BurnSystems.FlexBG.Modules.WayPointCalculationM.OnlyHeight
             this.AlignToFieldCoordinates(startPosition, out startX, out startY);
             this.AlignToFieldCoordinates(endPosition, out endX, out endY);
 
-            var startNode = this.CreateNewNode(startX, endX);
+            var startNode = this.CreateNewNode(startX, startY);
             this.endNode = this.CreateNewNode(endX, endY);
 
             startNode.HeuristicCost = this.GetHeuristicCost(startNode, endNode);
@@ -106,10 +116,14 @@ namespace BurnSystems.FlexBG.Modules.WayPointCalculationM.OnlyHeight
         /// </summary>
         private void InitAStar()
         {
-            this.openSet = new PriorityQueue<NodeInfo>((x, y) => x.HeuristicCost.CompareTo(y.HeuristicCost));
-            this.closedSet = new List<NodeInfo>();
+            this.openSet = new PriorityQueue<NodeInfo>((x, y) => y.HeuristicCost.CompareTo(x.HeuristicCost));
+            this.closedSet = new HashSet<NodeInfo>();
             this.cameFrom = new Dictionary<NodeInfo, NodeInfo>();
             this.nodeCache = new Dictionary<Pair<int, int>, NodeInfo>();
+
+            var info = this.VoxelMap.GetInfo(this.Game.Id);
+            this.maxX = info.SizeX;
+            this.maxY = info.SizeY;
         }
 
         /// <summary>
@@ -155,13 +169,20 @@ namespace BurnSystems.FlexBG.Modules.WayPointCalculationM.OnlyHeight
                 // Go through all neighbors
                 foreach (var neighbor in this.GetNeighbors(current))
                 {
-                    if (this.closedSet.Find(x => x.EqualsTo(neighbor)) == null)
+                    if (this.closedSet.Contains(neighbor))
                     {
                         // Already captured
                         continue;
                     }
 
                     // Calculate score:
+                    var effort = this.GetEffort(current, neighbor);
+                    if (effort == Double.MaxValue)
+                    {
+                        // Not interesting, do not put in open list
+                        continue;
+                    }
+
                     var tempCost = current.CalculatedCost + this.GetEffort(current, neighbor);
                     var isNeighborInOpenSet = this.openSet.Any(x => x.EqualsTo(neighbor));
                     if (!isNeighborInOpenSet
@@ -203,18 +224,22 @@ namespace BurnSystems.FlexBG.Modules.WayPointCalculationM.OnlyHeight
         /// <returns>Enumeration of backnodes</returns>
         private IEnumerable<NodeInfo> ReconstructPath(NodeInfo endNode)
         {
-            if (this.cameFrom.ContainsKey(endNode))
-            {
-                foreach (var value in this.ReconstructPath(this.cameFrom[endNode]))
-                {
-                    yield return value;
-                }
+            var current = endNode;
+            var result = new Stack<NodeInfo>();
 
-                yield return endNode;
-            }
-            else
+            while (true)
             {
-                yield return endNode;
+                result.Push(current);
+
+                if (!this.cameFrom.TryGetValue(current, out current))
+                {
+                    break;
+                }
+            }
+
+            while (result.Count > 0)
+            {
+                yield return result.Pop();
             }
         }
 
@@ -237,6 +262,11 @@ namespace BurnSystems.FlexBG.Modules.WayPointCalculationM.OnlyHeight
         /// <returns>Height of the column</returns>
         private double GetHeight(int x, int y)
         {
+            if (x < 0 || x >= this.maxX || y < 0 || y >= this.maxY)
+            {
+                return Double.MaxValue;
+            }
+
             return this.VoxelMap.GetHeight(
                 this.Game.Id,
                 x,

@@ -73,6 +73,11 @@ namespace BurnSystems.FlexBG.Modules.WayPointCalculationM.OnlyHeight
         /// <returns>true, if equal</returns>
         public override bool Equals(object obj)
         {
+            if (this == obj)
+            {
+                return true;
+            }
+
             var objNode = obj as NodeInfo;
             if (objNode == null)
             {
@@ -89,7 +94,17 @@ namespace BurnSystems.FlexBG.Modules.WayPointCalculationM.OnlyHeight
         /// <returns>true, if equal</returns>
         internal bool EqualsTo(NodeInfo objNode)
         {
-            return objNode.X == this.X && objNode.Y == this.Y;
+            return this == objNode || (objNode.X == this.X && objNode.Y == this.Y);
+        }
+
+        public override string ToString()
+        {
+            return string.Format(
+                "{0}, {1} (Cost: {2}, Heuristic: {3}",
+                this.X,
+                this.Y,
+                this.CalculatedCost,
+                this.HeuristicCost);
         }
     }
 }
