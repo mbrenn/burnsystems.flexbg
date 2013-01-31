@@ -2,10 +2,12 @@
 using BurnSystems.FlexBG.Modules.DeponNet.GameM;
 using BurnSystems.FlexBG.Modules.DeponNet.UnitM;
 using BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage;
+using BurnSystems.Logging;
 using BurnSystems.ObjectActivation;
 using BurnSystems.Test;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,6 +24,10 @@ namespace BurnSystems.FlexBG.Modules.WayPointCalculationM.OnlyHeight
     /// </summary>
     public class WayPointCalculation : IWayPointCalculation
     {
+        /// <summary>
+        /// Stores the class logger
+        /// </summary>
+        private static ILog logger = new ClassLogger(typeof(WayPointCalculation));
         [Inject]
         public IVoxelMap VoxelMap
         {
@@ -31,6 +37,16 @@ namespace BurnSystems.FlexBG.Modules.WayPointCalculationM.OnlyHeight
 
         [Inject(ByName="CurrentGame", IsMandatory=true)]
         public Game Game
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether a full debug shall be executed with the help of the
+        /// integrated class logger
+        /// </summary>
+        public bool DoFullDebug
         {
             get;
             set;
@@ -86,6 +102,16 @@ namespace BurnSystems.FlexBG.Modules.WayPointCalculationM.OnlyHeight
         /// <returns>Calculated way points</returns>
         public IEnumerable<Vector3D> CalculateWaypoints(Vector3D startPosition, Vector3D endPosition, UnitType unitType)
         {
+            logger.LogEntry(
+                   LogLevel.Notify,
+                   string.Format(
+                       "Executing waypoint calculation from {0} to {1}",
+                       startPosition.ToString(),
+                       endPosition.ToString()));
+
+            var watch = new Stopwatch();
+            watch.Start();
+
             this.InitAStar();
 
             int startX, startY, endX, endY;
@@ -99,7 +125,28 @@ namespace BurnSystems.FlexBG.Modules.WayPointCalculationM.OnlyHeight
 
             this.openSet.Add(startNode);
 
+            // Performs the algorithm
             var result = this.PerformAStar();
+            watch.Stop();
+
+            int stepCount = 0;
+            if (result != null)
+            {
+                result = result.ToList();
+                stepCount = result.Count();
+            }
+
+            logger.LogEntry(
+                LogLevel.Notify,
+                string.Format(
+                    "Executed waypoint calculation, having {3} steps from {0} to {1} within {2} ms ({4} nodes in closed list, {5} nodes open)",
+                    startPosition.ToString(),
+                    endPosition.ToString(),
+                    watch.ElapsedMilliseconds.ToString(),
+                    stepCount,
+                    this.closedSet.Count,
+                    this.openSet.Count));
+
             if (result == null)
             {
                 return null;
@@ -158,6 +205,11 @@ namespace BurnSystems.FlexBG.Modules.WayPointCalculationM.OnlyHeight
                     return null;
                 }
 
+                if (this.DoFullDebug)
+                {
+                    logger.LogEntry(LogLevel.Verbose, "Popped waypoint: " + current.ToString());
+                }
+
                 if (current.X == endNode.X && current.Y == endNode.Y)
                 {
                     // Reconstruct Path
@@ -195,6 +247,11 @@ namespace BurnSystems.FlexBG.Modules.WayPointCalculationM.OnlyHeight
                         if (!isNeighborInOpenSet)
                         {
                             this.openSet.Add(neighbor);
+
+                            if (this.DoFullDebug)
+                            {
+                                logger.LogEntry(LogLevel.Verbose, "Pushed waypoint: " + neighbor.ToString());
+                            }
                         }
                     }
                 }
@@ -254,6 +311,17 @@ namespace BurnSystems.FlexBG.Modules.WayPointCalculationM.OnlyHeight
             y = (int)Math.Floor(position.Y);
         }
 
+        private double GetHeight(NodeInfo info)
+        {
+            if (!double.IsNaN(info.CachedHeight))
+            {
+                return info.CachedHeight;
+            }
+
+            info.CachedHeight = this.GetHeight(info.X, info.Y);
+            return info.CachedHeight;
+        }
+
         /// <summary>
         /// Gets the height of the field for the column
         /// </summary>
@@ -264,7 +332,7 @@ namespace BurnSystems.FlexBG.Modules.WayPointCalculationM.OnlyHeight
         {
             if (x < 0 || x >= this.maxX || y < 0 || y >= this.maxY)
             {
-                return Double.MaxValue;
+                return double.MaxValue;
             }
 
             return this.VoxelMap.GetHeight(
@@ -283,8 +351,8 @@ namespace BurnSystems.FlexBG.Modules.WayPointCalculationM.OnlyHeight
         private double GetEffort(NodeInfo startNode, NodeInfo endNode)
         {
             return this.GetEffort(
-                this.GetHeight(startNode.X, startNode.Y),
-                this.GetHeight(endNode.X, endNode.Y));
+                this.GetHeight(startNode),
+                this.GetHeight(endNode));
         }
 
         /// <summary>
@@ -296,20 +364,20 @@ namespace BurnSystems.FlexBG.Modules.WayPointCalculationM.OnlyHeight
         private double GetEffort(double heightSource, double heightTarget)
         {
             // Boundary checks
-            if (heightSource == Double.MaxValue)
+            if (heightSource >= float.MaxValue)
             {
                 return this.constValue;
             }
 
-            if (heightTarget == Double.MaxValue)
+            if (heightTarget >= float.MaxValue)
             {
                 return double.MaxValue;
             }
 
-            // Caclulation itself
+            // Calculation itself
             // e = f * b^(h1-h2) + c
             return
-                this.heightFactor * Math.Pow(this.heightBase, (heightSource - heightTarget))
+                this.heightFactor * Math.Pow(this.heightBase, (heightTarget - heightSource))
                 + this.constValue;
         }
 

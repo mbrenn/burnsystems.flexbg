@@ -47,6 +47,15 @@ namespace BurnSystems.FlexBG.Modules.WayPointCalculationM.OnlyHeight
         }
 
         /// <summary>
+        /// Gets the cached height, speeding up the retrieval of height for open nodes
+        /// </summary>
+        public double CachedHeight
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// Initializes a new instance of the NodeInfo
         /// </summary>
         /// <param name="x">X-Coordinate of the node</param>
@@ -55,6 +64,7 @@ namespace BurnSystems.FlexBG.Modules.WayPointCalculationM.OnlyHeight
         {
             this.X = x;
             this.Y = y;
+            this.CachedHeight = double.NaN;
         }
 
         /// <summary>
