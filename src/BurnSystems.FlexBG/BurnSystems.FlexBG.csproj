@@ -86,7 +86,18 @@
     <Compile Include="Modules\DeponNet\ResourceSetM\ResourceSetBag.cs" />
     <Compile Include="Modules\DeponNet\ResourceSetM\ResourceType.cs" />
     <Compile Include="Modules\DeponNet\TownM\Town.cs" />
+    <Compile Include="Modules\DeponNet\UnitM\Interfaces\IUnitGroupManagement.cs" />
+    <Compile Include="Modules\DeponNet\UnitM\Interfaces\IUnitManagement.cs" />
+    <Compile Include="Modules\DeponNet\UnitM\LocalUnitDatabase.cs" />
+    <Compile Include="Modules\DeponNet\UnitM\Strategies\UnitStrategy.cs" />
     <Compile Include="Modules\DeponNet\UnitM\Unit.cs" />
+    <Compile Include="Modules\DeponNet\UnitM\UnitGroup.cs" />
+    <Compile Include="Modules\DeponNet\UnitM\UnitGroupManagement.cs" />
+    <Compile Include="Modules\DeponNet\UnitM\UnitJobs\DoNothingJob.cs" />
+    <Compile Include="Modules\DeponNet\UnitM\UnitJobs\IJob.cs" />
+    <Compile Include="Modules\DeponNet\UnitM\UnitJobs\MoveJob.cs" />
+    <Compile Include="Modules\DeponNet\UnitM\UnitManagement.cs" />
+    <Compile Include="Modules\DeponNet\UnitM\UnitsData.cs" />
     <Compile Include="Modules\DeponNet\UnitM\UnitType.cs" />
     <Compile Include="Modules\FlexBgModule.cs" />
     <Compile Include="Modules\GameInfoM\GameInfo.cs" />
@@ -96,6 +107,7 @@
     <Compile Include="Modules\IdGeneratorM\IdStatus.cs" />
     <Compile Include="Modules\IdGeneratorM\IdStatusDb.cs" />
     <Compile Include="Modules\IdGeneratorM\IIdGenerator.cs" />
+    <Compile Include="Modules\LockMasterM\ILockMaster.cs" />
     <Compile Include="Modules\MailSenderM\Extensions.cs" />
     <Compile Include="Modules\MailSenderM\IMailSender.cs" />
     <Compile Include="Modules\MailSenderM\MailSender.cs" />
@@ -177,6 +189,7 @@
     </Content>
     <Compile Include="Modules\DeponNet\MapM\Admin\MapTreeView.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

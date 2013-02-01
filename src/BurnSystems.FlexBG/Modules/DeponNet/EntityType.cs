@@ -45,5 +45,10 @@ namespace BurnSystems.FlexBG.Modules.DeponNet
         /// Stores the entity type id of research
         /// </summary>
         public const int Research = 7;
+
+        /// <summary>
+        /// Stores the entity type id of unit groups
+        /// </summary>
+        public const int UnitGroup = 8;
     }
 }
