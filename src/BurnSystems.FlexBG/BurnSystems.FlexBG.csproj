@@ -108,6 +108,7 @@
     <Compile Include="Modules\IdGeneratorM\IdStatusDb.cs" />
     <Compile Include="Modules\IdGeneratorM\IIdGenerator.cs" />
     <Compile Include="Modules\LockMasterM\ILockMaster.cs" />
+    <Compile Include="Modules\LockMasterM\Simple\SimpleLockMaster.cs" />
     <Compile Include="Modules\MailSenderM\Extensions.cs" />
     <Compile Include="Modules\MailSenderM\IMailSender.cs" />
     <Compile Include="Modules\MailSenderM\MailSender.cs" />
