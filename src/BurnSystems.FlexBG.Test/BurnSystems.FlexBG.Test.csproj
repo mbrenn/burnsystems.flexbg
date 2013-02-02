@@ -51,6 +51,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="LockMasterM\TestSimpleLocking.cs" />
     <Compile Include="MapVoxelStorage\ColumnTests.cs" />
     <Compile Include="MapVoxelStorage\DatabaseCacheTests.cs" />
     <Compile Include="MapVoxelStorage\DatabaseTests.cs" />

@@ -50,5 +50,10 @@ namespace BurnSystems.FlexBG.Modules.DeponNet
         /// Stores the entity type id of unit groups
         /// </summary>
         public const int UnitGroup = 8;
+
+        /// <summary>
+        /// Stores the entity type for server
+        /// </summary>
+        public const int Server = 100;
     }
 }

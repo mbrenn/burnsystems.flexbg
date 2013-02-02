@@ -17,7 +17,7 @@ namespace BurnSystems.FlexBG.Modules.LockMasterM
         /// <param name="entityType">Entity type</param>
         /// <param name="entityId">Id of the entity</param>
         /// <returns>Disposable object that shall be disposed if finished</returns>
-        IDisposable AcquireReadLock(int entityType, long entityId);
+        IDisposable AcquireReadLock(IEnumerable<LockEntity> entities);
 
         /// <summary>
         /// Acquires a write lock for the given entity type
@@ -25,7 +25,7 @@ namespace BurnSystems.FlexBG.Modules.LockMasterM
         /// <param name="entityType">Entity type</param>
         /// <param name="entityId">Id of the entity</param>
         /// <returns>Disposable object that shall be disposed if finished</returns>
-        IDisposable AcquireWriteLock(int entityType, long entityId);
+        IDisposable AcquireWriteLock(IEnumerable<LockEntity> entities);
 
         /// <summary>
         /// Defines a relationship between owner and child
