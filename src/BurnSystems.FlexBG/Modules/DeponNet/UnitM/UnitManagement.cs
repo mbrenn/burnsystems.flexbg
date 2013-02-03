@@ -34,7 +34,11 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.UnitM
             unit.Position = position;
             unit.Id = this.IdGenerator.NextId(EntityType.Unit);
 
-            this.Data.UnitsStore.Units.Add(unit);
+            lock (this.Data.SyncObject)
+            {
+                this.Data.UnitsStore.Units.Add(unit);
+            }
+
             return unit.Id;
         }
 

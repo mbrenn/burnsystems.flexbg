@@ -1,5 +1,6 @@
 ﻿using BurnSystems.FlexBG.Modules.DeponNet.PlayerM;
 using BurnSystems.FlexBG.Modules.DeponNet.PlayerM.Interface;
+using BurnSystems.FlexBG.Modules.LockMasterM;
 using BurnSystems.ObjectActivation;
 using System;
 using System.Collections.Generic;
@@ -14,10 +15,17 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.Rules
     /// </summary>
     public class PlayerRules : IPlayerRules
     {
+        [Inject(IsMandatory=true)]
+        public ILockMaster LockMaster
+        {
+            get;
+            set;
+        }
+
         /// <summary>
         /// Gets or sets the playermanagement
         /// </summary>
-        [Inject]
+        [Inject(IsMandatory=true)]
         public IPlayerManagement PlayerManagement
         {
             get;
@@ -31,13 +39,16 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.Rules
         /// <returns>Id of the new player</returns>
         public long CreatePlayer(PlayerCreationParams param)
         {
-            var result = this.PlayerManagement.CreatePlayer(
-                param.UserId, 
-                param.GameId, 
-                param.Playername, 
-                param.Empirename);
+            using (this.LockMaster.AcquireWriteLock(EntityType.Game, param.GameId))
+            {
+                var result = this.PlayerManagement.CreatePlayer(
+                    param.UserId,
+                    param.GameId,
+                    param.Playername,
+                    param.Empirename);
 
-            return result;
+                return result;
+            }
         }
 
         /// <summary>
@@ -46,7 +57,11 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.Rules
         /// <param name="playerId">Id of the player to be dropped</param>
         public void DropPlayer(long playerId)
         {
-            throw new NotImplementedException();
+            var player = this.PlayerManagement.GetPlayer(playerId);
+            using (this.LockMaster.AcquireWriteLock(EntityType.Game, player.GameId))
+            {
+                throw new NotImplementedException();
+            }
         }
     }
 }

@@ -21,14 +21,14 @@ namespace BurnSystems.FlexBG.Modules.LockMasterM
             return lockMaster.AcquireWriteLock(entities);
         }
 
-        public static IDisposable AcquireReadLock(this ILockMaster lockMaster, int entityType, int entityId)
+        public static IDisposable AcquireReadLock(this ILockMaster lockMaster, int entityType, long entityId)
         {
-            return lockMaster.AcquireReadLock(new LockEntity(entityType, entityId));
+            return lockMaster.AcquireReadLock(new LockEntity[] { new LockEntity(entityType, entityId) });
         }
 
-        public static IDisposable AcquireWriteLock(this ILockMaster lockMaster, int entityType, int entityId)
+        public static IDisposable AcquireWriteLock(this ILockMaster lockMaster, int entityType, long entityId)
         {
-            return lockMaster.AcquireWriteLock(new LockEntity(entityType, entityId));
+            return lockMaster.AcquireWriteLock(new LockEntity[] { new LockEntity(entityType, entityId) });
         }
     }
 }

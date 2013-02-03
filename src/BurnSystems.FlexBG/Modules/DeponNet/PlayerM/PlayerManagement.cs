@@ -42,34 +42,52 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.PlayerM
             player.GameId = gameId;
             player.Id = this.IdGenerator.NextId(EntityType.Player);
 
-            this.Data.PlayersStore.Players.Add(player);
+            lock (this.Data.SyncObject)
+            {
+                this.Data.PlayersStore.Players.Add(player);
+            }
 
             return player.Id;
         }
 
         public void RemovePlayer(long playerId)
         {
-            this.Data.PlayersStore.Players.RemoveAll(x => x.Id == playerId);
+            lock (this.Data.SyncObject)
+            {
+                this.Data.PlayersStore.Players.RemoveAll(x => x.Id == playerId);
+            }
         }
 
         public IEnumerable<Player> GetAllPlayers()
         {
-            return this.Data.PlayersStore.Players.ToList();
+            lock (this.Data.SyncObject)
+            {
+                return this.Data.PlayersStore.Players.ToList();
+            }
         }
 
         public IEnumerable<Player> GetPlayerOfUser(long userId)
         {
-            return this.Data.PlayersStore.Players.Where(x => x.OwnerId == userId).ToList();
+            lock (this.Data.SyncObject)
+            {
+                return this.Data.PlayersStore.Players.Where(x => x.OwnerId == userId).ToList();
+            }
         }
 
         public IEnumerable<Player> GetPlayerOfGame(long gameId)
         {
-            return this.Data.PlayersStore.Players.Where(x => x.GameId == gameId).ToList();
+            lock (this.Data.SyncObject)
+            {
+                return this.Data.PlayersStore.Players.Where(x => x.GameId == gameId).ToList();
+            }
         }
 
         public Player GetPlayer(long playerId)
         {
-            return this.Data.PlayersStore.Players.Where(x => x.Id == playerId).FirstOrDefault();
+            lock (this.Data.SyncObject)
+            {
+                return this.Data.PlayersStore.Players.Where(x => x.Id == playerId).FirstOrDefault();
+            }
         }
     }
 }

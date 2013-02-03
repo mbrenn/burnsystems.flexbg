@@ -12,10 +12,23 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.UnitM
     [BindAlsoTo(typeof(IFlexBgRuntimeModule))]
     public class LocalUnitDatabase : IFlexBgRuntimeModule
     {
+        /// <summary>
+        /// Stores the synchronization
+        /// </summary>
+        private object syncObject = new object();
+
         public UnitsData UnitsStore
         {
             get;
             set;
+        }
+
+        /// <summary>
+        /// Gets or sets the sync object
+        /// </summary>
+        public object SyncObject
+        {
+            get { return this.syncObject; }
         }
 
         /// <summary>

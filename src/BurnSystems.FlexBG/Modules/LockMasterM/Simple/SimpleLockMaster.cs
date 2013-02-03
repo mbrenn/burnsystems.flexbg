@@ -35,7 +35,7 @@ namespace BurnSystems.FlexBG.Modules.LockMasterM.Simple
             this.CheckForDeadLock(entities);
 
             // Adds to status
-            this.UpdateStatus(entities);
+            this.AddToStatus(entities);
 
             // Perform locking
             Monitor.Enter(this.syncObject);
@@ -53,7 +53,7 @@ namespace BurnSystems.FlexBG.Modules.LockMasterM.Simple
             this.CheckForDeadLock(entities);
 
             // Adds to status
-            this.UpdateStatus(entities);
+            this.AddToStatus(entities);
 
             // Perform lock
             Monitor.Enter(this.syncObject);
@@ -65,12 +65,22 @@ namespace BurnSystems.FlexBG.Modules.LockMasterM.Simple
                 });
         }
 
-        private void UpdateStatus(IEnumerable<LockEntity> entities)
+        /// <summary>
+        /// Adds the lock to the status, so locking can be tracked
+        /// </summary>
+        /// <param name="entities">Entities to be added</param>
+        private void AddToStatus(IEnumerable<LockEntity> entities)
         {
             foreach (var entity in entities)
             {
-                this.status.Value.Add(entity);
+                // Checks, if entity type is known
+                if (entity.EntityType >= this.parentRelationShips.Count)
+                {
+                    throw new InvalidOperationException("Entity Type is not known: " + entity.EntityType);
+                }
 
+                // Performs the addition itself
+                this.status.Value.Add(entity);
                 var currentEntityType = entity.EntityType;
 
                 while (currentEntityType != 0)
@@ -82,12 +92,22 @@ namespace BurnSystems.FlexBG.Modules.LockMasterM.Simple
             }
         }
 
+        /// <summary>
+        /// Removes the lock to the status, so locking can be tracked
+        /// </summary>
+        /// <param name="entities">Entities to be removed</param>
         private void RemoveFromStatus(IEnumerable<LockEntity> entities)
         {
             foreach (var entity in entities)
             {
-                this.status.Value.Remove(entity);
+                // Checks, if entity type is known
+                if (entity.EntityType >= this.parentRelationShips.Count)
+                {
+                    throw new InvalidOperationException("Entity Type is not known: " + entity.EntityType);
+                }
 
+                // Performs the removal itself
+                this.status.Value.Remove(entity);
                 var currentEntityType = entity.EntityType;
 
                 while (currentEntityType != 0)
@@ -99,6 +119,10 @@ namespace BurnSystems.FlexBG.Modules.LockMasterM.Simple
             }
         }
 
+        /// <summary>
+        /// Checks if dead lock may occur. Some rules apply
+        /// </summary>
+        /// <param name="entities">Entities to be added</param>
         private void CheckForDeadLock(IEnumerable<LockEntity> entities)
         {
             // Entity itself shall not be locked! 
