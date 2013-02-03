@@ -1,17 +1,41 @@
 ﻿using BurnSystems.FlexBG.Modules.DeponNet.UnitM.Interfaces;
+using BurnSystems.FlexBG.Modules.IdGeneratorM;
+using BurnSystems.ObjectActivation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media.Media3D;
 
 namespace BurnSystems.FlexBG.Modules.DeponNet.UnitM
 {
     public class UnitManagement : IUnitManagement
     {
-        public long CreateUnit(long ownerId, long unitTypeId, System.Windows.Media.Media3D.Vector3D position)
+        [Inject(IsMandatory = true)]
+        public LocalUnitDatabase Data
         {
-            throw new NotImplementedException();
+            get;
+            set;
+        }
+
+        [Inject(IsMandatory = true)]
+        public IIdGenerator IdGenerator
+        {
+            get;
+            set;
+        }
+
+        public long CreateUnit(long ownerId, int unitTypeId, Vector3D position)
+        {
+            var unit = new Unit();
+            unit.PlayerId = ownerId;
+            unit.UnitTypeId= unitTypeId;
+            unit.Position = position;
+            unit.Id = this.IdGenerator.NextId(EntityType.Unit);
+
+            this.Data.UnitsStore.Units.Add(unit);
+            return unit.Id;
         }
 
         public void DissolveUnit(long unitId)
@@ -19,7 +43,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.UnitM
             throw new NotImplementedException();
         }
 
-        public void UpdatePosition(long unitId, System.Windows.Media.Media3D.Vector3D newPosition)
+        public void UpdatePosition(long unitId, Vector3D newPosition)
         {
             throw new NotImplementedException();
         }

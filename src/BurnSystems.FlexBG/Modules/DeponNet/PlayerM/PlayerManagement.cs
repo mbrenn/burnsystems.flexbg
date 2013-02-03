@@ -11,14 +11,14 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.PlayerM
 {
     public class PlayerManagement : IPlayerManagement
     {
-        [Inject]
-        public PlayersData Data
+        [Inject(IsMandatory=true)]
+        public LocalPlayerDatabase Data
         {
             get;
             set;
         }
 
-        [Inject]
+        [Inject(IsMandatory = true)]
         public IIdGenerator IdGenerator
         {
             get;
@@ -42,34 +42,34 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.PlayerM
             player.GameId = gameId;
             player.Id = this.IdGenerator.NextId(EntityType.Player);
 
-            this.Data.Players.Add(player);
+            this.Data.PlayersStore.Players.Add(player);
 
             return player.Id;
         }
 
         public void RemovePlayer(long playerId)
         {
-            this.Data.Players.RemoveAll(x => x.Id == playerId);
+            this.Data.PlayersStore.Players.RemoveAll(x => x.Id == playerId);
         }
 
         public IEnumerable<Player> GetAllPlayers()
         {
-            return this.Data.Players.ToList();
+            return this.Data.PlayersStore.Players.ToList();
         }
 
         public IEnumerable<Player> GetPlayerOfUser(long userId)
         {
-            return this.Data.Players.Where(x => x.OwnerId == userId).ToList();
+            return this.Data.PlayersStore.Players.Where(x => x.OwnerId == userId).ToList();
         }
 
         public IEnumerable<Player> GetPlayerOfGame(long gameId)
         {
-            return this.Data.Players.Where(x => x.GameId == gameId).ToList();
+            return this.Data.PlayersStore.Players.Where(x => x.GameId == gameId).ToList();
         }
 
         public Player GetPlayer(long playerId)
         {
-            return this.Data.Players.Where(x => x.Id == playerId).FirstOrDefault();
+            return this.Data.PlayersStore.Players.Where(x => x.Id == playerId).FirstOrDefault();
         }
     }
 }

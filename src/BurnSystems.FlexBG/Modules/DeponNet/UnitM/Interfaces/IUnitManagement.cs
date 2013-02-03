@@ -16,7 +16,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.UnitM.Interfaces
         /// <param name="unitTypeId">Id of the unit type</param>
         /// <param name="position">Position of the unit</param>
         /// <returns>Id of the new unit</returns>
-        long CreateUnit(long ownerId, long unitTypeId, Vector3D position);
+        long CreateUnit(long ownerId, int unitTypeId, Vector3D position);
 
         /// <summary>
         /// Dissolves the unit
