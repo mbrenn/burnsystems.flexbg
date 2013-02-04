@@ -110,6 +110,7 @@
     <Compile Include="Modules\GameInfoM\GameInfoProvider.cs" />
     <Compile Include="Modules\GameInfoM\IGameInfoProvider.cs" />
     <Compile Include="Modules\GenericObjectStorageM\Entry.cs" />
+    <Compile Include="Modules\GenericObjectStorageM\Extensions.cs" />
     <Compile Include="Modules\GenericObjectStorageM\RuntimeStore.cs" />
     <Compile Include="Modules\GenericObjectStorageM\Store.cs" />
     <Compile Include="Modules\GenericObjectStorageM\GenericObjectStorage.cs" />

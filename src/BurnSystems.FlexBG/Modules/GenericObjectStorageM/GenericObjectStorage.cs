@@ -24,12 +24,12 @@ namespace BurnSystems.FlexBG.Modules.GenericObjectStorageM
         /// <summary>
         /// Stores the Store
         /// </summary>
-        private Store store;
+        private Store store = new Store();
 
         /// <summary>
         /// Stores the runtime store
         /// </summary>
-        private RuntimeStore runtimeStore;
+        private RuntimeStore runtimeStore = new RuntimeStore();
 
         /// <summary>
         /// Sets a value into this dynamic storage
@@ -74,14 +74,21 @@ namespace BurnSystems.FlexBG.Modules.GenericObjectStorageM
 
         public void Start()
         {
-            SerializedFile.LoadFromFile<Store>("genericstore", () => new Store());
+            lock (this.syncObject)
+            {
+                this.store = SerializedFile.LoadFromFile<Store>("genericstore", () => new Store());
+                this.runtimeStore = new RuntimeStore();
 
-            this.UpdateIndex();
+                this.UpdateIndex();
+            }
         }
 
         public void Shutdown()
         {
-            SerializedFile.StoreToFile("genericstore", this.store);
+            lock (this.syncObject)
+            {
+                SerializedFile.StoreToFile("genericstore", this.store);
+            }
         }
 
         /// <summary>

@@ -9,6 +9,7 @@ namespace BurnSystems.FlexBG.Modules.GenericObjectStorageM
     /// <summary>
     /// Stores the entries
     /// </summary>
+    [Serializable]
     public class Entry
     {
         private string objectType;
