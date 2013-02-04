@@ -9,6 +9,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.TownM
     /// <summary>
     /// Defines the town
     /// </summary>
+    [Serializable]
     public class Town
     {
         /// <summary>
@@ -33,6 +34,15 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.TownM
         /// Gets or sets the town name
         /// </summary>
         public string TownName
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the town is a capital town
+        /// </summary>
+        public bool IsCapital
         {
             get;
             set;
