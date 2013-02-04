@@ -12,10 +12,23 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.ResourceSetM
     [BindAlsoTo(typeof(IFlexBgRuntimeModule))]
     public class LocalResourceDatabase : IFlexBgRuntimeModule
     {
+        /// <summary>
+        /// Stores the synchronization
+        /// </summary>
+        private object syncObject = new object();
+
         public ResourcesData ResourceStore
         {
             get;
             set;
+        }
+
+        /// <summary>
+        /// Gets or sets the sync object
+        /// </summary>
+        public object SyncObject
+        {
+            get { return this.syncObject; }
         }
 
         /// <summary>

@@ -186,5 +186,38 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
                 }
             }
         }
+
+        /// <summary>
+        /// Gets the height for the given column
+        /// </summary>
+        /// <param name="column">Column to be used</param>
+        /// <returns>Height of first field change</returns>
+        public static double GetHeight(this List<FieldTypeChangeInfo> column)
+        {
+            if (column == null || column.Count <= 1)
+            {
+                // Column has not been found, maximum height
+                // Or column just consists of air
+                return double.MaxValue;
+            }
+
+            return column[1].ChangeHeight;
+        }
+
+        /// <summary>
+        /// Gets the height for the given column
+        /// </summary>
+        /// <param name="column">Column to be used</param>
+        /// <returns>Height of first field change</returns>
+        public static double GetHeight(this IVoxelMap voxelMap, long instanceId, int x, int y)
+        {
+            var column = voxelMap.GetColumn(instanceId, x, y);
+            if (column == null)
+            {
+                return double.MaxValue;
+            }
+
+            return column.GetHeight();
+        }
     }
 }

@@ -7,17 +7,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BurnSystems.FlexBG.Modules.DeponNet.PlayerM
+namespace BurnSystems.FlexBG.Modules.DeponNet.UnitM
 {
     [BindAlsoTo(typeof(IFlexBgRuntimeModule))]
-    public class LocalPlayerDatabase : IFlexBgRuntimeModule
+    public class LocalUnitDatabase : IFlexBgRuntimeModule
     {
         /// <summary>
         /// Stores the synchronization
         /// </summary>
         private object syncObject = new object();
 
-        public PlayersData PlayersStore
+        public UnitsData UnitsStore
         {
             get;
             set;
@@ -36,7 +36,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.PlayerM
         /// </summary>
         public void Start()
         {
-            this.PlayersStore = SerializedFile.LoadFromFile<PlayersData>("players.db", () => new PlayersData());
+            this.UnitsStore = SerializedFile.LoadFromFile<UnitsData>("units.db", () => new UnitsData());
         }
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.PlayerM
         /// </summary>
         public void Shutdown()
         {
-            SerializedFile.StoreToFile("players.db", this.PlayersStore);
+            SerializedFile.StoreToFile("units.db", this.UnitsStore);
         }
     }
 }

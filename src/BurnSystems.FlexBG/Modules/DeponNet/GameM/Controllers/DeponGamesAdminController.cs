@@ -37,6 +37,16 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.GameM.Controllers
         [WebMethod]
         public IActionResult Create([PostModel] DeponCreateGameModel model)
         {
+            CreateGame(model);
+            return this.SuccessJson();
+        }
+
+        /// <summary>
+        /// Creates game and returns the game id
+        /// </summary>
+        /// <param name="model">Model to be used</param>
+        public long CreateGame(DeponCreateGameModel model)
+        {
             var gameId = this.GameManagement.Create(model.Title, model.Description, model.MaxPlayers);
 
             var info = new VoxelMapInfo();
@@ -57,7 +67,8 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.GameM.Controllers
             new AddNoiseLayer(this.VoxelMap, FieldTypes.Grass, () => 0, () => float.MinValue).Execute(gameId);
 
             logger.LogEntry(LogLevel.Notify, "Finished map creation for game " + gameId.ToString());
-            return this.SuccessJson();
+
+            return gameId;
         }
     }
 }

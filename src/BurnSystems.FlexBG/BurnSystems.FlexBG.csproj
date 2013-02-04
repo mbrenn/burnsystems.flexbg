@@ -30,6 +30,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -47,8 +48,11 @@
     <Compile Include="Modules\DeponNet\BuildingM\Building.cs" />
     <Compile Include="Modules\DeponNet\BuildingM\BuildingType.cs" />
     <Compile Include="Modules\DeponNet\EntityType.cs" />
-    <Compile Include="Modules\DeponNet\GameClockM\GameClock.cs" />
+    <Compile Include="Modules\DeponNet\GameClockM\GameClockInfo.cs" />
     <Compile Include="Modules\DeponNet\GameClockM\GameClockManager.cs" />
+    <Compile Include="Modules\DeponNet\GameClockM\GameClocksData.cs" />
+    <Compile Include="Modules\DeponNet\GameClockM\Interface\IGameClockManager.cs" />
+    <Compile Include="Modules\DeponNet\GameClockM\LocalGameClockDatabase.cs" />
     <Compile Include="Modules\DeponNet\GameM\Admin\DeponCreateGameModel.cs" />
     <Compile Include="Modules\DeponNet\GameM\Admin\DeponGameAdminInterface.cs" />
     <Compile Include="Modules\DeponNet\GameM\Admin\GamesTreeViewItem.cs" />
@@ -81,8 +85,25 @@
     <Compile Include="Modules\DeponNet\ResourceSetM\ResourceSet.cs" />
     <Compile Include="Modules\DeponNet\ResourceSetM\ResourceSetBag.cs" />
     <Compile Include="Modules\DeponNet\ResourceSetM\ResourceType.cs" />
+    <Compile Include="Modules\DeponNet\Rules\IPlayerRules.cs" />
+    <Compile Include="Modules\DeponNet\Rules\IUnitJobRules.cs" />
+    <Compile Include="Modules\DeponNet\Rules\PlayerCreationParams.cs" />
+    <Compile Include="Modules\DeponNet\Rules\PlayerRules.cs" />
+    <Compile Include="Modules\DeponNet\Rules\UnitJobRules.cs" />
     <Compile Include="Modules\DeponNet\TownM\Town.cs" />
+    <Compile Include="Modules\DeponNet\UnitM\Interfaces\IUnitGroupManagement.cs" />
+    <Compile Include="Modules\DeponNet\UnitM\Interfaces\IUnitManagement.cs" />
+    <Compile Include="Modules\DeponNet\UnitM\LocalUnitDatabase.cs" />
+    <Compile Include="Modules\DeponNet\UnitM\Strategies\UnitStrategy.cs" />
     <Compile Include="Modules\DeponNet\UnitM\Unit.cs" />
+    <Compile Include="Modules\DeponNet\UnitM\UnitGroup.cs" />
+    <Compile Include="Modules\DeponNet\UnitM\UnitGroupManagement.cs" />
+    <Compile Include="Modules\DeponNet\UnitM\UnitJobs\BaseJob.cs" />
+    <Compile Include="Modules\DeponNet\UnitM\UnitJobs\DoNothingJob.cs" />
+    <Compile Include="Modules\DeponNet\UnitM\UnitJobs\IJob.cs" />
+    <Compile Include="Modules\DeponNet\UnitM\UnitJobs\MoveJob.cs" />
+    <Compile Include="Modules\DeponNet\UnitM\UnitManagement.cs" />
+    <Compile Include="Modules\DeponNet\UnitM\UnitsData.cs" />
     <Compile Include="Modules\DeponNet\UnitM\UnitType.cs" />
     <Compile Include="Modules\FlexBgModule.cs" />
     <Compile Include="Modules\GameInfoM\GameInfo.cs" />
@@ -97,6 +118,12 @@
     <Compile Include="Modules\IdGeneratorM\IdStatus.cs" />
     <Compile Include="Modules\IdGeneratorM\IdStatusDb.cs" />
     <Compile Include="Modules\IdGeneratorM\IIdGenerator.cs" />
+    <Compile Include="Modules\LockMasterM\Extensions.cs" />
+    <Compile Include="Modules\LockMasterM\ILockMaster.cs" />
+    <Compile Include="Modules\LockMasterM\LockEntity.cs" />
+    <Compile Include="Modules\LockMasterM\Simple\LockingStatus.cs" />
+    <Compile Include="Modules\LockMasterM\Simple\LockScope.cs" />
+    <Compile Include="Modules\LockMasterM\Simple\SimpleLockMaster.cs" />
     <Compile Include="Modules\MailSenderM\Extensions.cs" />
     <Compile Include="Modules\MailSenderM\IMailSender.cs" />
     <Compile Include="Modules\MailSenderM\MailSender.cs" />
@@ -152,6 +179,9 @@
     <Compile Include="Modules\UserQueryM\IUserQuery.cs" />
     <Compile Include="Modules\UserQueryM\UserQueryConsole.cs" />
     <Compile Include="Modules\UserQueryM\UserQueryDefaultAnswer.cs" />
+    <Compile Include="Modules\WayPointCalculationM\IWayPointCalculation.cs" />
+    <Compile Include="Modules\WayPointCalculationM\OnlyHeight\NodeInfo.cs" />
+    <Compile Include="Modules\WayPointCalculationM\OnlyHeight\WayPointCalculation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Runtime.cs" />
   </ItemGroup>
@@ -175,6 +205,7 @@
     </Content>
     <Compile Include="Modules\DeponNet\MapM\Admin\MapTreeView.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
