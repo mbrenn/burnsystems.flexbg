@@ -131,41 +131,12 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.Rules.UnitJobM
 
             if (currentJob is MoveJob)
             {
-                if (this.ExecuteMoveJob(unit, currentJob as MoveJob))
+                var moveRule = new UnitMoveJobRule(this);
+                if (moveRule.ExecuteMoveJob(unit, currentJob as MoveJob))
                 {
                     this.ActivateNextJob(unit);
                 }
             }
-        }
-
-        /// <summary>
-        /// Executes the move job for the given unit
-        /// </summary>
-        /// <param name="unit">Unit, whose job shall be executed</param>
-        /// <param name="moveJob">The movejob</param>
-        private bool ExecuteMoveJob(Unit unit, MoveJob moveJob)
-        {
-            var tick = 1;
-            var finished = false;
-            var distance = moveJob.Velocity * tick;
-
-            var currentPosition = unit.Position;
-            var targetPosition = moveJob.TargetPosition;
-
-            var wayTo = targetPosition - currentPosition;
-            if (wayTo.Length <= distance)
-            {
-                // We have reached target position, finish!
-                distance = wayTo.Length;
-                finished = true;
-            }
-
-            wayTo.Normalize();
-            wayTo *= distance;
-
-            this.UnitManagement.UpdatePosition(unit.Id, currentPosition + wayTo);
-
-            return finished;
         }
 
         /// <summary>
@@ -256,39 +227,10 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.Rules.UnitJobM
                     // Only user defined jobs are expanded
                     if (currentJob is MoveJob)
                     {
-                        this.ExpandMoveJob(unit, currentJob as MoveJob);
+                        var moveRule = new UnitMoveJobRule(this);
+                        moveRule.ExpandMoveJob(unit, currentJob as MoveJob);
                     }
                 }
-            }
-        }
-
-        /// <summary>
-        /// Expands the move job in a way that a move job will be generated for each field
-        /// </summary>
-        /// <param name="unit">Unit who needs new jobs</param>
-        /// <param name="moveJob">Movejob to be generated</param>
-        private void ExpandMoveJob(Unit unit, MoveJob moveJob)
-        {
-            var currentJobPosition = unit.IndexCurrentJob;
-            var wayPoints = this.WayPointCalculation.CalculateWaypoints(
-                    unit.Position,
-                    moveJob.TargetPosition,
-                    null)
-                .ToList();
-
-            // First waypoint and last waypoint are not required, because they give the start and endposition
-            foreach (var point in wayPoints.Skip(1).Take(wayPoints.Count - 2))
-            {
-                var newMoveJob = new MoveJob()
-                {
-                    IsUserDefined = false,
-                    TargetPosition = point,
-                    Velocity = moveJob.Velocity
-                };
-
-                this.UnitManagement.InsertJob(unit.Id, newMoveJob, currentJobPosition);
-
-                currentJobPosition++;
             }
         }
     }
