@@ -12,7 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BurnSystems.FlexBG.Modules.DeponNet.Rules
+namespace BurnSystems.FlexBG.Modules.DeponNet.Rules.UnitJobM
 {
     /// <summary>
     /// Executes the jobs for the units

@@ -89,11 +89,11 @@
     <Compile Include="Modules\DeponNet\ResourceSetM\ResourceSet.cs" />
     <Compile Include="Modules\DeponNet\ResourceSetM\ResourceSetBag.cs" />
     <Compile Include="Modules\DeponNet\ResourceSetM\ResourceType.cs" />
-    <Compile Include="Modules\DeponNet\Rules\IPlayerRules.cs" />
-    <Compile Include="Modules\DeponNet\Rules\IUnitJobRules.cs" />
-    <Compile Include="Modules\DeponNet\Rules\PlayerCreationParams.cs" />
-    <Compile Include="Modules\DeponNet\Rules\PlayerRules.cs" />
-    <Compile Include="Modules\DeponNet\Rules\UnitJobRules.cs" />
+    <Compile Include="Modules\DeponNet\Rules\PlayerRulesM\IPlayerRules.cs" />
+    <Compile Include="Modules\DeponNet\Rules\UnitJobM\IUnitJobRules.cs" />
+    <Compile Include="Modules\DeponNet\Rules\PlayerRulesM\PlayerCreationParams.cs" />
+    <Compile Include="Modules\DeponNet\Rules\PlayerRulesM\PlayerRules.cs" />
+    <Compile Include="Modules\DeponNet\Rules\UnitJobM\UnitJobRules.cs" />
     <Compile Include="Modules\DeponNet\TownM\Town.cs" />
     <Compile Include="Modules\DeponNet\UnitM\Interfaces\IUnitGroupManagement.cs" />
     <Compile Include="Modules\DeponNet\UnitM\Interfaces\IUnitManagement.cs" />

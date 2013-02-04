@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BurnSystems.FlexBG.Modules.DeponNet.Rules
+namespace BurnSystems.FlexBG.Modules.DeponNet.Rules.PlayerRulesM
 {
     /// <summary>
     /// Stores the rules, which are for the player

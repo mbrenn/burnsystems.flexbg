@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BurnSystems.FlexBG.Modules.DeponNet.Rules
+namespace BurnSystems.FlexBG.Modules.DeponNet.Rules.PlayerRulesM
 {
     /// <summary>
     /// Defines the interface for the player rules
