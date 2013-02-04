@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BurnSystems.Collections;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,12 +10,12 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.BuildingM
     /// <summary>
     /// Defines the building type
     /// </summary>
-    public class BuildingType
+    public class BuildingType : IHasId
     {
         /// <summary>
         /// Gets or sets the id of the buildung
         /// </summary>
-        public int Id
+        public long Id
         {
             get;
             set;

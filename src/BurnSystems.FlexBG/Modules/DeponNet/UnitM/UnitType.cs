@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BurnSystems.Collections;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,12 +10,12 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.UnitM
     /// <summary>
     /// Defines the unit types
     /// </summary>
-    public class UnitType
+    public class UnitType : IHasId
     {
         /// <summary>
         /// Gets or sets the id of the Unit type
         /// </summary>
-        public int Id
+        public long Id
         {
             get;
             set;
@@ -24,6 +25,30 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.UnitM
         /// Gets or sets the token
         /// </summary>
         public string Token
+        {
+            get;
+            set;
+        }
+
+        public double Velocity
+        {
+            get;
+            set;
+        }
+
+        public double TotalStructure
+        {
+            get;
+            set;
+        }
+
+        public double TotalAttack
+        {
+            get;
+            set;
+        }
+
+        public double TotalDefense
         {
             get;
             set;

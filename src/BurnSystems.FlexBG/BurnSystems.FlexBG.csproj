@@ -40,6 +40,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helper\ProviderByIdM\BaseProviderById.cs" />
+    <Compile Include="Helper\ProviderByIdM\IProviderById.cs" />
     <Compile Include="Helper\SerializedFile.cs" />
     <Compile Include="Interfaces\IFlexBgRuntimeModule.cs" />
     <Compile Include="Modules\AdminInterfaceM\AdminRootData.cs" />
@@ -47,6 +49,8 @@
     <Compile Include="Modules\ConfigurationStorageM\IConfigurationStorage.cs" />
     <Compile Include="Modules\DeponNet\BuildingM\Building.cs" />
     <Compile Include="Modules\DeponNet\BuildingM\BuildingType.cs" />
+    <Compile Include="Modules\DeponNet\BuildingM\BuildingTypeProvider.cs" />
+    <Compile Include="Modules\DeponNet\BuildingM\Interface\IBuildingTypeProvider.cs" />
     <Compile Include="Modules\DeponNet\EntityType.cs" />
     <Compile Include="Modules\DeponNet\GameClockM\GameClockInfo.cs" />
     <Compile Include="Modules\DeponNet\GameClockM\GameClockManager.cs" />
@@ -93,6 +97,7 @@
     <Compile Include="Modules\DeponNet\TownM\Town.cs" />
     <Compile Include="Modules\DeponNet\UnitM\Interfaces\IUnitGroupManagement.cs" />
     <Compile Include="Modules\DeponNet\UnitM\Interfaces\IUnitManagement.cs" />
+    <Compile Include="Modules\DeponNet\UnitM\Interfaces\IUnitTypeProvider.cs" />
     <Compile Include="Modules\DeponNet\UnitM\LocalUnitDatabase.cs" />
     <Compile Include="Modules\DeponNet\UnitM\Strategies\UnitStrategy.cs" />
     <Compile Include="Modules\DeponNet\UnitM\Unit.cs" />
@@ -105,6 +110,7 @@
     <Compile Include="Modules\DeponNet\UnitM\UnitManagement.cs" />
     <Compile Include="Modules\DeponNet\UnitM\UnitsData.cs" />
     <Compile Include="Modules\DeponNet\UnitM\UnitType.cs" />
+    <Compile Include="Modules\DeponNet\UnitM\UnitTypeProvider.cs" />
     <Compile Include="Modules\FlexBgModule.cs" />
     <Compile Include="Modules\GameInfoM\GameInfo.cs" />
     <Compile Include="Modules\GameInfoM\GameInfoProvider.cs" />
