@@ -8,7 +8,7 @@ using System.Windows.Media.Media3D;
 namespace BurnSystems.FlexBG.Modules.DeponNet.UnitM.UnitJobs
 {
     [Serializable]
-    public class MoveJob : IJob
+    public class MoveJob : BaseJob
     {
         /// <summary>
         /// Defines the target position of the unit
@@ -26,6 +26,14 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.UnitM.UnitJobs
         {
             get;
             set;
+        }
+
+        public override string ToString()
+        {
+            return string.Format(
+                "To ({0}) with velocity {1}",
+                this.TargetPosition.ToString(),
+                this.Velocity.ToString());
         }
     }
 }

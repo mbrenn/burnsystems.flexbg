@@ -11,5 +11,13 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.UnitM.UnitJobs
     /// </summary>
     public interface IJob
     {
+        /// <summary>
+        /// Gets or sets a value, indicating whether user has created the job or it has been created by engine
+        /// </summary>
+        bool IsUserDefined
+        {
+            get;
+            set;
+        }
     }
 }

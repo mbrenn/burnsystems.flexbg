@@ -16,8 +16,8 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.GameClockM
         /// <summary>
         /// Gets or sets the data
         /// </summary>
-        [Inject]
-        public GameClocksData Data
+        [Inject(IsMandatory=true)]
+        public LocalGameClockDatabase Data
         {
             get;
             set;
@@ -30,9 +30,9 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.GameClockM
         /// <returns>-1, if not found</returns>
         public long GetTicks(long instanceId)
         {
-            lock (this.Data.GameClockInfos)
+            lock (this.Data.GameClockStore.GameClockInfos)
             {
-                var result = this.Data.GameClockInfos.Where(x => x.InstanceId == instanceId)
+                var result = this.Data.GameClockStore.GameClockInfos.Where(x => x.InstanceId == instanceId)
                     .FirstOrDefault();
                 if (result == null)
                 {
@@ -50,9 +50,9 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.GameClockM
         /// <param name="ticks">Number of ticks to be added</param>
         public void IncrementTicks(long instanceId, long ticks)
         {
-            lock (this.Data.GameClockInfos)
+            lock (this.Data.GameClockStore.GameClockInfos)
             {
-                var result = this.Data.GameClockInfos.Where(x => x.InstanceId == instanceId)
+                var result = this.Data.GameClockStore.GameClockInfos.Where(x => x.InstanceId == instanceId)
                     .FirstOrDefault();
                 if (result == null)
                 {
@@ -63,7 +63,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.GameClockM
                         Time = 0
                     };
 
-                    this.Data.GameClockInfos.Add(result);
+                    this.Data.GameClockStore.GameClockInfos.Add(result);
                 }
 
                 result.Time += ticks;

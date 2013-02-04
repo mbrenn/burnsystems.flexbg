@@ -78,5 +78,14 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.UnitM
             get;
             set;
         }
+
+        /// <summary>
+        /// Initializes a new instance of the Unit class
+        /// </summary>
+        public Unit()
+        {
+            this.IndexCurrentJob = -1;
+
+        }
     }
 }

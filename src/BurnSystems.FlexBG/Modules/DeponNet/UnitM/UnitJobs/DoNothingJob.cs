@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace BurnSystems.FlexBG.Modules.DeponNet.UnitM.UnitJobs
 {
     [Serializable]
-    public class DoNothingJob : IJob
+    public class DoNothingJob : BaseJob
     {
     }
 }

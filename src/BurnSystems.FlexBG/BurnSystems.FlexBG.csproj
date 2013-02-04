@@ -86,8 +86,10 @@
     <Compile Include="Modules\DeponNet\ResourceSetM\ResourceSetBag.cs" />
     <Compile Include="Modules\DeponNet\ResourceSetM\ResourceType.cs" />
     <Compile Include="Modules\DeponNet\Rules\IPlayerRules.cs" />
+    <Compile Include="Modules\DeponNet\Rules\IUnitJobRules.cs" />
     <Compile Include="Modules\DeponNet\Rules\PlayerCreationParams.cs" />
     <Compile Include="Modules\DeponNet\Rules\PlayerRules.cs" />
+    <Compile Include="Modules\DeponNet\Rules\UnitJobRules.cs" />
     <Compile Include="Modules\DeponNet\TownM\Town.cs" />
     <Compile Include="Modules\DeponNet\UnitM\Interfaces\IUnitGroupManagement.cs" />
     <Compile Include="Modules\DeponNet\UnitM\Interfaces\IUnitManagement.cs" />
@@ -96,6 +98,7 @@
     <Compile Include="Modules\DeponNet\UnitM\Unit.cs" />
     <Compile Include="Modules\DeponNet\UnitM\UnitGroup.cs" />
     <Compile Include="Modules\DeponNet\UnitM\UnitGroupManagement.cs" />
+    <Compile Include="Modules\DeponNet\UnitM\UnitJobs\BaseJob.cs" />
     <Compile Include="Modules\DeponNet\UnitM\UnitJobs\DoNothingJob.cs" />
     <Compile Include="Modules\DeponNet\UnitM\UnitJobs\IJob.cs" />
     <Compile Include="Modules\DeponNet\UnitM\UnitJobs\MoveJob.cs" />
