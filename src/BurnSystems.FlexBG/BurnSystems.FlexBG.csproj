@@ -88,6 +88,11 @@
     <Compile Include="Modules\GameInfoM\GameInfo.cs" />
     <Compile Include="Modules\GameInfoM\GameInfoProvider.cs" />
     <Compile Include="Modules\GameInfoM\IGameInfoProvider.cs" />
+    <Compile Include="Modules\GenericObjectStorageM\Entry.cs" />
+    <Compile Include="Modules\GenericObjectStorageM\RuntimeStore.cs" />
+    <Compile Include="Modules\GenericObjectStorageM\Store.cs" />
+    <Compile Include="Modules\GenericObjectStorageM\GenericObjectStorage.cs" />
+    <Compile Include="Modules\GenericObjectStorageM\Interface\IGenericObjectStorage.cs" />
     <Compile Include="Modules\IdGeneratorM\IdGenerator.cs" />
     <Compile Include="Modules\IdGeneratorM\IdStatus.cs" />
     <Compile Include="Modules\IdGeneratorM\IdStatusDb.cs" />
