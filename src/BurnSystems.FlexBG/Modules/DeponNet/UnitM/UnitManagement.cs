@@ -29,17 +29,62 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.UnitM
             set;
         }
 
-        public long CreateUnit(long ownerId, int unitTypeId, Vector3D position)
+        [Inject]
+        public IUnitTypeProvider UnitTypeProvider
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Gets the unit type, if available
+        /// </summary>
+        /// <param name="unitTypeId">Id of the unit type</param>
+        /// <returns>Unittype to be retrieved</returns>
+        private UnitType GetUnitType(long unitTypeId)
+        {
+            if (this.UnitTypeProvider != null)
+            {
+                return this.UnitTypeProvider.Get(unitTypeId);
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Creates the unit
+        /// </summary>
+        /// <param name="ownerId">Id of the owner</param>
+        /// <param name="unitTypeId">Id of the unit type</param>
+        /// <param name="amount">Amount of units</param>
+        /// <param name="position">Position of unit</param>
+        /// <returns>Id of the created unit</returns>
+        public long CreateUnit(long ownerId, int unitTypeId, int amount, Vector3D position)
         {
             var unit = new Unit();
             unit.PlayerId = ownerId;
             unit.UnitTypeId= unitTypeId;
             unit.Position = position;
             unit.Id = this.IdGenerator.NextId(EntityType.Unit);
+            var unitType = this.GetUnitType(unitTypeId);
 
             lock (this.Data.SyncObject)
             {
                 this.Data.UnitsStore.Units.Add(unit);
+
+                for (var n = 0; n < amount; n++)
+                {
+                    var instance = new UnitInstance();
+                    instance.Id = this.IdGenerator.NextId(EntityType.UnitInstance);
+                    instance.IsDead = false;
+
+                    if (unitType != null)
+                    {
+                        instance.LifePoints = unitType.LifePoints;
+                    }
+
+                    unit.Instances.Add(instance);
+                }
             }
 
             return unit.Id;
@@ -179,6 +224,40 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.UnitM
                 }
 
                 unit.Strategy = strategy;
+            }
+        }
+
+        /// <summary>
+        /// Sets the unit instance for a specific unit
+        /// </summary>
+        /// <param name="unitId">Id of the unit</param>
+        /// <param name="instancePosition">Position of the instance in array</param>
+        /// <param name="instance">Instance to be set</param>
+        public void SetUnitInstance(long unitId, int instancePosition, UnitInstance instance)
+        {
+            lock (this.Data.SyncObject)
+            {
+                var unit = this.GetUnit(unitId);
+                if (unit != null)
+                {
+                    unit.Instances[instancePosition] = instance;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Removes all dead instances from array
+        /// </summary>
+        /// <param name="unitId">Id of the unit</param>
+        public void RemoveDeadInstances(long unitId)
+        {
+            lock (this.Data.SyncObject)
+            {
+                var unit = this.GetUnit(unitId);
+                if (unit != null)
+                {
+                    unit.Instances.RemoveAll(x => x.IsDead || x.LifePoints <= 0);
+                }
             }
         }
     }

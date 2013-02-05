@@ -36,19 +36,19 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.UnitM
             set;
         }
 
-        public double TotalStructure
+        public double LifePoints
         {
             get;
             set;
         }
 
-        public double TotalAttack
+        public double AttackPoints
         {
             get;
             set;
         }
 
-        public double TotalDefense
+        public double DefensePoints
         {
             get;
             set;

@@ -12,18 +12,35 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.UnitM.Data
     [Serializable]
     public class Unit
     {
+        private long id;
+
+        private long playerId;
+
+        public Vector3D Position;
+
+        private long unitTypeId;
+
+        private UnitStrategy strategy;
+
+        private int currentJobIndex;
+
         /// <summary>
         /// Stores the list of jobs
         /// </summary>
         private List<IJob> jobs = new List<IJob>();
 
         /// <summary>
+        /// Stores the instances
+        /// </summary>
+        private List<UnitInstance> instances = new List<UnitInstance>();
+
+        /// <summary>
         /// Gets or sets the unit id
         /// </summary>
         public long Id
         {
-            get;
-            set;
+            get { return this.id; }
+            set { this.id = value; }
         }
 
         /// <summary>
@@ -31,26 +48,17 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.UnitM.Data
         /// </summary>
         public long PlayerId
         {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// Gets or sets the position of the unit
-        /// </summary>
-        public Vector3D Position
-        {
-            get;
-            set;
+            get { return this.playerId; }
+            set { this.playerId = value; }
         }
 
         /// <summary>
         /// Stores the id of the unittype
         /// </summary>
-        public int UnitTypeId
+        public long UnitTypeId
         {
-            get;
-            set;
+            get { return this.unitTypeId; }
+            set { this.unitTypeId = value; }
         }
 
         /// <summary>
@@ -58,8 +66,8 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.UnitM.Data
         /// </summary>
         public UnitStrategy Strategy
         {
-            get;
-            set;
+            get { return this.strategy; }
+            set { this.strategy = value; }
         }
 
         public List<IJob> Jobs
@@ -75,8 +83,13 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.UnitM.Data
         /// </summary>
         public int IndexCurrentJob
         {
-            get;
-            set;
+            get { return this.currentJobIndex; }
+            set { this.currentJobIndex = value; }
+        }
+
+        public List<UnitInstance> Instances
+        {
+            get { return this.instances; }
         }
 
         /// <summary>
@@ -85,7 +98,11 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.UnitM.Data
         public Unit()
         {
             this.IndexCurrentJob = -1;
+        }
 
+        public double Amount
+        {
+            get { return this.Instances.Count; }
         }
     }
 }

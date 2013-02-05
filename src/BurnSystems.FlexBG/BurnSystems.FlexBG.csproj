@@ -97,6 +97,7 @@
     <Compile Include="Modules\DeponNet\Rules\UnitRulesM\UnitJobRules.cs" />
     <Compile Include="Modules\DeponNet\Rules\UnitRulesM\UnitMoveJobRule.cs" />
     <Compile Include="Modules\DeponNet\TownM\Town.cs" />
+    <Compile Include="Modules\DeponNet\UnitM\Data\UnitInstance.cs" />
     <Compile Include="Modules\DeponNet\UnitM\Interfaces\IUnitGroupManagement.cs" />
     <Compile Include="Modules\DeponNet\UnitM\Interfaces\IUnitManagement.cs" />
     <Compile Include="Modules\DeponNet\UnitM\Interfaces\IUnitTypeProvider.cs" />

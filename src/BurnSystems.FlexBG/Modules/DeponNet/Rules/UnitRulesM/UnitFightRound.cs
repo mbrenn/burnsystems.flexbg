@@ -41,6 +41,15 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.Rules.UnitRulesM
             set;
         }
 
+        [Inject(IsMandatory = true)]
+        public IUnitTypeProvider UnitTypeProvider
+        {
+            get;
+            set;
+        }
+
+        private object syncRoot = new object();
+
         /// <summary>
         /// Executes the fight round
         /// </summary>
@@ -51,20 +60,93 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.Rules.UnitRulesM
             var stopWatch = new Stopwatch();
             stopWatch.Start();
 
-            foreach (var unit in units)
+            Parallel.ForEach(units, (unit) =>
             {
                 // Get all units in scope
                 var fightingUnits = units.Where(
-                    x => this.MightFight(unit, x) && x != unit);
+                    x => this.MightFight(unit, x) && x != unit)
+                    .ToList();
 
-                foreach (var fightUnit in fightingUnits)
+                /*foreach (var fightUnit in fightingUnits)
                 {
-                    //logger.LogEntry(LogLevel.Verbose, string.Format("{0} attacks {1}", unit.Id, fightUnit.Id));
+                    logger.LogEntry(LogLevel.Verbose, string.Format("{0} attacks {1}", unit.Id, fightUnit.Id));
+                }*/
+
+                if (fightingUnits.Count > 0)
+                {
+                    this.ExecuteAttack(unit, fightingUnits);
                 }
+            });
+
+            // Removes all dead instances
+            foreach (var unit in units)
+            {
+                this.UnitManagement.RemoveDeadInstances(unit.Id);
             }
 
             stopWatch.Stop();
             logger.LogEntry(LogLevel.Notify, string.Format("Ending FightRound: {0} ms", stopWatch.ElapsedMilliseconds));
+        }
+
+        /// <summary>
+        /// Executes the attack for the unit
+        /// </summary>
+        /// <param name="unit">Unit which is attacking the other units</param>
+        /// <param name="fightingUnits">The units which are fought</param>
+        private void ExecuteAttack(Unit unit, IList<Unit> fightingUnits)
+        {
+            var attackerType = this.UnitTypeProvider.Get(unit.UnitTypeId);
+            if (attackerType == null)
+            {
+                throw new InvalidOperationException("Unknown unittype: " + unit.UnitTypeId);
+            }
+
+            // Do this for every nondead unit
+            var totalCount = unit.Instances.Count;
+            var totalDefenderUnits = fightingUnits.Sum(x => x.Instances.Count);
+            Parallel.For(0, totalCount, (n) =>
+            {
+                // Get some of all unitinstances
+                var selection = MathHelper.Random.Next(0, totalDefenderUnits);
+
+                // Find
+                foreach (var defender in fightingUnits)
+                {
+                    if (selection >= defender.Instances.Count)
+                    {
+                        // Not in this defender thing, look into next one
+                        selection -= defender.Instances.Count;
+                    }
+                    else
+                    {
+                        var defenderType = this.UnitTypeProvider.Get(defender.UnitTypeId);
+                        var selectedInstance = defender.Instances[selection];
+
+                        // Calculate loss
+                        var loss = attackerType.AttackPoints * attackerType.AttackPoints
+                            / (attackerType.AttackPoints * defenderType.DefensePoints);
+                        //lock (this.syncRoot)
+                        {
+                            selectedInstance.LifePoints -= loss;
+
+                            /*logger.LogEntry(
+                                LogLevel.Verbose,
+                                string.Format(
+                                    "Unit {0} [{3}] reduced by {1} lifepoints, caused by {2}",
+                                    defender.Id,
+                                    loss,
+                                    attackerType.Id,
+                                    selection));*/
+
+                            // Store result
+                            this.UnitManagement.SetUnitInstance(defender.Id, selection, selectedInstance);
+                        }
+
+                        // Cancel
+                        break;
+                    }
+                }
+            });
         }
 
         /// <summary>
@@ -75,18 +157,26 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.Rules.UnitRulesM
         /// <returns>true, if both units fight</returns>
         public bool MightFight(Unit attacker, Unit defender)
         {
+            // We do not have a strategy
             if (attacker.Strategy == null)
             {
                 return false;
             }
 
+            // Distance is too high
             var distance = (attacker.Position - defender.Position).Length;
-            if (distance < attacker.Strategy.AttackRadius)
+            if (distance > attacker.Strategy.AttackRadius)
             {
-                return true;
+                return false;
             }
 
-            return false;
+            // Same player
+            if (attacker.PlayerId == defender.PlayerId)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

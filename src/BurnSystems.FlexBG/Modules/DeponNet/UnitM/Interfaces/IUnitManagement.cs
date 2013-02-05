@@ -20,10 +20,11 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.UnitM.Interfaces
         /// Creates a unit
         /// </summary>
         /// <param name="ownerId">Id of the owner</param>
+        /// <param name="amount">Amount of unit instances</param>
         /// <param name="unitTypeId">Id of the unit type</param>
         /// <param name="position">Position of the unit</param>
         /// <returns>Id of the new unit</returns>
-        long CreateUnit(long ownerId, int unitTypeId, Vector3D position);
+        long CreateUnit(long ownerId, int unitTypeId, int amount, Vector3D position);
 
         /// <summary>
         /// Dissolves the unit
@@ -70,5 +71,19 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.UnitM.Interfaces
         /// <param name="unitId">Id of the unit</param>
         /// <param name="strategy">Strategy to be implemented</param>
         void SetUnitStrategy(long unitId, UnitStrategy strategy);
+        
+        /// <summary>
+        /// Sets the unit instance for a specific unit
+        /// </summary>
+        /// <param name="unitId">Id of the unit</param>
+        /// <param name="instancePosition">Position of the instance in array</param>
+        /// <param name="instance">Instance to be set</param>
+        void SetUnitInstance(long unitId, int instancePosition, UnitInstance instance);
+        
+        /// <summary>
+        /// Removes all dead instances from array
+        /// </summary>
+        /// <param name="unitId">Id of the unit</param>
+        void RemoveDeadInstances(long unitId);
     }
 }

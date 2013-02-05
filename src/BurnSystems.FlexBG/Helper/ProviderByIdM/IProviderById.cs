@@ -14,6 +14,12 @@ namespace BurnSystems.FlexBG.Helper.ProviderByIdM
     public interface IProviderById<T> where T : IHasId
     {
         /// <summary>
+        /// Adds an item
+        /// </summary>
+        /// <param name="item">Item to be added</param>
+        void Add(T item);
+
+        /// <summary>
         /// Gets by id
         /// </summary>
         /// <param name="id">Id, whose data shall be retrieved</param>
