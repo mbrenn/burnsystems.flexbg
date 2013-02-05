@@ -51,6 +51,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseProviderByIdM\TestIndexProvider.cs" />
     <Compile Include="BaseProviderByIdM\TestProvider.cs" />
     <Compile Include="GenericObjectStorageM\TestStorage.cs" />
     <Compile Include="LockMasterM\TestSimpleLocking.cs" />

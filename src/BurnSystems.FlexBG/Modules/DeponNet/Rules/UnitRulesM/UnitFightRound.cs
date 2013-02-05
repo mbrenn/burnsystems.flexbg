@@ -60,6 +60,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.Rules.UnitRulesM
             var stopWatch = new Stopwatch();
             stopWatch.Start();
 
+            var hasFought = false;
             Parallel.ForEach(units, (unit) =>
             {
                 // Get all units in scope
@@ -75,13 +76,17 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.Rules.UnitRulesM
                 if (fightingUnits.Count > 0)
                 {
                     this.ExecuteAttack(unit, fightingUnits);
+                    hasFought = true;
                 }
             });
 
             // Removes all dead instances
-            foreach (var unit in units)
+            if (hasFought)
             {
-                this.UnitManagement.RemoveDeadInstances(unit.Id);
+                foreach (var unit in units)
+                {
+                    this.UnitManagement.RemoveDeadInstances(unit.Id);
+                }
             }
 
             stopWatch.Stop();
@@ -104,7 +109,9 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.Rules.UnitRulesM
             // Do this for every nondead unit
             var totalCount = unit.Instances.Count;
             var totalDefenderUnits = fightingUnits.Sum(x => x.Instances.Count);
-            Parallel.For(0, totalCount, (n) =>
+
+            for ( var n = 0; n <totalCount; n++ )
+            //Parallel.For(0, totalCount, (n) =>
             {
                 // Get some of all unitinstances
                 var selection = MathHelper.Random.Next(0, totalDefenderUnits);
@@ -125,7 +132,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.Rules.UnitRulesM
                         // Calculate loss
                         var loss = attackerType.AttackPoints * attackerType.AttackPoints
                             / (attackerType.AttackPoints * defenderType.DefensePoints);
-                        //lock (this.syncRoot)
+                        lock (this.syncRoot)
                         {
                             selectedInstance.LifePoints -= loss;
 
@@ -139,14 +146,15 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.Rules.UnitRulesM
                                     selection));*/
 
                             // Store result
-                            this.UnitManagement.SetUnitInstance(defender.Id, selection, selectedInstance);
+                            // this.UnitManagement.SetUnitInstance(defender.Id, selection, selectedInstance);
                         }
 
                         // Cancel
                         break;
                     }
                 }
-            });
+            }
+            //);
         }
 
         /// <summary>

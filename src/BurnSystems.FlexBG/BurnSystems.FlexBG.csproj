@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="Helper\ProviderByIdM\BaseProviderById.cs" />
     <Compile Include="Helper\ProviderByIdM\IProviderById.cs" />
+    <Compile Include="Helper\ProviderByIdM\IndexProviderById.cs" />
     <Compile Include="Helper\SerializedFile.cs" />
     <Compile Include="Interfaces\IFlexBgRuntimeModule.cs" />
     <Compile Include="Modules\AdminInterfaceM\AdminRootData.cs" />

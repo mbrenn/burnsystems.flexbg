@@ -11,7 +11,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.UnitM
     /// <summary>
     /// Provides the unit types
     /// </summary>
-    public class UnitTypeProvider : BaseProviderById<UnitType>, IUnitTypeProvider
+    public class UnitTypeProvider : IndexProviderById<UnitType>, IUnitTypeProvider
     {
     }
 }
