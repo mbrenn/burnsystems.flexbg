@@ -66,7 +66,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.PlayerM
             }
         }
 
-        public IEnumerable<Player> GetPlayerOfUser(long userId)
+        public IEnumerable<Player> GetPlayersOfUser(long userId)
         {
             lock (this.Data.SyncObject)
             {
@@ -74,7 +74,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.PlayerM
             }
         }
 
-        public IEnumerable<Player> GetPlayerOfGame(long gameId)
+        public IEnumerable<Player> GetPlayersOfGame(long gameId)
         {
             lock (this.Data.SyncObject)
             {

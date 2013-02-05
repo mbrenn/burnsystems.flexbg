@@ -11,7 +11,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.BuildingM
     /// <summary>
     /// Provides the unit types
     /// </summary>
-    public class BuildingTypeProvider : BaseProviderById<BuildingType>, IBuildingTypeProvider
+    public class BuildingTypeProvider : IndexProviderById<BuildingType>, IBuildingTypeProvider
     {
     }
 }

@@ -8,13 +8,27 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.BuildingM
 {
     public class Building
     {
+        private long id;
+
+        private long townId;
+
+        private long playerId;
+
+        private long buildingTypeId;
+
+        private int level;
+
+        private bool isActive;
+
+        private double productivity;
+
         /// <summary>
         /// Gets or sets the id of the building
         /// </summary>
         public long Id
         {
-            get;
-            set;
+            get { return this.id; }
+            set { this.id = value; }
         }
 
         /// <summary>
@@ -22,8 +36,8 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.BuildingM
         /// </summary>
         public long TownId
         {
-            get;
-            set;
+            get { return this.townId; }
+            set { this.townId = value; }
         }
 
         /// <summary>
@@ -31,8 +45,8 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.BuildingM
         /// </summary>
         public long PlayerId
         {
-            get;
-            set;
+            get { return this.playerId; }
+            set { this.playerId = value; }
         }
 
         /// <summary>
@@ -40,8 +54,8 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.BuildingM
         /// </summary>
         public long BuildingTypeId
         {
-            get;
-            set;
+            get { return this.buildingTypeId; }
+            set { this.buildingTypeId = value; }
         }
 
         /// <summary>
@@ -49,8 +63,8 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.BuildingM
         /// </summary>
         public int Level
         {
-            get;
-            set;
+            get { return this.level; }
+            set { this.level = value; }
         }
 
         /// <summary>
@@ -58,8 +72,8 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.BuildingM
         /// </summary>
         public bool IsActive
         {
-            get;
-            set;
+            get { return this.isActive; }
+            set { this.isActive = value; }
         }
 
         /// <summary>
@@ -68,8 +82,8 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.BuildingM
         /// </summary>
         public double Productivity
         {
-            get;
-            set;
+            get { return this.productivity; }
+            set { this.productivity = value; }
         }
     }
 }
