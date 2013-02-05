@@ -94,6 +94,11 @@ namespace BurnSystems.FlexBG.Helper
         /// <param name="directory">Directory to be cleared</param>
         private static void ClearDirectory(string directory)
         {
+            if (!Directory.Exists(directory))
+            {
+                return;
+            }
+
             foreach (var subDirectory in Directory.GetDirectories(directory))
             {
                 ClearDirectory(subDirectory);

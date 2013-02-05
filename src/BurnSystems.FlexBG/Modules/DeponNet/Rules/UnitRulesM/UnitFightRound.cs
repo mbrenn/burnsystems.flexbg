@@ -83,7 +83,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.Rules.UnitRulesM
             // Removes all dead instances
             if (hasFought)
             {
-                foreach (var unit in units)
+                foreach (var unit in units.ToList())
                 {
                     this.UnitManagement.RemoveDeadInstances(unit.Id);
                 }

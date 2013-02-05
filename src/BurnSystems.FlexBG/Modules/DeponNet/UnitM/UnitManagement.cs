@@ -90,9 +90,20 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.UnitM
             return unit.Id;
         }
 
+        /// <summary>
+        /// Removes unit from unit storage
+        /// </summary>
+        /// <param name="unitId">Id of unit to be removed</param>
         public void DissolveUnit(long unitId)
         {
-            throw new NotImplementedException();
+            lock (this.Data.SyncObject)
+            {
+                var unit = this.GetUnit(unitId);
+                if (unit != null)
+                {
+                    this.Data.UnitsStore.Units.Remove(unit);
+                }
+            }
         }
 
         public void UpdatePosition(long unitId, Vector3D newPosition)
@@ -257,6 +268,11 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.UnitM
                 if (unit != null)
                 {
                     unit.Instances.RemoveAll(x => x.IsDead || x.LifePoints <= 0);
+
+                    if (unit.Amount == 0)
+                    {
+                        this.DissolveUnit(unitId);
+                    }
                 }
             }
         }
