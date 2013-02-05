@@ -1,4 +1,6 @@
-﻿using BurnSystems.FlexBG.Modules.DeponNet.UnitM.Interfaces;
+﻿using BurnSystems.FlexBG.Modules.DeponNet.UnitM.Data;
+using BurnSystems.FlexBG.Modules.DeponNet.UnitM.Interfaces;
+using BurnSystems.FlexBG.Modules.DeponNet.UnitM.Strategies;
 using BurnSystems.FlexBG.Modules.DeponNet.UnitM.UnitJobs;
 using BurnSystems.FlexBG.Modules.IdGeneratorM;
 using BurnSystems.ObjectActivation;
@@ -157,6 +159,26 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.UnitM
                 }
 
                 unit.IndexCurrentJob = currentJobIndex;
+            }
+        }
+
+        /// <summary>
+        /// Sets the unit strategy
+        /// </summary>
+        /// <param name="unitId">Id of the unit</param>
+        /// <param name="strategy">Strategy to be implemented</param>
+        public void SetUnitStrategy(long unitId, UnitStrategy strategy)
+        {
+            lock (this.Data.SyncObject)
+            {
+                var unit = this.Data.UnitsStore.Units.Where(x => x.Id == unitId).FirstOrDefault();
+                if (unit == null)
+                {
+                    // Nothing to do here
+                    return;
+                }
+
+                unit.Strategy = strategy;
             }
         }
     }

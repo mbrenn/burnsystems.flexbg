@@ -1,5 +1,6 @@
 ﻿using BurnSystems.FlexBG.Modules.DeponNet.GameClockM.Interface;
 using BurnSystems.FlexBG.Modules.DeponNet.UnitM;
+using BurnSystems.FlexBG.Modules.DeponNet.UnitM.Data;
 using BurnSystems.FlexBG.Modules.DeponNet.UnitM.Interfaces;
 using BurnSystems.FlexBG.Modules.DeponNet.UnitM.UnitJobs;
 using BurnSystems.FlexBG.Modules.LockMasterM;
@@ -12,7 +13,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BurnSystems.FlexBG.Modules.DeponNet.Rules.UnitJobM
+namespace BurnSystems.FlexBG.Modules.DeponNet.Rules.UnitRulesM
 {
     /// <summary>
     /// Executes the jobs for the units

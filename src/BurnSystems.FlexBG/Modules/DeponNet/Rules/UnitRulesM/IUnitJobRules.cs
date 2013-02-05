@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BurnSystems.FlexBG.Modules.DeponNet.Rules.UnitJobM
+namespace BurnSystems.FlexBG.Modules.DeponNet.Rules.UnitRulesM
 {
     /// <summary>
     /// Implements all interfaces that are necessary for unit rules

@@ -1,4 +1,5 @@
 ﻿using BurnSystems.FlexBG.Modules.DeponNet.UnitM;
+using BurnSystems.FlexBG.Modules.DeponNet.UnitM.Data;
 using BurnSystems.FlexBG.Modules.DeponNet.UnitM.UnitJobs;
 using BurnSystems.FlexBG.Modules.WayPointCalculationM;
 using BurnSystems.ObjectActivation;
@@ -8,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BurnSystems.FlexBG.Modules.DeponNet.Rules.UnitJobM
+namespace BurnSystems.FlexBG.Modules.DeponNet.Rules.UnitRulesM
 {
     internal class UnitMoveJobRule
     {

@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Media3D;
 
-namespace BurnSystems.FlexBG.Modules.DeponNet.UnitM
+namespace BurnSystems.FlexBG.Modules.DeponNet.UnitM.Data
 {
     [Serializable]
     public class Unit

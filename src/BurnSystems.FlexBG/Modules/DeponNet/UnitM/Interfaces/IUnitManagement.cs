@@ -1,4 +1,6 @@
-﻿using BurnSystems.FlexBG.Modules.DeponNet.UnitM.UnitJobs;
+﻿using BurnSystems.FlexBG.Modules.DeponNet.UnitM.Data;
+using BurnSystems.FlexBG.Modules.DeponNet.UnitM.Strategies;
+using BurnSystems.FlexBG.Modules.DeponNet.UnitM.UnitJobs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,7 +38,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.UnitM.Interfaces
         IEnumerable<Unit> GetAllUnits();
 
         IEnumerable<Unit> GetUnitsOfPlayer(long ownerId);
-        
+
         /// <summary>
         /// Inserts a job for the unit. 
         /// This is just done on data level, no automatic update of current unit task will be performed
@@ -61,5 +63,12 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.UnitM.Interfaces
         /// <param name="unitId">Id of the unit</param>
         /// <param name="currentJobIndex">Index of the next current job</param>
         void SetCurrentJob(long unitId, int currentJobIndex);
+
+        /// <summary>
+        /// Sets the unit strategy
+        /// </summary>
+        /// <param name="unitId">Id of the unit</param>
+        /// <param name="strategy">Strategy to be implemented</param>
+        void SetUnitStrategy(long unitId, UnitStrategy strategy);
     }
 }

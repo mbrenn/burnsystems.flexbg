@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BurnSystems.FlexBG.Modules.DeponNet.UnitM
+namespace BurnSystems.FlexBG.Modules.DeponNet.UnitM.Data
 {
     [Serializable]
     public class UnitGroup
