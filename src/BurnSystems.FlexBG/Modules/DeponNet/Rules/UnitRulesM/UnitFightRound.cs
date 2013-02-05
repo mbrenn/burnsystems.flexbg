@@ -110,7 +110,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.Rules.UnitRulesM
             var totalCount = unit.Instances.Count;
             var totalDefenderUnits = fightingUnits.Sum(x => x.Instances.Count);
 
-            for ( var n = 0; n <totalCount; n++ )
+            for (var n = 0; n < totalCount; n++)
             //Parallel.For(0, totalCount, (n) =>
             {
                 // Get some of all unitinstances
