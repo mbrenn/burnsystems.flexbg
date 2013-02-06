@@ -80,5 +80,10 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.PlayerM
             get;
             set;
         }
+
+        public override string ToString()
+        {
+            return this.Playername;
+        }
     }
 }

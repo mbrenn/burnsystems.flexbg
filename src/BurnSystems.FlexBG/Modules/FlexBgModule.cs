@@ -74,7 +74,7 @@ namespace BurnSystems.FlexBG.Modules
         /// <param name="container">Container to be used</param>
         /// <param name="title">Title of the function</param>
         /// <param name="function">Function that shall be called during start up</param>
-        public static void DuringStartUp<T>(ActivationContainer container, string title, Action<IActivates, T> function)
+        public static void CallDuringStartUp<T>(ActivationContainer container, string title, Action<IActivates, T> function)
         {
             container.Bind<IFlexBgRuntimeModule>().To(
                 (x) =>

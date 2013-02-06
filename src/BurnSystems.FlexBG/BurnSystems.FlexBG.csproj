@@ -78,7 +78,7 @@
     <Compile Include="Modules\DeponNet\PlayerM\Admin\PlayerAdminInterface.cs" />
     <Compile Include="Modules\DeponNet\PlayerM\Admin\PlayersAdminController.cs" />
     <Compile Include="Modules\DeponNet\PlayerM\Admin\PlayersTreeViewItem.cs" />
-    <Compile Include="Modules\DeponNet\PlayerM\Admin\PlayerTreeView.cs" />
+    <Compile Include="Modules\DeponNet\PlayerM\Admin\PlayerTreeViewItem.cs" />
     <Compile Include="Modules\DeponNet\PlayerM\Interface\IPlayerManagement.cs" />
     <Compile Include="Modules\DeponNet\PlayerM\LocalPlayerDatabase.cs" />
     <Compile Include="Modules\DeponNet\PlayerM\Player.cs" />
