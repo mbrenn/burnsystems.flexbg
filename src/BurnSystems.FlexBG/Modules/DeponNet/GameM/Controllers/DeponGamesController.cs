@@ -1,5 +1,6 @@
 ﻿using BurnSystems.FlexBG.Modules.DeponNet.GameM.Interface;
 using BurnSystems.FlexBG.Modules.DeponNet.PlayerM.Interface;
+using BurnSystems.FlexBG.Modules.DeponNet.Rules.PlayerRulesM;
 using BurnSystems.FlexBG.Modules.UserM.Interfaces;
 using BurnSystems.FlexBG.Modules.UserM.Models;
 using BurnSystems.ObjectActivation;
@@ -45,6 +46,13 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.GameM.Controllers
             set;
         }
 
+        [Inject(IsMandatory = true)]
+        public IPlayerRules PlayerRules
+        {
+            get;
+            set;
+        }
+
         /// <summary>
         /// Lists all games
         /// </summary>
@@ -66,6 +74,27 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.GameM.Controllers
                     playerCount = this.PlayerManagement.GetPlayersOfGame(x.Id).Count(),
                     isInGame = players.Any(y => y.GameId == x.Id)
                 })
+            };
+
+            return this.Json(result);
+        }
+
+        [WebMethod]
+        public IActionResult JoinGame([PostModel] JoinGameModel model)
+        {
+            var playerId = this.PlayerRules.CreatePlayer(
+                new PlayerCreationParams()
+                {
+                    Playername = model.Playername,
+                    Empirename = model.Empirename,
+                    GameId = model.GameId,
+                    UserId = this.CurrentUser.Id
+                });
+                    
+            var result = new
+            {
+                success = true, 
+                playerId = playerId
             };
 
             return this.Json(result);
