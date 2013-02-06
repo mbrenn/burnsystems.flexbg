@@ -38,7 +38,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.GameM.Controllers
             set;
         }
 
-        [Inject(IsMandatory = true)]
+        [Inject(IsMandatory = true, ByName="CurrentUser")]
         public User CurrentUser
         {
             get;
@@ -50,7 +50,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.GameM.Controllers
         /// </summary>
         /// <returns></returns>
         [WebMethod]
-        public IActionResult ListGames()
+        public IActionResult GetGames()
         {
             var games = this.GameManagement.GetAll();
             var players = this.PlayerManagement.GetPlayersOfUser(this.CurrentUser.Id);
@@ -63,7 +63,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.GameM.Controllers
                     id = x.Id,
                     isPaused = x.IsPaused,
                     title = x.Title,
-                    playerCount = this.PlayerManagement.GetPlayersOfGame(x.Id),
+                    playerCount = this.PlayerManagement.GetPlayersOfGame(x.Id).Count(),
                     isInGame = players.Any(y => y.GameId == x.Id)
                 })
             };
