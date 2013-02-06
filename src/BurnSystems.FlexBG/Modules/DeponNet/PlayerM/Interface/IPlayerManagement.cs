@@ -24,10 +24,31 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.PlayerM.Interface
         /// <param name="playerId">Id of the player</param>
         void RemovePlayer(long playerId);
 
+        /// <summary>
+        /// Gets all players
+        /// </summary>
+        /// <returns>Enumeration of all players in all games</returns>
         IEnumerable<Player> GetAllPlayers();
 
-        IEnumerable<Player> GetPlayerOfUser(long userId);
+        /// <summary>
+        /// Gets the players of a specific user
+        /// </summary>
+        /// <param name="userId">Id of the user</param>
+        /// <returns>Players of the user</returns>
+        IEnumerable<Player> GetPlayersOfUser(long userId);
 
+        /// <summary>
+        /// Gets the players of a specific game
+        /// </summary>
+        /// <param name="gameId">Id of the game</param>
+        /// <returns>Players of the game</returns>
+        IEnumerable<Player> GetPlayersOfGame(long gameId);
+
+        /// <summary>
+        /// Gets a specific player
+        /// </summary>
+        /// <param name="playerId">Id of the player</param>
+        /// <returns>Player to be retrieved</returns>
         Player GetPlayer(long playerId);
     }
 }

@@ -221,7 +221,8 @@ namespace BurnSystems.FlexBG.Modules.UserM.Controllers
                 return this.TemplateOrJson(
                     new
                     {
-                        IsLoggedIn = false
+                        success = true,
+                        isloggedin = false
                     });
             }
             else
@@ -229,6 +230,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Controllers
                 return this.TemplateOrJson(
                     new
                     {
+                        success= true,
                         isloggedin = true,
                         username = currentUser.Username,
                         id = currentUser.Id
