@@ -132,7 +132,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.Rules.UnitRulesM
                         // Calculate loss
                         var loss = attackerType.AttackPoints * attackerType.AttackPoints
                             / (attackerType.AttackPoints * defenderType.DefensePoints);
-                        lock (this.syncRoot)
+                        lock (selectedInstance)
                         {
                             selectedInstance.LifePoints -= loss;
 
