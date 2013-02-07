@@ -12,6 +12,15 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
     public class VoxelMapInfo
     {
         /// <summary>
+        /// Gets or sets the instance id
+        /// </summary>
+        public long InstanceId
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// Size of the voxel map in X
         /// </summary>
         public long SizeX

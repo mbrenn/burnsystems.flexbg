@@ -99,6 +99,7 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
             // Creates the map by creating partition and storing them
             var partitionCountX = info.SizeX / info.PartitionLength;
             var partitionCountY = info.SizeY / info.PartitionLength;
+            info.InstanceId = instanceId;
 
             this.Loader.StoreInfoData(instanceId, info);
 

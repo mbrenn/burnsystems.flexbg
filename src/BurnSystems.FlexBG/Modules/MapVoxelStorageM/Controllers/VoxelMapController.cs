@@ -7,11 +7,19 @@ using BurnSystems.FlexBG.Modules.MapVoxelStorageM.Configuration;
 using System.Globalization;
 using BurnSystems.ObjectActivation;
 using BurnSystems.WebServer.Modules.MVC;
+using BurnSystems.FlexBG.Modules.DeponNet.GameM;
+using BurnSystems.FlexBG.Modules.DeponNet.GameM.Controllers;
+using BurnSystems.Test;
 
 namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Controllers
 {
     public class VoxelMapController : Controller
     {
+        /// <summary>
+        /// Defines the activation container name for current map
+        /// </summary>
+        public const string CurrentMapInstanceName = "FlexBG.CurrentMapInstance";
+
         [Inject]
         public IVoxelMap VoxelMap
         {
@@ -26,10 +34,30 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Controllers
             set;
         }
 
-        public IActionResult MapInfo(int i)
+        [Inject(ByName = CurrentMapInstanceName, IsMandatory = true)]
+        public VoxelMapInfo CurrentMapInstance
         {
-            var info = this.VoxelMap.GetInfo(i);
-            return this.Json(info);
+            get;
+            set;
+        }
+
+        [WebMethod]
+        public IActionResult GetMapInfo()
+        {
+
+            if (this.CurrentMapInstance == null)
+            {
+                throw new MVCProcessException("nomapinfo", "No mapinfo retrieved");
+            }
+            else
+            {
+                return this.Json(new
+                {
+                    success = true,
+                    sizeX = this.CurrentMapInstance.SizeX,
+                    sizeY = this.CurrentMapInstance.SizeY
+                });
+            }
         }
 
         /// <summary>
@@ -41,11 +69,12 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Controllers
         /// <param name="y1">Top-Y-Coordinate of the map</param>
         /// <param name="y2">Bottom-Y-Coordinate of the map</param>
         /// <returns></returns>
-        public IActionResult Surface(int i, int x1, int x2, int y1, int y2)
+        [WebMethod]
+        public IActionResult Surface(int x1, int x2, int y1, int y2)
         {
             if (x2 < x1 || y2 < y1)
             {
-                throw new ArgumentException("x2 <= x1 || y2 <= y1");
+                throw new ArgumentException("x2 < x1 || y2 < y1");
             }
 
             var fields = (x2 - x1) * (y2 - y1);
@@ -54,7 +83,7 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Controllers
                 throw new ArgumentException("(x2 - x1) * (y2 - y1) > 10000");
             }
 
-            var surface = this.VoxelMap.GetSurfaceInfo(i, x1, y1, x2, y2);
+            var surface = this.VoxelMap.GetSurfaceInfo(this.CurrentMapInstance.InstanceId, x1, y1, x2, y2);
 
             var result = new List<object>();
 
@@ -96,6 +125,23 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Controllers
             }
 
             return this.Json(result);
+        }
+
+        /// <summary>
+        /// Gets the current map instance by game
+        /// </summary>
+        /// <param name="activates">Activation container to be used</param>
+        /// <returns>ID of the the map</returns>
+        public static object GetCurrentMapInstanceByGame(IActivates activates)
+        {
+            var voxelMap = activates.Get<IVoxelMap>();
+
+            var game = activates.GetByName<Game>(DeponGamesController.CurrentGameName);
+            Ensure.IsNotNull(game, "No CurrentGame available");
+
+            var mapInfo = voxelMap.GetInfo(game.Id);
+            Ensure.IsNotNull(mapInfo, "No MapInfo available");
+            return mapInfo;
         }
     }
 }

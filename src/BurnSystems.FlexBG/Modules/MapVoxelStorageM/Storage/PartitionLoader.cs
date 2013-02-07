@@ -123,7 +123,9 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
             var path = this.GetPathForInfoFile(instanceId);
             if (File.Exists(path))
             {
-                return LoadInfoData(path);
+                var result = LoadInfoData(path);
+                result.InstanceId = instanceId;     // For moved or old mapinfos, which have not set the InstanceId
+                return result;
             }
 
             return null;
@@ -134,7 +136,7 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
         /// </summary>
         /// <param name="filePath">Path, where mapinfo.xml is stored</param>
         /// <returns>Found voxel map</returns>
-        public static VoxelMapInfo LoadInfoData(string filePath)
+        private static VoxelMapInfo LoadInfoData(string filePath)
         {
             var serializer = new XmlSerializer(typeof(VoxelMapInfo));
 
