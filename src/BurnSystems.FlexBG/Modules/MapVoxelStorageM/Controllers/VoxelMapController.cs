@@ -70,7 +70,7 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Controllers
         /// <param name="y2">Bottom-Y-Coordinate of the map</param>
         /// <returns></returns>
         [WebMethod]
-        public IActionResult Surface(int x1, int x2, int y1, int y2)
+        public IActionResult GetSurface(int x1, int x2, int y1, int y2)
         {
             if (x2 < x1 || y2 < y1)
             {
@@ -109,7 +109,12 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Controllers
                 tx++;
             }
 
-            return this.Json(result);
+            return this.Json(
+                new
+                {
+                    success = true,
+                    fields = result
+                });
         }
 
         /// <summary>
