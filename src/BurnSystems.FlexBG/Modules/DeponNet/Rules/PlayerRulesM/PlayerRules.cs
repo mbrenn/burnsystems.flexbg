@@ -63,5 +63,16 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.Rules.PlayerRulesM
                 throw new NotImplementedException();
             }
         }
+
+        /// <summary>
+        /// Gets a value whether the user may join the game
+        /// </summary>
+        /// <param name="userId">Id of the user</param>
+        /// <param name="gameId">Id of the game</param>
+        /// <returns>true, if user can join the game</returns>
+        public bool CanUserContinueGame(long userId, long gameId)
+        {
+            return this.PlayerManagement.GetPlayersOfUser(userId).Any(x => x.GameId == gameId);
+        }
     }
 }

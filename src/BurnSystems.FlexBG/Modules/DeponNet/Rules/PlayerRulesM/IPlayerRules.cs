@@ -23,5 +23,13 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.Rules.PlayerRulesM
         /// </summary>
         /// <param name="playerId">Id of the player to be dropped</param>
         void DropPlayer(long playerId);
+
+        /// <summary>
+        /// Gets a value whether the user may join the game
+        /// </summary>
+        /// <param name="userId">Id of the user</param>
+        /// <param name="gameId">Id of the game</param>
+        /// <returns>true, if user can join the game</returns>
+        bool CanUserContinueGame(long userId, long gameId);
     }
 }

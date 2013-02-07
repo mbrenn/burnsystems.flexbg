@@ -25,5 +25,12 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.GameM.Interface
         /// <param name="maxPlayers">Allowed players</param>
         /// <returns>Id of the created game</returns>
         long Create(string title, string description, int maxPlayers);
+
+        /// <summary>
+        /// Gets a game by id
+        /// </summary>
+        /// <param name="gameId">Id of the game</param>
+        /// <returns>Game which has been found</returns>
+        Game Get(long gameId);
     }
 }

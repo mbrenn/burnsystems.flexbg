@@ -40,7 +40,10 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.GameM
         /// <returns>Games to be included</returns>
         public IEnumerable<Game> GetAll()
         {
-            return this.GameDb.GameStore.Games.ToList();
+            lock (this.GameDb.GameStore)
+            {
+                return this.GameDb.GameStore.Games.ToList();
+            }
         }
 
         /// <summary>
@@ -62,9 +65,25 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.GameM
                 IsPaused = true
             };
 
-            this.GameDb.GameStore.Games.Add(game);
+            lock (this.GameDb.GameStore)
+            {
+                this.GameDb.GameStore.Games.Add(game);
+            }
 
             return nextGameId;
+        }
+
+        /// <summary>
+        /// Gets a game by id
+        /// </summary>
+        /// <param name="gameId">Id of the game</param>
+        /// <returns>Game which has been found</returns>
+        public Game Get(long gameId)
+        {
+            lock (this.GameDb.GameStore)
+            {
+                return this.GameDb.GameStore.Games.Where(x => x.Id == gameId).FirstOrDefault();
+            }
         }
     }
 }

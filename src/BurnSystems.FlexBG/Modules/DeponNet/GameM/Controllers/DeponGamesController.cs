@@ -4,7 +4,9 @@ using BurnSystems.FlexBG.Modules.DeponNet.Rules.PlayerRulesM;
 using BurnSystems.FlexBG.Modules.UserM.Interfaces;
 using BurnSystems.FlexBG.Modules.UserM.Models;
 using BurnSystems.ObjectActivation;
+using BurnSystems.Test;
 using BurnSystems.WebServer.Modules.MVC;
+using BurnSystems.WebServer.Modules.Sessions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -53,6 +55,18 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.GameM.Controllers
             set;
         }
 
+        [Inject(IsMandatory = true)]
+        public Session Session
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Session variable for current game
+        /// </summary>
+        public const string CurrentGameName = "FlexBG.CurrentGame";
+
         /// <summary>
         /// Lists all games
         /// </summary>
@@ -98,6 +112,50 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.GameM.Controllers
             };
 
             return this.Json(result);
+        }
+
+        [WebMethod]
+        public IActionResult ContinueGame([PostModel] ContinueGameModel model)
+        {
+            if (!this.PlayerRules.CanUserContinueGame(this.CurrentUser.Id, model.GameId))
+            {
+                throw new MVCProcessException("continuegame_playernotingame", "Player cannot join game.");
+            }
+            else
+            {
+                // Ok, we are in game, now add a cookie for game (Cookies are for games, mjam)
+                this.Session["FlexBG.CurrentGame"] = model.GameId;
+
+                var result = new
+                {
+                    success = true
+                };
+
+                return this.Json(result);
+            }
+        }
+
+        /// <summary>
+        /// Static helper method which retrieves the current game out of the session variables
+        /// which have been associated to the user
+        /// </summary>
+        /// <param name="activates">Activation container</param>
+        /// <returns>Found game or null, if user has not continued a game</returns>
+        public static Game GetGameOfWebRequest(IActivates activates)
+        {
+            var session = activates.Get<Session>();
+            var gameManagement = activates.Get<IGameManagement>();
+            Ensure.That(session != null, "Binding to Session has not been done");
+            Ensure.That(session != null, "Binding to IGameManagement has not been done");
+
+            var gameIdObj = session["FlexBG.CurrentGame"];
+            if (gameIdObj == null || !(gameIdObj is long))
+            {
+                // Nothing found
+                return null;
+            }
+
+            return gameManagement.Get((long)gameIdObj);
         }
     }
 }

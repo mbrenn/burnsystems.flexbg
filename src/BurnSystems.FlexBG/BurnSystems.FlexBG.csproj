@@ -62,6 +62,7 @@
     <Compile Include="Modules\DeponNet\GameM\Admin\DeponGameAdminInterface.cs" />
     <Compile Include="Modules\DeponNet\GameM\Admin\GamesTreeViewItem.cs" />
     <Compile Include="Modules\DeponNet\GameM\Admin\GameTreeViewItem.cs" />
+    <Compile Include="Modules\DeponNet\GameM\Controllers\ContinueGameModel.cs" />
     <Compile Include="Modules\DeponNet\GameM\Controllers\DeponGamesAdminController.cs" />
     <Compile Include="Modules\DeponNet\GameM\Controllers\DeponGamesController.cs" />
     <Compile Include="Modules\DeponNet\GameM\Controllers\JoinGameModel.cs" />
