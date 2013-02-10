@@ -63,6 +63,16 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.GameM.Controllers
         }
 
         /// <summary>
+        /// Gets or sets the current game, reqired for checking if user is in current game
+        /// </summary>
+        [Inject(ByName = DeponGamesController.CurrentGameName)]
+        public Game Game
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// Session variable for current game
         /// </summary>
         public const string CurrentGameName = "FlexBG.CurrentGame";
@@ -132,6 +142,34 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.GameM.Controllers
                 };
 
                 return this.Json(result);
+            }
+        }
+
+        /// <summary>
+        /// Checks, if player is in game
+        /// </summary>
+        /// <returns></returns>
+        [WebMethod]
+        public IActionResult HasUserJoined()
+        {
+            if (this.Game == null)
+            {
+                return this.Json(
+                    new
+                    {
+                        success = true,
+                        isInGame = false
+                    });
+            }
+            else
+            {
+                return this.Json(
+                    new
+                    {
+                        success = true,
+                        isInGame = true,
+                        gameId = this.Game.Id
+                    });
             }
         }
 
