@@ -56,6 +56,7 @@
     <Compile Include="GenericObjectStorageM\TestStorage.cs" />
     <Compile Include="LockMasterM\TestSimpleLocking.cs" />
     <Compile Include="MapVoxelStorage\ColumnTests.cs" />
+    <Compile Include="MapVoxelStorage\CompleteGameTests.cs" />
     <Compile Include="MapVoxelStorage\DatabaseCacheTests.cs" />
     <Compile Include="MapVoxelStorage\DatabaseTests.cs" />
     <Compile Include="MapVoxelStorage\MapGeneratorTests.cs" />
@@ -68,6 +69,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\src\DeponNet2\DeponNet2.csproj">
+      <Project>{c9f7cdd6-574f-4383-8542-96a3a9b13b80}</Project>
+      <Name>DeponNet2</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\BurnSystems.WebServer\src\BurnSystems.WebServer\BurnSystems.WebServer.csproj">
       <Project>{b31df31a-f19e-4ff9-b50f-b70f4f5949f4}</Project>
       <Name>BurnSystems.WebServer</Name>
