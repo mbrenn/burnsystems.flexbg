@@ -19,6 +19,12 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.GameM.Controllers
             set;
         }
 
+        public string Townname
+        {
+            get;
+            set;
+        }
+
         public long GameId
         {
             get;

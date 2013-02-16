@@ -112,6 +112,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.GameM.Controllers
                     Playername = model.Playername,
                     Empirename = model.Empirename,
                     GameId = model.GameId,
+                    FirstTownName = model.Townname,
                     UserId = this.CurrentUser.Id
                 });
                     

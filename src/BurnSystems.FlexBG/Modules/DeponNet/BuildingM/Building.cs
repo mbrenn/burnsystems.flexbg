@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace BurnSystems.FlexBG.Modules.DeponNet.BuildingM
 {
+    [Serializable]
     public class Building
     {
         private long id;

@@ -69,7 +69,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         /// Adds a user to database
         /// </summary>
         /// <param name="user">Information of user to be added</param>
-        public void AddUser(User user)
+        public long AddUser(User user)
         {
             using (this.Db.Sync.GetWriteLock())
             {
@@ -122,6 +122,8 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
 
                 this.Db.Data.Users.Add(user);
                 this.Db.Data.SaveChanges();
+
+                return user.Id;
             }
         }
 
@@ -209,7 +211,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         /// Adds group to usermanagement
         /// </summary>
         /// <param name="group">Group to be added</param>
-        public void AddGroup(Group group)
+        public long AddGroup(Group group)
         {
             using (this.Db.Sync.GetWriteLock())
             {
@@ -226,6 +228,8 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
 
                 this.Db.Data.Groups.Add(group);
                 this.Db.Data.SaveChanges();
+
+                return group.Id;
             }
         }
 

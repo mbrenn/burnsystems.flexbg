@@ -21,6 +21,7 @@ namespace BurnSystems.FlexBG.Test.MapVoxelStorage
         [Test]
         public void TestLoadingAndStoring()
         {
+            Log.TheLog.Reset();
             Log.TheLog.AddLogProvider(new DebugProvider());
             Log.TheLog.FilterLevel = LogLevel.Verbose;
 

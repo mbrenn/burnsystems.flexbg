@@ -9,7 +9,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.PlayerM.Interface
     public interface IPlayerManagement
     {
         /// <summary>
-        /// Creates a new player into the database
+        /// Creates a new town into the database
         /// </summary>
         /// <param name="userId">Id of the user</param>
         /// <param name="gameId">Id of the game</param>

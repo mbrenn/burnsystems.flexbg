@@ -8,7 +8,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Interfaces
 {
     public interface IUserManagement
     {
-        void AddUser(User user);
+        long AddUser(User user);
 
         void RemoveUser(User user);
 
@@ -26,7 +26,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Interfaces
 
         bool IsPasswordCorrect(User user, string password);
 
-        void AddGroup(Group group);
+        long AddGroup(Group group);
 
         void RemoveGroup(Group group);
 

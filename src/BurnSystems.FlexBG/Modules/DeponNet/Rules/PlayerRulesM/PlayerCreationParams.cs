@@ -31,5 +31,11 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.Rules.PlayerRulesM
             get;
             set;
         }
+
+        public string FirstTownName
+        {
+            get;
+            set;
+        }
     }
 }

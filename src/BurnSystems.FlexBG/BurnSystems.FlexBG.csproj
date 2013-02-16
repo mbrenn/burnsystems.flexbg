@@ -49,10 +49,14 @@
     <Compile Include="Modules\ConfigurationStorageM\ConfigurationStorage.cs" />
     <Compile Include="Modules\ConfigurationStorageM\IConfigurationStorage.cs" />
     <Compile Include="Modules\DeponNet\BuildingM\Building.cs" />
+    <Compile Include="Modules\DeponNet\BuildingM\BuildingManagement.cs" />
+    <Compile Include="Modules\DeponNet\BuildingM\BuildingsData.cs" />
     <Compile Include="Modules\DeponNet\BuildingM\BuildingType.cs" />
     <Compile Include="Modules\DeponNet\BuildingM\BuildingTypeProvider.cs" />
+    <Compile Include="Modules\DeponNet\BuildingM\Interface\IBuildingManagement.cs" />
     <Compile Include="Modules\DeponNet\BuildingM\Interface\IBuildingTypeProvider.cs" />
-    <Compile Include="Modules\DeponNet\Config.cs" />
+    <Compile Include="Modules\DeponNet\BuildingM\LocalBuildingDatabase.cs" />
+    <Compile Include="Modules\DeponNet\GameConfig.cs" />
     <Compile Include="Modules\DeponNet\EntityType.cs" />
     <Compile Include="Modules\DeponNet\GameClockM\GameClockInfo.cs" />
     <Compile Include="Modules\DeponNet\GameClockM\GameClockManager.cs" />
@@ -102,7 +106,11 @@
     <Compile Include="Modules\DeponNet\Rules\UnitRulesM\UnitFightRound.cs" />
     <Compile Include="Modules\DeponNet\Rules\UnitRulesM\UnitJobRules.cs" />
     <Compile Include="Modules\DeponNet\Rules\UnitRulesM\UnitMoveJobRule.cs" />
+    <Compile Include="Modules\DeponNet\TownM\Interface\ITownManagement.cs" />
+    <Compile Include="Modules\DeponNet\TownM\LocalTownDatabase.cs" />
     <Compile Include="Modules\DeponNet\TownM\Town.cs" />
+    <Compile Include="Modules\DeponNet\TownM\TownManagement.cs" />
+    <Compile Include="Modules\DeponNet\TownM\TownsData.cs" />
     <Compile Include="Modules\DeponNet\UnitM\Data\UnitInstance.cs" />
     <Compile Include="Modules\DeponNet\UnitM\Interfaces\IUnitGroupManagement.cs" />
     <Compile Include="Modules\DeponNet\UnitM\Interfaces\IUnitManagement.cs" />

@@ -1,7 +1,11 @@
-﻿using BurnSystems.FlexBG.Modules.DeponNet.PlayerM;
+﻿using BurnSystems.FlexBG.Modules.DeponNet.BuildingM.Interface;
+using BurnSystems.FlexBG.Modules.DeponNet.PlayerM;
 using BurnSystems.FlexBG.Modules.DeponNet.PlayerM.Interface;
+using BurnSystems.FlexBG.Modules.DeponNet.TownM.Interface;
 using BurnSystems.FlexBG.Modules.LockMasterM;
+using BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage;
 using BurnSystems.ObjectActivation;
+using BurnSystems.Test;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,8 +29,38 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.Rules.PlayerRulesM
         /// <summary>
         /// Gets or sets the playermanagement
         /// </summary>
+        [Inject(IsMandatory = true)]
+        public IVoxelMap VoxelMap
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Gets or sets the playermanagement
+        /// </summary>
         [Inject(IsMandatory=true)]
         public IPlayerManagement PlayerManagement
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Gets or sets the playermanagement
+        /// </summary>
+        [Inject(IsMandatory = true)]
+        public ITownManagement TownManagement
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Gets or sets the playermanagement
+        /// </summary>
+        [Inject(IsMandatory = true)]
+        public IBuildingManagement BuildingManagement
         {
             get;
             set;
@@ -41,13 +75,29 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.Rules.PlayerRulesM
         {
             using (this.LockMaster.AcquireWriteLock(EntityType.Game, param.GameId))
             {
-                var result = this.PlayerManagement.CreatePlayer(
+                var playerId = this.PlayerManagement.CreatePlayer(
                     param.UserId,
                     param.GameId,
                     param.Playername,
                     param.Empirename);
 
-                return result;
+                var townId = this.TownManagement.CreateTown(
+                    playerId,
+                    param.FirstTownName,
+                    true);
+
+                double x;
+                double y;
+                this.FindStartRandomPositionForPlayer(param.GameId, out x, out y);
+
+                // Creates the building
+                var buildingId = this.BuildingManagement.CreateBuilding(
+                    GameConfig.Buildings.Temple,
+                    townId,
+                    x,
+                    y);
+
+                return playerId;
             }
         }
 
@@ -62,6 +112,14 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.Rules.PlayerRulesM
             {
                 this.PlayerManagement.RemovePlayer(playerId);
             }
+        }
+
+        public void FindStartRandomPositionForPlayer(long gameId, out double x, out double y)
+        {
+            var info = this.VoxelMap.GetInfo(gameId);
+            Ensure.That(info != null, "No Information of map has been found");
+            x = Math.Floor(MathHelper.Random.NextDouble() * info.SizeX);
+            y = Math.Floor(MathHelper.Random.NextDouble() * info.SizeY);
         }
 
         /// <summary>
