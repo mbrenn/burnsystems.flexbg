@@ -136,13 +136,20 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.GameM.Controllers
                 // Ok, we are in game, now add a cookie for game (Cookies are for games, mjam)
                 this.Session["FlexBG.CurrentGame"] = model.GameId;
 
-                var result = new
-                {
-                    success = true
-                };
-
-                return this.Json(result);
+                return this.SuccessJson();
             }
+        }
+
+        /// <summary>
+        /// Leaves the gameplay. This is the counter method to <c>ContinueGame</c>. 
+        /// </summary>
+        /// <returns>Result of the web request</returns>
+        [WebMethod]
+        public IActionResult LeaveGame()
+        {
+            this.Session.Remove("FlexBG.CurrentGame");
+
+            return this.SuccessJson();
         }
 
         /// <summary>

@@ -20,5 +20,10 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.MapM
         /// Defines the grass field type as 1
         /// </summary>
         public static readonly byte Grass = 1;
+
+        /// <summary>
+        /// Defines the grass field type as 2
+        /// </summary>
+        public static readonly byte DarkGrass = 2;
     }
 }

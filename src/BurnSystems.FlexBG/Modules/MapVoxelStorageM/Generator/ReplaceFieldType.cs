@@ -38,11 +38,22 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Generator
             private set;
         }
 
-        public ReplaceFieldType(IVoxelMap voxelMap, byte oldFieldType, byte newFieldType)
+        /// <summary>
+        /// Gets or sets the filter which decides whether the fieldtypes on the specific field 
+        /// shall be replaced
+        /// </summary>
+        public Func<int, int, bool> Filter
+        {
+            get;
+            set;
+        }
+
+        public ReplaceFieldType(IVoxelMap voxelMap, byte oldFieldType, byte newFieldType, Func<int, int, bool> filter = null)
         {
             this.OldFieldType = oldFieldType;
             this.NewFieldType = newFieldType;
             this.VoxelMap = voxelMap;
+            this.Filter = filter;
         }
 
         /// <summary>
@@ -57,6 +68,11 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Generator
             {
                 for (var y = 0; y < dy; y++)
                 {
+                    if (this.Filter != null && !this.Filter(x, y))
+                    {
+                        continue;
+                    }
+
                     var column = this.VoxelMap.GetColumn(instanceId, x, y);
 
                     var modified = false;
