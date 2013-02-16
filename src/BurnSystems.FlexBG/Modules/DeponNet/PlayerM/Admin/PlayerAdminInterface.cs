@@ -46,7 +46,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.PlayerM.Admin
             this.ViewResolver.Add(
                 (x) => x is PlayersTreeViewItem,
                 (x) => new EntityView(
-                    new EntityViewConfig(                        
+                    new EntityViewConfig(
                         new EntityViewListTable<PlayersTreeViewItem>(
                             "Games",
                             EntityViewElementProperty.Create().Labelled("Id").For("Id").AsInteger(),
@@ -64,7 +64,13 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.PlayerM.Admin
                             EntityViewElementProperty.Create().Labelled("Id").For("Id").AsReadOnly().AsInteger(),
                             EntityViewElementProperty.Create().Labelled("Playername").For("Playername").AsString(),
                             EntityViewElementProperty.Create().Labelled("Empirename").For("Empirename").AsString(),
-                            EntityViewElementProperty.Create().Labelled("GameId").For("GameId").AsReadOnly().AsInteger()))));
+                            EntityViewElementProperty.Create().Labelled("GameId").For("GameId").AsReadOnly().AsInteger()),
+
+                        new EntityViewDetailTable(
+                            "Drop Table",
+                            EntityViewElementProperty.Create().Labelled("Id").For("Id").AsReadOnly().AsInteger())
+                        .SetButtonText("Drop Player")
+                        .WithOverrideUrl("players/DropPlayer"))));
         }
 
         public void Shutdown()

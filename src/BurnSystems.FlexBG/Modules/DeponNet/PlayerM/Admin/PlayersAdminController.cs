@@ -1,4 +1,5 @@
 ﻿using BurnSystems.FlexBG.Modules.DeponNet.PlayerM.Interface;
+using BurnSystems.FlexBG.Modules.DeponNet.Rules.PlayerRulesM;
 using BurnSystems.ObjectActivation;
 using BurnSystems.WebServer.Modules.MVC;
 using System;
@@ -12,10 +13,18 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.PlayerM.Admin
     public class PlayersAdminController : Controller
     {
         [Inject]
-        public IPlayerManagement PlayerManagement
+        public IPlayerRules PlayerRules
         {
             get;
             set;
+        }
+
+        [WebMethod]
+        public IActionResult DropPlayer([PostModel] Models.DropPlayerModel model)
+        {
+            this.PlayerRules.DropPlayer(model.Id);
+
+            return this.SuccessJson();
         }
     }
 }

@@ -52,6 +52,7 @@
     <Compile Include="Modules\DeponNet\BuildingM\BuildingType.cs" />
     <Compile Include="Modules\DeponNet\BuildingM\BuildingTypeProvider.cs" />
     <Compile Include="Modules\DeponNet\BuildingM\Interface\IBuildingTypeProvider.cs" />
+    <Compile Include="Modules\DeponNet\Config.cs" />
     <Compile Include="Modules\DeponNet\EntityType.cs" />
     <Compile Include="Modules\DeponNet\GameClockM\GameClockInfo.cs" />
     <Compile Include="Modules\DeponNet\GameClockM\GameClockManager.cs" />
@@ -76,6 +77,7 @@
     <Compile Include="Modules\DeponNet\MapM\Admin\MapTreeViewItem.cs" />
     <Compile Include="Modules\DeponNet\MapM\FieldCoordinates.cs" />
     <Compile Include="Modules\DeponNet\MapM\FieldTypes.cs" />
+    <Compile Include="Modules\DeponNet\PlayerM\Admin\Models\DropPlayerModel.cs" />
     <Compile Include="Modules\DeponNet\PlayerM\Admin\PlayerAdminInterface.cs" />
     <Compile Include="Modules\DeponNet\PlayerM\Admin\PlayersAdminController.cs" />
     <Compile Include="Modules\DeponNet\PlayerM\Admin\PlayersTreeViewItem.cs" />

@@ -60,7 +60,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.Rules.PlayerRulesM
             var player = this.PlayerManagement.GetPlayer(playerId);
             using (this.LockMaster.AcquireWriteLock(EntityType.Game, player.GameId))
             {
-                throw new NotImplementedException();
+                this.PlayerManagement.RemovePlayer(playerId);
             }
         }
 
