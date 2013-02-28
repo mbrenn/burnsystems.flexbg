@@ -35,5 +35,15 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.BuildingM.Interface
         /// <param name="townId">Id of the town</param>
         /// <returns>Enumeration of towns</returns>
         IEnumerable<Building> GetAllBuildingsOfTown(long townId);
+
+        /// <summary>
+        /// Gets all buildings in a certain region
+        /// </summary>
+        /// <param name="x1">Left X-Coordinate in the map</param>
+        /// <param name="x2">Right X-Coordinate in the map</param>
+        /// <param name="y1">Top Y-Coordinate in the map</param>
+        /// <param name="y2">Bottom Y-Coordinate in the map</param>
+        /// <returns>Enumeration of buildings</returns>
+        IEnumerable<Building> GetAllBuildingsInRegion(int x1, int x2, int y1, int y2);
     }
 }

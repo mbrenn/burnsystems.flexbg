@@ -1,4 +1,5 @@
-﻿using BurnSystems.FlexBG.Modules.DeponNet.UnitM;
+﻿using BurnSystems.FlexBG.Modules.DeponNet.Common;
+using BurnSystems.FlexBG.Modules.DeponNet.UnitM;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,6 @@ namespace BurnSystems.FlexBG.Modules.WayPointCalculationM
         /// <param name="endPosition">Position, where unit will be</param>
         /// <param name="unitType">Type of the unit which shall be calculated</param>
         /// <returns>Enumeration of waypoints</returns>
-        IEnumerable<Vector3D> CalculateWaypoints(Vector3D startPosition, Vector3D endPosition, UnitType unitType);
+        IEnumerable<ObjectPosition> CalculateWaypoints(ObjectPosition startPosition, ObjectPosition endPosition, UnitType unitType);
     }
 }

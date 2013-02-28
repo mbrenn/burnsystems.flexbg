@@ -1,4 +1,5 @@
 ﻿using BurnSystems.FlexBG.Modules.ConfigurationStorageM;
+using BurnSystems.FlexBG.Modules.DeponNet.Common;
 using BurnSystems.FlexBG.Modules.DeponNet.GameM;
 using BurnSystems.FlexBG.Modules.DeponNet.GameM.Controllers;
 using BurnSystems.FlexBG.Modules.DeponNet.MapM;
@@ -69,8 +70,8 @@ namespace BurnSystems.FlexBG.Test.WayPointCalculationM
             var wayPointCalculation = container.Get<IWayPointCalculation>();
 
             var wayPoints = wayPointCalculation.CalculateWaypoints(
-                new System.Windows.Media.Media3D.Vector3D(0, 0, 0),
-                new System.Windows.Media.Media3D.Vector3D(50, 50, 50), 
+                new ObjectPosition(0, 0, 0),
+                new ObjectPosition(50, 50, 50), 
                 null);
 
             Assert.That(wayPoints, Is.Not.Null);
@@ -84,8 +85,8 @@ namespace BurnSystems.FlexBG.Test.WayPointCalculationM
             var wayPointCalculation = container.Get<IWayPointCalculation>();
 
             var wayPoints = wayPointCalculation.CalculateWaypoints(
-                new System.Windows.Media.Media3D.Vector3D(0, 0, 0),
-                new System.Windows.Media.Media3D.Vector3D(200, 200, 200),
+                new ObjectPosition(0, 0, 0),
+                new ObjectPosition(200, 200, 200),
                 null);
 
             Assert.That(wayPoints, Is.Not.Null);
@@ -107,8 +108,8 @@ namespace BurnSystems.FlexBG.Test.WayPointCalculationM
             var wayPointCalculation = container.Get<IWayPointCalculation>();
 
             var wayPoints = wayPointCalculation.CalculateWaypoints(
-                new System.Windows.Media.Media3D.Vector3D(0, 0, 0),
-                new System.Windows.Media.Media3D.Vector3D(5, 0, 0),
+                new ObjectPosition(0, 0, 0),
+                new ObjectPosition(5, 0, 0),
                 null);
 
             Assert.That(wayPoints, Is.Null);
@@ -129,8 +130,8 @@ namespace BurnSystems.FlexBG.Test.WayPointCalculationM
             var wayPointCalculation = container.Get<IWayPointCalculation>();
 
             var wayPoints = wayPointCalculation.CalculateWaypoints(
-                new System.Windows.Media.Media3D.Vector3D(0, 0, 0),
-                new System.Windows.Media.Media3D.Vector3D(5, 0, 0),
+                new ObjectPosition(0, 0, 0),
+                new ObjectPosition(5, 0, 0),
                 null)
                 .Select(x => new { X = x.X - 0.5, Y = x.Y - 0.5 })
                 .ToList();
@@ -169,8 +170,8 @@ namespace BurnSystems.FlexBG.Test.WayPointCalculationM
             Assert.That(wayPoints[9].Y, Is.EqualTo(0));
 
             var wayPoints2 = wayPointCalculation.CalculateWaypoints(
-                new System.Windows.Media.Media3D.Vector3D(5, 0, 0),
-                new System.Windows.Media.Media3D.Vector3D(0, 0, 0),
+                new ObjectPosition(5, 0, 0),
+                new ObjectPosition(0, 0, 0),
                 null)
                 .Select(x => new { X = x.X - 0.5, Y = x.Y - 0.5 })
                 .ToList();

@@ -1,4 +1,5 @@
-﻿using BurnSystems.FlexBG.Modules.DeponNet.UnitM.Data;
+﻿using BurnSystems.FlexBG.Modules.DeponNet.Common;
+using BurnSystems.FlexBG.Modules.DeponNet.UnitM.Data;
 using BurnSystems.FlexBG.Modules.DeponNet.UnitM.Interfaces;
 using BurnSystems.FlexBG.Modules.DeponNet.UnitM.Strategies;
 using BurnSystems.FlexBG.Modules.DeponNet.UnitM.UnitJobs;
@@ -59,7 +60,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.UnitM
         /// <param name="amount">Amount of units</param>
         /// <param name="position">Position of unit</param>
         /// <returns>Id of the created unit</returns>
-        public long CreateUnit(long ownerId, int unitTypeId, int amount, Vector3D position)
+        public long CreateUnit(long ownerId, int unitTypeId, int amount, ObjectPosition position)
         {
             var unit = new Unit();
             unit.PlayerId = ownerId;
@@ -106,7 +107,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.UnitM
             }
         }
 
-        public void UpdatePosition(long unitId, Vector3D newPosition)
+        public void UpdatePosition(long unitId, ObjectPosition newPosition)
         {
             lock (this.Data.SyncObject)
             {
@@ -114,8 +115,8 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.UnitM
                 if (unit != null)
                 {
                     unit.Position = newPosition;
-                }                
-            }            
+                }
+            }
         }
 
         public Unit GetUnit(long unitId)

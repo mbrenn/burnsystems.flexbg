@@ -1,4 +1,5 @@
-﻿using BurnSystems.FlexBG.Modules.DeponNet.UnitM.Data;
+﻿using BurnSystems.FlexBG.Modules.DeponNet.Common;
+using BurnSystems.FlexBG.Modules.DeponNet.UnitM.Data;
 using BurnSystems.FlexBG.Modules.DeponNet.UnitM.Strategies;
 using BurnSystems.FlexBG.Modules.DeponNet.UnitM.UnitJobs;
 using System;
@@ -24,7 +25,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.UnitM.Interfaces
         /// <param name="unitTypeId">Id of the unit type</param>
         /// <param name="position">Position of the unit</param>
         /// <returns>Id of the new unit</returns>
-        long CreateUnit(long ownerId, int unitTypeId, int amount, Vector3D position);
+        long CreateUnit(long ownerId, int unitTypeId, int amount, ObjectPosition position);
 
         /// <summary>
         /// Dissolves the unit
@@ -32,7 +33,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.UnitM.Interfaces
         /// <param name="unitId"></param>
         void DissolveUnit(long unitId);
 
-        void UpdatePosition(long unitId, Vector3D newPosition);
+        void UpdatePosition(long unitId, ObjectPosition newPosition);
 
         Unit GetUnit(long unitId);
 

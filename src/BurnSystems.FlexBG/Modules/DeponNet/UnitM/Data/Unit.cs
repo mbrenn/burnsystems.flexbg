@@ -1,4 +1,5 @@
-﻿using BurnSystems.FlexBG.Modules.DeponNet.UnitM.Strategies;
+﻿using BurnSystems.FlexBG.Modules.DeponNet.Common;
+using BurnSystems.FlexBG.Modules.DeponNet.UnitM.Strategies;
 using BurnSystems.FlexBG.Modules.DeponNet.UnitM.UnitJobs;
 using System;
 using System.Collections.Generic;
@@ -16,7 +17,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.UnitM.Data
 
         private long playerId;
 
-        public Vector3D Position;
+        public ObjectPosition Position;
 
         private long unitTypeId;
 

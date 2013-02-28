@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BurnSystems.FlexBG.Modules.DeponNet.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,7 +14,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.UnitM.UnitJobs
         /// <summary>
         /// Defines the target position of the unit
         /// </summary>
-        public Vector3D TargetPosition
+        public ObjectPosition TargetPosition
         {
             get;
             set;

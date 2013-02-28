@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BurnSystems.FlexBG.Modules.DeponNet.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,6 +23,8 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.BuildingM
         private bool isActive;
 
         private double productivity;
+
+        private ObjectPosition position = new ObjectPosition();
 
         /// <summary>
         /// Gets or sets the id of the building
@@ -85,6 +88,20 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.BuildingM
         {
             get { return this.productivity; }
             set { this.productivity = value; }
+        }
+
+        public ObjectPosition Position
+        {
+            get
+            {
+                if (this.position == null)
+                {
+                    this.position = new ObjectPosition();
+                }
+
+                return this.position;
+            }
+            set { this.position = value; }
         }
     }
 }

@@ -192,7 +192,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.GameM.Controllers
             var session = activates.Get<Session>();
             var gameManagement = activates.Get<IGameManagement>();
             Ensure.That(session != null, "Binding to Session has not been done");
-            Ensure.That(session != null, "Binding to IGameManagement has not been done");
+            Ensure.That(gameManagement != null, "Binding to IGameManagement has not been done");
 
             var gameIdObj = session["FlexBG.CurrentGame"];
             if (gameIdObj == null || !(gameIdObj is long))

@@ -1,4 +1,5 @@
 ﻿using BurnSystems.Collections;
+using BurnSystems.FlexBG.Modules.DeponNet.Common;
 using BurnSystems.FlexBG.Modules.DeponNet.GameM;
 using BurnSystems.FlexBG.Modules.DeponNet.UnitM;
 using BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage;
@@ -100,7 +101,7 @@ namespace BurnSystems.FlexBG.Modules.WayPointCalculationM.OnlyHeight
         /// <param name="endPosition">End Position</param>
         /// <param name="unitType">Type of the unit</param>
         /// <returns>Calculated way points</returns>
-        public IEnumerable<Vector3D> CalculateWaypoints(Vector3D startPosition, Vector3D endPosition, UnitType unitType)
+        public IEnumerable<ObjectPosition> CalculateWaypoints(ObjectPosition startPosition, ObjectPosition endPosition, UnitType unitType)
         {
             logger.LogEntry(
                    LogLevel.Notify,
@@ -155,7 +156,7 @@ namespace BurnSystems.FlexBG.Modules.WayPointCalculationM.OnlyHeight
             // Returns the list of positions
             // Addition of 0.5 is necessary because central positions will be returned. 
             return result.Select(x =>
-                    new Vector3D(x.X + 0.5, x.Y + 0.5, 0));
+                    new ObjectPosition(x.X + 0.5, x.Y + 0.5, 0));
         }
 
         /// <summary>
@@ -305,7 +306,7 @@ namespace BurnSystems.FlexBG.Modules.WayPointCalculationM.OnlyHeight
         /// </summary>
         /// <param name="position"></param>
         /// <returns></returns>
-        private void AlignToFieldCoordinates(Vector3D position, out int x, out int y)
+        private void AlignToFieldCoordinates(ObjectPosition position, out int x, out int y)
         {
             x = (int)Math.Floor(position.X);
             y = (int)Math.Floor(position.Y);

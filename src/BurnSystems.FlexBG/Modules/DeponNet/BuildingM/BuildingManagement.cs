@@ -53,9 +53,9 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.BuildingM
         public long CreateBuilding(BuildingType buildingType, long townId, double x, double y)
         {
             var ownerTown = this.TownManagement.GetTown(townId);
-            if ( ownerTown == null )
+            if (ownerTown == null)
             {
-                throw new InvalidOperationException ( "Town with id " + townId + " does not exist");
+                throw new InvalidOperationException("Town with id " + townId + " does not exist");
             }
 
             var building = new Building();
@@ -98,6 +98,26 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.BuildingM
             lock (this.BuildingDb.BuildingsStore)
             {
                 return this.BuildingDb.BuildingsStore.Buildings.Where(x => x.TownId == townId).ToList();
+            }
+        }
+
+        /// <summary>
+        /// Gets all buildings in a certain region
+        /// </summary>
+        /// <param name="x1">Left X-Coordinate in the map</param>
+        /// <param name="x2">Right X-Coordinate in the map</param>
+        /// <param name="y1">Top Y-Coordinate in the map</param>
+        /// <param name="y2">Bottom Y-Coordinate in the map</param>
+        /// <returns>Enumeration of buildings</returns>
+        public IEnumerable<Building> GetAllBuildingsInRegion(int x1, int x2, int y1, int y2)
+        {
+            lock (this.BuildingDb.BuildingsStore)
+            {
+                return this.BuildingDb.BuildingsStore.Buildings.Where(x =>
+                    x.Position.X >= x1 &&
+                    x.Position.X <= x2 &&
+                    x.Position.Y >= y1 &&
+                    x.Position.Y <= y2).ToList();
             }
         }
     }
