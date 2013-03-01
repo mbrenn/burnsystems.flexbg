@@ -46,6 +46,11 @@
     <Compile Include="Helper\SerializedFile.cs" />
     <Compile Include="Interfaces\IFlexBgRuntimeModule.cs" />
     <Compile Include="Modules\AdminInterfaceM\AdminRootData.cs" />
+    <Compile Include="Modules\BackgroundWorkerM\Interface\IBackgroundWorker.cs" />
+    <Compile Include="Modules\BackgroundWorkerM\Interface\ITimePredicate.cs" />
+    <Compile Include="Modules\BackgroundWorkerM\Logic\BackgroundWorker.cs" />
+    <Compile Include="Modules\BackgroundWorkerM\Logic\ExecuteByRealTime.cs" />
+    <Compile Include="Modules\BackgroundWorkerM\Logic\WorkerItem.cs" />
     <Compile Include="Modules\ConfigurationStorageM\ConfigurationStorage.cs" />
     <Compile Include="Modules\ConfigurationStorageM\IConfigurationStorage.cs" />
     <Compile Include="Modules\DeponNet\BuildingM\Building.cs" />
@@ -232,7 +237,9 @@
     </Content>
     <Compile Include="Modules\DeponNet\MapM\Admin\MapTreeView.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Modules\BackgroundWorkerM\Data\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
