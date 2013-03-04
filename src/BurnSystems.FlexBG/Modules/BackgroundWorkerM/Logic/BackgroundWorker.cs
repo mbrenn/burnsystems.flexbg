@@ -133,8 +133,11 @@ namespace BurnSystems.FlexBG.Modules.BackgroundWorkerM.Logic
                 // Executes all the workers via task parallel
                 Parallel.ForEach(workers, x =>
                 {
-                    x.RefreshTime(container);
-                    x.Execute(this.container);
+                    using (var block = new ActivationBlock("BackgroundWorker", this.container))
+                    {
+                        x.RefreshTime(block);
+                        x.Execute(block);
+                    }
                 });
             }
         }

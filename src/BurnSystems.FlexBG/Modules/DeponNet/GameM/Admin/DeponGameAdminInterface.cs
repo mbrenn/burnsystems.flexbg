@@ -72,7 +72,10 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.GameM.Admin
                     new EntityViewConfig(
                         new EntityViewDetailTable(
                             "GetColumn",
-                            EntityViewElementProperty.Create().Labelled("Id").For("Id").AsReadOnly().AsInteger()))));
+                            EntityViewElementProperty.Create().Labelled("Id").For("Id").AsInteger(),
+                            EntityViewElementProperty.Create().Labelled("Title").For("Title").AsString(),
+                            EntityViewElementProperty.Create().Labelled("Paused").For("IsPaused").AsBoolean(),
+                            EntityViewElementProperty.Create().Labelled("Max Players").For("MaxPlayers").AsInteger32()))));
         }
 
         public void Shutdown()

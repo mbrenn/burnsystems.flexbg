@@ -114,6 +114,7 @@
     <Compile Include="Modules\DeponNet\Rules\UnitRulesM\UnitFightRound.cs" />
     <Compile Include="Modules\DeponNet\Rules\UnitRulesM\UnitJobRules.cs" />
     <Compile Include="Modules\DeponNet\Rules\UnitRulesM\UnitMoveJobRule.cs" />
+    <Compile Include="Modules\DeponNet\Rules\WorldClockTick\WorldClockIncrement.cs" />
     <Compile Include="Modules\DeponNet\TownM\Interface\ITownManagement.cs" />
     <Compile Include="Modules\DeponNet\TownM\LocalTownDatabase.cs" />
     <Compile Include="Modules\DeponNet\TownM\Town.cs" />
@@ -239,6 +240,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Modules\BackgroundWorkerM\Data\" />
+    <Folder Include="Modules\DeponNet\Rules\EconomyTick\" />
+    <Folder Include="Modules\DeponNet\Rules\MilitaryTick\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
