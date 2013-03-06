@@ -18,10 +18,10 @@ namespace BurnSystems.FlexBG.Modules.BackgroundWorkerM.Interface
         /// </summary>
         /// <param name="id">Id of the worker to be added. This id will also be used for removal</param>
         /// <param name="obj">Object that can be added to this request and will be sent to nextTimeFunc and action</param>
-        /// <param name="nextTimeFunc">Function, which retrieves the next time event. 
+        /// <param name="backgroundTask">Function, which defines the task to be executed
         /// If the time has elapsed, this method will be reasked, so action is not called when the timing has changed</param>
         /// <param name="action">Action which shall be called</param>
-        void Add(string id, ITimePredicate nextTimeFunc, Action<IActivates> action);
+        void Add(string id, IBackgroundTask backgroundTask);
 
         /// <summary>
         /// Removes a specific worker

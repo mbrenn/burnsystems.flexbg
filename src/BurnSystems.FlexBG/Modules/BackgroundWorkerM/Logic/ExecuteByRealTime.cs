@@ -1,4 +1,6 @@
 ﻿using BurnSystems.FlexBG.Modules.BackgroundWorkerM.Interface;
+using BurnSystems.ObjectActivation;
+using BurnSystems.Test;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +12,7 @@ namespace BurnSystems.FlexBG.Modules.BackgroundWorkerM.Logic
     /// <summary>
     /// Returns a predicate, which executes an event by real time
     /// </summary>
-    public class ExecuteByRealTime : ITimePredicate
+    public class ExecuteByRealTime : IBackgroundTask
     {
         /// <summary>
         /// Stores the date of the last execution
@@ -22,9 +24,17 @@ namespace BurnSystems.FlexBG.Modules.BackgroundWorkerM.Logic
         /// </summary>
         private TimeSpan intervalTime;
 
-        public ExecuteByRealTime(TimeSpan intervalTime)
+        /// <summary>
+        /// Stores the function that shall be executed, if timeinterval has gone
+        /// </summary>
+        private Action<IActivates> executionFunction;
+
+        public ExecuteByRealTime(TimeSpan intervalTime, Action<IActivates> executionFunction)
         {
+            Ensure.IsNotNull(executionFunction);
+
             this.intervalTime = intervalTime;
+            this.executionFunction = executionFunction;
         }
 
         /// <summary>
@@ -41,9 +51,10 @@ namespace BurnSystems.FlexBG.Modules.BackgroundWorkerM.Logic
         /// Refreshes the time
         /// </summary>
         /// <param name="container"></param>
-        public void RefreshTime(ObjectActivation.IActivates container)
+        public void Execute(ObjectActivation.IActivates container)
         {
             this.lastExecution = DateTime.Now;
+            this.executionFunction(container);
         }
     }
 }

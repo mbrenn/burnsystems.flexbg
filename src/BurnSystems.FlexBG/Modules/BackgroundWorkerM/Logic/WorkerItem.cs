@@ -40,13 +40,7 @@ namespace BurnSystems.FlexBG.Modules.BackgroundWorkerM.Logic
             set;
         }
 
-        public ITimePredicate NextTime
-        {
-            get;
-            set;
-        }
-
-        public Action<IActivates> Action
+        public IBackgroundTask Task
         {
             get;
             set;
@@ -54,17 +48,12 @@ namespace BurnSystems.FlexBG.Modules.BackgroundWorkerM.Logic
 
         public DateTime GetNextTime(IActivates container)
         {
-            return this.NextTime.GetNextExecutionTime(container);
+            return this.Task.GetNextExecutionTime(container);
         }
 
         public void Execute(IActivates container)
         {
-            this.Action(container);
-        }
-
-        internal void RefreshTime(IActivates container)
-        {
-            this.NextTime.RefreshTime(container);
+            this.Task.Execute(container);
         }
     }
 }

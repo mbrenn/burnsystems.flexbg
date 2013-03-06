@@ -135,7 +135,6 @@ namespace BurnSystems.FlexBG.Modules.BackgroundWorkerM.Logic
                 {
                     using (var block = new ActivationBlock("BackgroundWorker", this.container))
                     {
-                        x.RefreshTime(block);
                         x.Execute(block);
                     }
                 });
@@ -164,19 +163,17 @@ namespace BurnSystems.FlexBG.Modules.BackgroundWorkerM.Logic
         /// Adds a worker to the background thread
         /// </summary>
         /// <param name="id">Id of the worker to be added. This id will also be used for removal</param>
-        /// <param name="nextTimePredicate">Function, which retrieves the next time event. 
+        /// <param name="backgroundTask">Function, which retrieves the next time event. 
         /// If the time has elapsed, this method will be reasked, so action is not called when the timing has changed</param>
         /// <param name="action">Action which shall be called</param>
-        public void Add(string id, ITimePredicate nextTimePredicate, Action<IActivates> action)
+        public void Add(string id, IBackgroundTask backgroundTask)
         {
-            Ensure.That(nextTimePredicate != null);
-            Ensure.That(action != null);
+            Ensure.That(backgroundTask != null);
 
             var worker = new WorkerItem();
             worker.Key = id;
-            worker.Action = action;
-            worker.NextTime = nextTimePredicate;
-            worker.AssumedNextTime = worker.GetNextTime(this.container);
+            worker.Task = backgroundTask;
+            worker.AssumedNextTime = DateTime.MinValue; // We cannot ask now. FlexBG has not started yet
 
             lock (this.syncRoot)
             {

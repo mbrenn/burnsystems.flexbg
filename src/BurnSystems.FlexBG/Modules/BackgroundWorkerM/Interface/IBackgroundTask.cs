@@ -10,7 +10,7 @@ namespace BurnSystems.FlexBG.Modules.BackgroundWorkerM.Interface
     /// <summary>
     /// Defines an interface that stores the last execute time
     /// </summary>
-    public interface ITimePredicate
+    public interface IBackgroundTask
     {
         /// <summary>
         /// Gets the next execution time
@@ -23,6 +23,6 @@ namespace BurnSystems.FlexBG.Modules.BackgroundWorkerM.Interface
         /// Refreshes the time
         /// </summary>
         /// <param name="container">Container to be executed</param>
-        void RefreshTime(IActivates container);
+        void Execute(IActivates container);
     }
 }

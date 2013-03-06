@@ -45,11 +45,11 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.Rules.WorldClockTick
             {
                 if (game.IsPaused)
                 {
-                    logger.LogEntry(LogLevel.Verbose, "Game is paused: " + game.Title);
+                    // logger.LogEntry(LogLevel.Verbose, "Game is paused: " + game.Title);
                     continue;
                 }
 
-                logger.LogEntry(LogLevel.Verbose, "Increment Worldclock for game: " + game.Title);
+                // logger.LogEntry(LogLevel.Verbose, "Increment Worldclock for game: " + game.Title);
                 this.ClockManager.IncrementTicks(game.Id, 1);
             }
         }

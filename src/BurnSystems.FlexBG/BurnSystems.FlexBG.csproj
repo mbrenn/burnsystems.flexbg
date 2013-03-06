@@ -47,8 +47,9 @@
     <Compile Include="Interfaces\IFlexBgRuntimeModule.cs" />
     <Compile Include="Modules\AdminInterfaceM\AdminRootData.cs" />
     <Compile Include="Modules\BackgroundWorkerM\Interface\IBackgroundWorker.cs" />
-    <Compile Include="Modules\BackgroundWorkerM\Interface\ITimePredicate.cs" />
+    <Compile Include="Modules\BackgroundWorkerM\Interface\IBackgroundTask.cs" />
     <Compile Include="Modules\BackgroundWorkerM\Logic\BackgroundWorker.cs" />
+    <Compile Include="Modules\BackgroundWorkerM\Logic\ExecuteByGameTime.cs" />
     <Compile Include="Modules\BackgroundWorkerM\Logic\ExecuteByRealTime.cs" />
     <Compile Include="Modules\BackgroundWorkerM\Logic\WorkerItem.cs" />
     <Compile Include="Modules\ConfigurationStorageM\ConfigurationStorage.cs" />
@@ -107,6 +108,8 @@
     <Compile Include="Modules\DeponNet\ResourceSetM\ResourceSet.cs" />
     <Compile Include="Modules\DeponNet\ResourceSetM\ResourceSetBag.cs" />
     <Compile Include="Modules\DeponNet\ResourceSetM\ResourceType.cs" />
+    <Compile Include="Modules\DeponNet\Rules\EconomyTick\EconomyTickExecution.cs" />
+    <Compile Include="Modules\DeponNet\Rules\MilitaryTick\MilitaryTickExecution.cs" />
     <Compile Include="Modules\DeponNet\Rules\PlayerRulesM\IPlayerRules.cs" />
     <Compile Include="Modules\DeponNet\Rules\UnitRulesM\IUnitJobRules.cs" />
     <Compile Include="Modules\DeponNet\Rules\PlayerRulesM\PlayerCreationParams.cs" />
@@ -240,8 +243,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Modules\BackgroundWorkerM\Data\" />
-    <Folder Include="Modules\DeponNet\Rules\EconomyTick\" />
-    <Folder Include="Modules\DeponNet\Rules\MilitaryTick\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
