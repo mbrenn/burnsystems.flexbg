@@ -64,7 +64,8 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.GameM.Admin
                             EntityViewElementProperty.Create().Labelled("MaxPlayers").For("MaxPlayers").AsInteger(),
                             EntityViewElementProperty.Create().Labelled("Width of Map").For("MapWidth").AsInteger(),
                             EntityViewElementProperty.Create().Labelled("Height of Map").For("MapHeight").AsInteger())
-                            .WithOverrideUrl("games/Create"))));
+                            .WithOverrideUrl("games/Create")
+                            .SetButtonText("Create Game"))));
 
             this.ViewResolver.Add(
                 (x) => x is GameTreeViewItem,

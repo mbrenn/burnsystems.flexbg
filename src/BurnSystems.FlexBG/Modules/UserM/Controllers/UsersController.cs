@@ -71,7 +71,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Controllers
         /// Stores the game info
         /// </summary>
         [Inject]
-        public IGameInfoProvider GameInfo
+        public IServerInfoProvider GameInfo
         {
             get;
             set;
@@ -178,7 +178,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Controllers
                 // Send mail to user
                 var authLink = string.Format(
                     "{0}auth.bspx?u={1}&a={2}",
-                    this.GameInfo.GameInfo.Url,
+                    this.GameInfo.ServerInfo.Url,
                     user.Id,
                     user.ActivationKey);
 
@@ -300,7 +300,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Controllers
                     this.Configuration.ForgotPwdMailTemplate,
                     user,
                     new System.Collections.Generic.Dictionary<string, object>()
-                        .With("ForgotLink", this.GameInfo.GameInfo.Url + "newpassword.bspx?u=" + user.Id.ToString() + "&a=" + user.ActivationKey));
+                        .With("ForgotLink", this.GameInfo.ServerInfo.Url + "newpassword.bspx?u=" + user.Id.ToString() + "&a=" + user.ActivationKey));
             this.MailSender.SendMail(
                 user.EMail,
                 this.Configuration.ForgotPwdMailSubject,

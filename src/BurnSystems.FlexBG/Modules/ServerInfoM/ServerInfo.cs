@@ -5,7 +5,7 @@ using System.Text;
 
 namespace BurnSystems.FlexBG.Modules.GameInfoM
 {    
-    public class GameInfo
+    public class ServerInfo
     {
         public string Name
         {

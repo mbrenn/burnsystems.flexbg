@@ -23,7 +23,7 @@ namespace BurnSystems.FlexBG.Modules.MailSenderM
         private bool sendAsync = false;
 
         [Inject(IsMandatory = true)]
-        public IGameInfoProvider GameInfo
+        public IServerInfoProvider GameInfo
         {
             get;
             set;
@@ -61,7 +61,7 @@ namespace BurnSystems.FlexBG.Modules.MailSenderM
             smtpClient.Credentials = new NetworkCredential(settings.SmtpUsername, settings.SmtpPassword);
 
             var mailMessage = new MailMessage(
-                this.GameInfo.GameInfo.AdminEMail,
+                this.GameInfo.ServerInfo.AdminEMail,
                 receiver,
                 subject,
                 content);

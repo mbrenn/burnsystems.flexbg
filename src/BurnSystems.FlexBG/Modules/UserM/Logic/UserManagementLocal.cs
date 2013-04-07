@@ -39,7 +39,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         }
 
         [Inject(IsMandatory = true)]
-        public IGameInfoProvider GameInfoProvider
+        public IServerInfoProvider GameInfoProvider
         {
             get;
             set;
@@ -397,7 +397,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         {
             using (this.Db.Sync.GetWriteLock())
             {
-                var completePassword = user.Username + password + this.GameInfoProvider.GameInfo.PasswordSalt;
+                var completePassword = user.Username + password + this.GameInfoProvider.ServerInfo.PasswordSalt;
                 user.EncryptedPassword = completePassword.Sha1();
             }
         }
@@ -412,7 +412,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         {
             using (this.Db.Sync.GetReadLock())
             {
-                var completePassword = user.Username + password + this.GameInfoProvider.GameInfo.PasswordSalt;
+                var completePassword = user.Username + password + this.GameInfoProvider.ServerInfo.PasswordSalt;
                 return user.EncryptedPassword == completePassword.Sha1();
             }
         }
@@ -462,14 +462,21 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
             {
                 if (!this.IsUsernameExisting(AdminName))
                 {
+                    classLogger.Message("Creating user with name: " + AdminName);
+                    var password = this.UserQuery.Ask(
+                        "Give password: ",
+                        null,
+                        this.GameInfoProvider.ServerInfo.PasswordSalt);
+                    
+
                     var user = new User();
                     user.Username = AdminName;
-                    user.EMail = this.GameInfoProvider.GameInfo.AdminEMail;
+                    user.EMail = this.GameInfoProvider.ServerInfo.AdminEMail;
                     user.HasAgreedToTOS = true;
                     user.HasNoCredentials = false;
                     user.IsActive = true;
 
-                    this.SetPassword(user, this.GameInfoProvider.GameInfo.PasswordSalt);
+                    this.SetPassword(user, password);
 
                     this.AddUser(user);
                 }

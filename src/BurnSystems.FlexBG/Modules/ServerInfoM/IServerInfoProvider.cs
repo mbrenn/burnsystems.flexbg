@@ -8,9 +8,9 @@ namespace BurnSystems.FlexBG.Modules.GameInfoM
     /// <summary>
     /// Queries the gameinfo
     /// </summary>
-    public interface IGameInfoProvider
+    public interface IServerInfoProvider
     {
-        GameInfo GameInfo
+        ServerInfo ServerInfo
         {
             get;
         }

@@ -10,26 +10,26 @@ using BurnSystems.ObjectActivation;
 
 namespace BurnSystems.FlexBG.Modules.GameInfoM
 {
-    public class GameInfoProvider : IGameInfoProvider
+    public class ServerInfoProvider : IServerInfoProvider
     {
         [Inject]
-        public GameInfoProvider(IConfigurationStorage storage)
+        public ServerInfoProvider(IConfigurationStorage storage)
         {
             Ensure.That(storage != null, "IConfigurationStorage not set in Constructor");
 
             var xmlInfo = storage.Documents
                 .Elements("FlexBG")
-                .Elements("Game")
-                .Elements("GameInfo")
+                .Elements("Server")
+                .Elements("ServerInfo")
                 .LastOrDefault();
 
-            Ensure.That(xmlInfo != null, "Xml-Configuration within flexbg/game/info not found");
+            Ensure.That(xmlInfo != null, "Xml-Configuration within FlexBG/Server/ServerInfo  not found");
 
-            var serializer = new XmlSerializer(typeof(GameInfo));
-            this.GameInfo = serializer.Deserialize(xmlInfo.CreateReader()) as GameInfo;
+            var serializer = new XmlSerializer(typeof(ServerInfo));
+            this.ServerInfo = serializer.Deserialize(xmlInfo.CreateReader()) as ServerInfo;
         }
 
-        public GameInfo GameInfo
+        public ServerInfo ServerInfo
         {
             get;
             private set;
