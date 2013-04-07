@@ -66,7 +66,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.GameM.Controllers
         /// Gets or sets the current game, reqired for checking if user is in current game
         /// </summary>
         [Inject(ByName = DeponGamesController.CurrentGameName)]
-        public Game Game
+        public Game CurrentGame
         {
             get;
             set;
@@ -141,6 +141,22 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.GameM.Controllers
             }
         }
 
+        [WebMethod]
+        public IActionResult GetGameInfo()
+        {
+            var result = new
+            {
+                success = true,
+                title = this.CurrentGame.Title,
+                maxPlayers = this.CurrentGame.MaxPlayers,
+                isPaused = this.CurrentGame.IsPaused,
+                id = this.CurrentGame.Id,
+                description = this.CurrentGame.Description
+            };
+
+            return this.Json(result);
+        }
+
         /// <summary>
         /// Leaves the gameplay. This is the counter method to <c>ContinueGame</c>. 
         /// </summary>
@@ -160,7 +176,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.GameM.Controllers
         [WebMethod]
         public IActionResult HasUserJoined()
         {
-            if (this.Game == null)
+            if (this.CurrentGame == null)
             {
                 return this.Json(
                     new
@@ -176,7 +192,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.GameM.Controllers
                     {
                         success = true,
                         isInGame = true,
-                        gameId = this.Game.Id
+                        gameId = this.CurrentGame.Id
                     });
             }
         }
