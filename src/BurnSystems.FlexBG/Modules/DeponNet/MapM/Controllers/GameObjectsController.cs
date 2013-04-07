@@ -65,7 +65,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.MapM.Controllers
         }
         
         /// <summary>
-        /// Gets the gmaeobjects on the map
+        /// Gets the gameobjects on the map
         /// </summary>
         /// <param name="x1">Left-X-Coordinate of the map</param>
         /// <param name="x2">Right-X-Coordinate of the map</param>

@@ -63,6 +63,7 @@
     <Compile Include="Modules\DeponNet\BuildingM\Interface\IBuildingTypeProvider.cs" />
     <Compile Include="Modules\DeponNet\BuildingM\LocalBuildingDatabase.cs" />
     <Compile Include="Modules\DeponNet\Common\ObjectPosition.cs" />
+    <Compile Include="Modules\DeponNet\GameClockM\Controllers\GameClockController.cs" />
     <Compile Include="Modules\DeponNet\GameConfig.cs" />
     <Compile Include="Modules\DeponNet\EntityType.cs" />
     <Compile Include="Modules\DeponNet\GameClockM\GameClockInfo.cs" />
