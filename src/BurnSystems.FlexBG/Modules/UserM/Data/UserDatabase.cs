@@ -53,7 +53,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Data
         /// <summary>
         /// Stores the filepath to user data
         /// </summary>
-        private string filePath = "data/users.data";
+        private string filePath = "data/users.db";
 
         /// <summary>
         /// Loads database from file
