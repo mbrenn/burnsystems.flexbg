@@ -91,8 +91,7 @@ namespace BurnSystems.FlexBG.Modules.BackgroundWorkerM.Logic
                 //    -8       =    90         +     2    -        100
                 var difference = nextExecution - currentGameTick;
                 if (difference <= 0)
-                {
-                    logger.LogEntry(LogLevel.Verbose, "Next Execution: " + nextExecution.ToString() + ", Current Game Time: " + currentGameTick.ToString());
+                {                    
                     var innerContainer = new ActivationContainer("Background Task Game");
                     innerContainer.BindToName("CurrentGame").ToConstant(game);
 
