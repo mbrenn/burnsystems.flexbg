@@ -1,5 +1,7 @@
 ﻿using BurnSystems.FlexBG.Modules.DeponNet.BuildingM;
 using BurnSystems.FlexBG.Modules.DeponNet.BuildingM.Interfaces;
+using BurnSystems.FlexBG.Modules.DeponNet.MapM;
+using BurnSystems.FlexBG.Modules.DeponNet.MapM.Interface;
 using BurnSystems.ObjectActivation;
 using BurnSystems.Test;
 using System;
@@ -35,12 +37,31 @@ namespace BurnSystems.FlexBG.Modules.DeponNet
             public static BuildingType LivingHouse;
         }
 
+        public static class Fields
+        {
+            /// <summary>
+            /// Stores the air
+            /// </summary>
+            public static FieldType Air;
+
+            /// <summary>
+            /// Defines the grass field type as 1
+            /// </summary>
+            public static FieldType Grass;
+
+            /// <summary>
+            /// Defines the grass field type as 2
+            /// </summary>
+            public static FieldType DarkGrass;
+        }
+
         /// <summary>
         /// Initializes the game configuration
         /// </summary>
         public static void Init(IActivates container)
         {
             InitBuildingTypes(container);
+            InitFieldTypes(container);
         }
 
         private static void InitBuildingTypes(IActivates container)
@@ -111,6 +132,42 @@ namespace BurnSystems.FlexBG.Modules.DeponNet
                 SizeY = 1
             };
             buildingTypeProvider.Add(Buildings.LivingHouse);
+        }
+
+        /// <summary>
+        /// Initializes the field types
+        /// </summary>
+        /// <param name="container">Container to be used</param>
+        private static void InitFieldTypes(IActivates container)
+        {
+            var fieldTypeProvider = container.Get<IFieldTypeProvider>();
+            
+            /// <summary>
+            /// Stores the air
+            /// </summary>
+            Fields.Air = new FieldType()
+            {
+                Id = 0,
+                Title = "Air"
+            };
+
+            /// <summary>
+            /// Defines the grass field type as 1
+            /// </summary>
+            Fields.Grass = new FieldType()
+            {
+                Id = 1,
+                Title = "Grass"
+            };
+
+            /// <summary>
+            /// Defines the grass field type as 2
+            /// </summary>
+            Fields.DarkGrass = new FieldType()
+            {
+                Id = 2,
+                Title = "DarkGrass"
+            };
         }
     }
 }

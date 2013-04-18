@@ -1,4 +1,5 @@
 ﻿using BurnSystems.FlexBG.Modules.ConfigurationStorageM;
+using BurnSystems.FlexBG.Modules.DeponNet;
 using BurnSystems.FlexBG.Modules.DeponNet.Common;
 using BurnSystems.FlexBG.Modules.DeponNet.GameM;
 using BurnSystems.FlexBG.Modules.DeponNet.GameM.Controllers;
@@ -57,8 +58,8 @@ namespace BurnSystems.FlexBG.Test.WayPointCalculationM
 
             var voxelMap = container.Get<IVoxelMap>();
             voxelMap.CreateMap(game.Id, info);
-            CompleteFill.Execute(voxelMap, game.Id, FieldTypes.Air);
-            new AddNoiseLayer(voxelMap, FieldTypes.Grass, () => 0, () => float.MinValue).Execute(game.Id);
+            CompleteFill.Execute(voxelMap, game.Id, GameConfig.Fields.Air.IdAsByte);
+            new AddNoiseLayer(voxelMap, GameConfig.Fields.Grass.IdAsByte, () => 0, () => float.MinValue).Execute(game.Id);
 
             return container;
         }
@@ -99,11 +100,11 @@ namespace BurnSystems.FlexBG.Test.WayPointCalculationM
             var container = this.Init();
 
             var voxelMap = container.Get<IVoxelMap>();
-            voxelMap.SetFieldType(1, 0, 2, FieldTypes.Grass, float.MinValue, float.MaxValue);
-            voxelMap.SetFieldType(1, 1, 2, FieldTypes.Grass, float.MinValue, float.MaxValue);
-            voxelMap.SetFieldType(1, 2, 2, FieldTypes.Grass, float.MinValue, float.MaxValue);
-            voxelMap.SetFieldType(1, 2, 1, FieldTypes.Grass, float.MinValue, float.MaxValue);
-            voxelMap.SetFieldType(1, 2, 0, FieldTypes.Grass, float.MinValue, float.MaxValue);
+            voxelMap.SetFieldType(1, 0, 2, GameConfig.Fields.Grass.IdAsByte, float.MinValue, float.MaxValue);
+            voxelMap.SetFieldType(1, 1, 2, GameConfig.Fields.Grass.IdAsByte, float.MinValue, float.MaxValue);
+            voxelMap.SetFieldType(1, 2, 2, GameConfig.Fields.Grass.IdAsByte, float.MinValue, float.MaxValue);
+            voxelMap.SetFieldType(1, 2, 1, GameConfig.Fields.Grass.IdAsByte, float.MinValue, float.MaxValue);
+            voxelMap.SetFieldType(1, 2, 0, GameConfig.Fields.Grass.IdAsByte, float.MinValue, float.MaxValue);
 
             var wayPointCalculation = container.Get<IWayPointCalculation>();
 
@@ -121,11 +122,11 @@ namespace BurnSystems.FlexBG.Test.WayPointCalculationM
             var container = this.Init();
 
             var voxelMap = container.Get<IVoxelMap>();
-            voxelMap.SetFieldType(1, 0, 1, FieldTypes.Grass, float.MinValue, 100);
-            voxelMap.SetFieldType(1, 1, 1, FieldTypes.Grass, float.MinValue, 100);
-            voxelMap.SetFieldType(1, 3, 0, FieldTypes.Grass, float.MinValue, 100);
-            voxelMap.SetFieldType(1, 3, 1, FieldTypes.Grass, float.MinValue, 100);
-            voxelMap.SetFieldType(1, 5, 1, FieldTypes.Grass, float.MinValue, 100);
+            voxelMap.SetFieldType(1, 0, 1, GameConfig.Fields.Grass.IdAsByte, float.MinValue, 100);
+            voxelMap.SetFieldType(1, 1, 1, GameConfig.Fields.Grass.IdAsByte, float.MinValue, 100);
+            voxelMap.SetFieldType(1, 3, 0, GameConfig.Fields.Grass.IdAsByte, float.MinValue, 100);
+            voxelMap.SetFieldType(1, 3, 1, GameConfig.Fields.Grass.IdAsByte, float.MinValue, 100);
+            voxelMap.SetFieldType(1, 5, 1, GameConfig.Fields.Grass.IdAsByte, float.MinValue, 100);
 
             var wayPointCalculation = container.Get<IWayPointCalculation>();
 

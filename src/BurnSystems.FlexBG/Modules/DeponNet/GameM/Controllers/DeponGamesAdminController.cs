@@ -17,6 +17,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.GameM.Controllers
     public class DeponGamesAdminController : Controller
     {
         private static ILog logger = new ClassLogger(typeof(DeponGameAdminInterface));
+
         /// <summary>
         /// Gets or sets the game management
         /// </summary>
@@ -61,13 +62,13 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.GameM.Controllers
                 info);
 
             logger.LogEntry(LogLevel.Notify, "Fill Map for game " + gameId.ToString());
-            CompleteFill.Execute(this.VoxelMap, gameId, FieldTypes.Air);
+            CompleteFill.Execute(this.VoxelMap, gameId, GameConfig.Fields.Air.IdAsByte);
 
             logger.LogEntry(LogLevel.Notify, "Add Grass for game " + gameId.ToString());
-            new AddNoiseLayer(this.VoxelMap, FieldTypes.Grass, () => 0, () => float.MinValue).Execute(gameId);
+            new AddNoiseLayer(this.VoxelMap, GameConfig.Fields.Grass.IdAsByte, () => 0, () => float.MinValue).Execute(gameId);
 
             logger.LogEntry(LogLevel.Notify, "Add DarkGrass for game " + gameId.ToString());
-            new ReplaceFieldType(this.VoxelMap, FieldTypes.Grass, FieldTypes.DarkGrass, (x, y) => MathHelper.Random.NextDouble() < 0.1).Execute(gameId);
+            new ReplaceFieldType(this.VoxelMap, GameConfig.Fields.Grass.IdAsByte, GameConfig.Fields.DarkGrass.IdAsByte, (x, y) => MathHelper.Random.NextDouble() < 0.1).Execute(gameId);
 
             logger.LogEntry(LogLevel.Notify, "Finished map creation for game " + gameId.ToString());
 
