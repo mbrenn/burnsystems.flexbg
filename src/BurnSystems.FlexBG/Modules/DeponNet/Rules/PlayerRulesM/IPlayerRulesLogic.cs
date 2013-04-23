@@ -9,7 +9,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.Rules.PlayerRulesM
     /// <summary>
     /// Defines the interface for the player rules
     /// </summary>
-    public interface IPlayerRules
+    public interface IPlayerRulesLogic
     {
         /// <summary>
         /// Creates a new player

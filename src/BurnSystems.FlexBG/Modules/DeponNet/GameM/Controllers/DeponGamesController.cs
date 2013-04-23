@@ -49,7 +49,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.GameM.Controllers
         }
 
         [Inject(IsMandatory = true)]
-        public IPlayerRules PlayerRules
+        public IPlayerRulesLogic PlayerRules
         {
             get;
             set;

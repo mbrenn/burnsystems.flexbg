@@ -27,9 +27,9 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.MapM
         }
 
         /// <summary>
-        /// Gets or sets the title
+        /// Gets or sets the Token that will be used for messages
         /// </summary>
-        public string Title
+        public string Token
         {
             get;
             set;

@@ -58,5 +58,17 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.GameM
         {
             return this.Title;
         }
+
+        public object AsJson()
+        {
+            return new
+            {
+                title = this.Title,
+                maxPlayers = this.MaxPlayers,
+                isPaused = this.IsPaused,
+                id = this.Id,
+                description = this.Description
+            };
+        }
     }
 }

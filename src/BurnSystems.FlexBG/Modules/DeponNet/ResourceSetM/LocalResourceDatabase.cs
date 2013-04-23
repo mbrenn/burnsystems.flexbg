@@ -46,5 +46,29 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.ResourceSetM
         {
             SerializedFile.StoreToFile("resources.db", this.ResourceStore);
         }
+
+        /// <summary>
+        /// Finds a specific resourcesetbag
+        /// </summary>
+        /// <param name="entityType">Type of the entity</param>
+        /// <param name="entityId">ID of the entity</param>
+        /// <returns>Found bag</returns>
+        public ResourceSetBag Find(int entityType, long entityId)
+        {
+            lock (this.syncObject)
+            {
+                var found = this.ResourceStore.Resources.Where(x => x.EntityType == entityType && x.EntityId == entityId)
+                    .FirstOrDefault();
+
+                if (found == null)
+                {
+                    found = new ResourceSetBag();
+                    found.EntityType = entityType;
+                    found.EntityId = entityId;
+                }
+
+                return found;
+            }
+        }
     }
 }

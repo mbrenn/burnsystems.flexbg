@@ -1,5 +1,6 @@
 ﻿using BurnSystems.FlexBG.Modules.DeponNet.GameM;
 using BurnSystems.FlexBG.Modules.DeponNet.GameM.Controllers;
+using BurnSystems.FlexBG.Modules.DeponNet.MapM.Interface;
 using BurnSystems.FlexBG.Modules.DeponNet.PlayerM;
 using BurnSystems.FlexBG.Modules.DeponNet.PlayerM.Controllers;
 using BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage;
@@ -48,6 +49,13 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.DataProvider
             set;
         }
 
+        [Inject(IsMandatory = true)]
+        public IFieldTypeProvider FieldTypeProvider
+        {
+            get;
+            set;
+        }
+
         /// <summary>
         /// Gets detailled information about a certain field
         /// </summary>
@@ -63,15 +71,20 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.DataProvider
             {
                 new FieldInfoContent()
                 {
-                    title = "Welcome", 
+                    title = string.Empty, 
                     content = field.FirstOrDefault().FieldType.ToString(),
                     token = "fieldinfo",
-                    data = null
+                    data = new {
+                        x = x,
+                        y = y,
+                        fieldTypeTitle = this.FieldTypeProvider.Get ( field.Last().FieldType).Token
+                    }
                 }
             };
 
             var result = new
             {
+                data = data,
                 success = true
             };
 

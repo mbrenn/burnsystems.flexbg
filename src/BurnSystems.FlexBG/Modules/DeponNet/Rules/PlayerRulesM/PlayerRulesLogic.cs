@@ -1,6 +1,8 @@
 ﻿using BurnSystems.FlexBG.Modules.DeponNet.BuildingM.Interface;
 using BurnSystems.FlexBG.Modules.DeponNet.PlayerM;
 using BurnSystems.FlexBG.Modules.DeponNet.PlayerM.Interface;
+using BurnSystems.FlexBG.Modules.DeponNet.ResourceSetM;
+using BurnSystems.FlexBG.Modules.DeponNet.ResourceSetM.Interface;
 using BurnSystems.FlexBG.Modules.DeponNet.TownM.Interface;
 using BurnSystems.FlexBG.Modules.LockMasterM;
 using BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage;
@@ -17,7 +19,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.Rules.PlayerRulesM
     /// <summary>
     /// Stores the rules, which are for the player
     /// </summary>
-    public class PlayerRules : IPlayerRules
+    public class PlayerRulesLogic : IPlayerRulesLogic
     {
         [Inject(IsMandatory=true)]
         public ILockMaster LockMaster
@@ -67,6 +69,23 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.Rules.PlayerRulesM
         }
 
         /// <summary>
+        /// Gets or sets the resourcemanagement
+        /// </summary>
+        [Inject(IsMandatory = true)]
+        public IResourceManagement ResourceManagement
+        {
+            get;
+            set;
+        }
+
+        [Inject(IsMandatory = true)]
+        public PlayerRulesConfig Config
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// Creates a new player
         /// </summary>
         /// <param name="param">Parameters for the new player</param>
@@ -96,6 +115,15 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.Rules.PlayerRulesM
                     townId,
                     x,
                     y);
+
+                // Initializes the player
+                var playerResources = new ResourceSetBag();
+                playerResources.Resources.Set(this.Config.PlayerStartResources);
+                this.ResourceManagement.SetResourceSet(EntityType.Player, playerId, playerResources);
+
+                var townResources = new ResourceSetBag();
+                townResources.Resources.Set(this.Config.TownStartResources);
+                this.ResourceManagement.SetResourceSet(EntityType.Town, townId, playerResources);
 
                 return playerId;
             }

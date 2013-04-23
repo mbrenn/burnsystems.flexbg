@@ -24,6 +24,15 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.ResourceSetM
         }
 
         /// <summary>
+        /// Sets the resource set bag
+        /// </summary>
+        /// <param name="other">Other resource set bag</param>
+        public void Set(ResourceSetBag other)
+        {
+            this.Resources.Set(other.Resources);
+        }
+
+        /// <summary>
         /// Gets or sets the id of the entity
         /// </summary>
         public long EntityId

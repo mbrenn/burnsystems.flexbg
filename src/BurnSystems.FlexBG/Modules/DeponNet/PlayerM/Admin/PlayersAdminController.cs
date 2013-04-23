@@ -13,7 +13,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.PlayerM.Admin
     public class PlayersAdminController : Controller
     {
         [Inject]
-        public IPlayerRules PlayerRules
+        public IPlayerRulesLogic PlayerRules
         {
             get;
             set;

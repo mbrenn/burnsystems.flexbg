@@ -85,5 +85,20 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.PlayerM
         {
             return this.Playername;
         }
+
+        public object AsJson()
+        {
+            return new
+            {
+                Id = this.Id,
+                GameId = this.GameId,
+                OwnerId = this.OwnerId,
+                RegionId = this.RegionId,
+                Playername = this.Playername,
+                Empirename = this.Empirename,
+                Created = this.Created,
+                LastUsed = this.LastUsed
+            };
+        }
     }
 }

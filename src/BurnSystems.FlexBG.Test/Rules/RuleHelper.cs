@@ -77,7 +77,7 @@ namespace BurnSystems.FlexBG.Test.Rules
 
         public long CreatePlayer(long userId)
         {
-            var playerRules = this.Container.Get<IPlayerRules>();
+            var playerRules = this.Container.Get<IPlayerRulesLogic>();
 
             return playerRules.CreatePlayer(
                 new PlayerCreationParams()

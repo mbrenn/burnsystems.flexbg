@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BurnSystems.Collections;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,7 +11,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.ResourceSetM
     /// Defines the list of existing resource types. 
     /// Internally, the id is used
     /// </summary>
-    public class ResourceType
+    public class ResourceType : IHasId
     {
         /// <summary>
         /// Gets or sets the id

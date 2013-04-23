@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BurnSystems.Collections;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,7 +22,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.ResourceSetM
         /// <summary>
         /// This container stores the resources
         /// </summary>
-        private Dictionary<int, double> resources = new Dictionary<int, double>();
+        private Dictionary<long, double> resources = new Dictionary<long, double>();
 
         /// <summary>
         /// Initializes a new instance of the ResourceSet class.
@@ -34,7 +35,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.ResourceSetM
         /// Initializes a new instance of the ResourceSet class.
         /// </summary>
         /// <param name="resources">Pair of resources to be set</param>
-        public ResourceSet(IEnumerable<KeyValuePair<int, double>> resources)
+        public ResourceSet(IEnumerable<KeyValuePair<long, double>> resources)
         {
             foreach (var pair in resources)
             {
@@ -64,7 +65,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.ResourceSetM
         /// <summary>
         /// Gets the resources as a dictionary
         /// </summary>
-        public Dictionary<int, double> Resources
+        public Dictionary<long, double> Resources
         {
             get { return this.resources; }
         }
@@ -144,7 +145,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.ResourceSetM
         /// </summary>
         /// <param name="resourceType">Requested resource type</param>
         /// <returns>Amount of resources or null, if not set</returns>
-        public double this[int resourceType]
+        public double this[long resourceType]
         {
             get
             {
@@ -161,6 +162,24 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.ResourceSetM
             set
             {
                 this.resources[resourceType] = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the amount of resources
+        /// </summary>
+        /// <param name="resourceType">Requested resource type</param>
+        /// <returns>Amount of resources or null, if not set</returns>
+        public double this[IHasId resourceType]
+        {
+            get
+            {
+                return this[resourceType.Id];
+            }
+
+            set
+            {
+                this[resourceType.Id] = value;
             }
         }
 
@@ -199,7 +218,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.ResourceSetM
         /// <param name="pred1">First predicate</param>
         /// <param name="pred2">Second predicate</param>
         /// <returns>true, if one of the predicate returns true</returns>
-        public static Predicate<int> GetOrPredicate(Predicate<int> pred1, Predicate<int> pred2)
+        public static Predicate<int> GetOrPredicate(Predicate<long> pred1, Predicate<long> pred2)
         {
             return (x) => pred1(x) || pred2(x);
         }
@@ -213,10 +232,10 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.ResourceSetM
         /// <param name="pred2">Second predicate</param>
         /// <param name="pred3">Third predicate</param>
         /// <returns>true, if one of the predicate returns true</returns>
-        public static Predicate<int> GetOrPredicate(
-            Predicate<int> pred1,
-            Predicate<int> pred2,
-            Predicate<int> pred3)
+        public static Predicate<long> GetOrPredicate(
+            Predicate<long> pred1,
+            Predicate<long> pred2,
+            Predicate<long> pred3)
         {
             return (x) => pred1(x) || pred2(x) || pred3(x);
         }
@@ -284,7 +303,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.ResourceSetM
         /// </summary>
         /// <param name="resourceType">Type of resource to be added</param>
         /// <param name="value">Wert des Rohstoffs</param>
-        public void AddResource(int resourceType, double value)
+        public void AddResource(long resourceType, double value)
         {
             if (value != 0.0)
             {
@@ -298,7 +317,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.ResourceSetM
         /// <param name="scaleFactor">Scaling factor</param>
         public void Scale(double scaleFactor)
         {
-            foreach (var pair in new Dictionary<int, double>(this.resources))
+            foreach (var pair in new Dictionary<long, double>(this.resources))
             {
                 if (pair.Value != 0.0)
                 {
@@ -313,7 +332,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.ResourceSetM
         /// <param name="factor">Factor for resources</param>
         public void Scale(ResourceSet factor)
         {
-            foreach (var pair in new Dictionary<int, double>(this.resources))
+            foreach (var pair in new Dictionary<long, double>(this.resources))
             {
                 this[pair.Key] = pair.Value * factor[pair.Key];
             }
@@ -443,7 +462,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.ResourceSetM
         /// <param name="predicate">Predicate, which filters the resources
         /// that shall be checked</param>
         /// <returns>true, if this instance has enough resources</returns>
-        public bool HasEnoughFor(ResourceSet resources, Predicate<int> predicate)
+        public bool HasEnoughFor(ResourceSet resources, Predicate<long> predicate)
         {
             foreach (var pair in resources.resources)
             {
@@ -498,7 +517,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.ResourceSetM
         /// If this instance is <c>null</c>, all resources will be regarded
         /// </param>
         /// <returns>Number of possible units</returns>
-        public double GetNrOfPossibleItems(ResourceSet cost, Predicate<int> predicate)
+        public double GetNrOfPossibleItems(ResourceSet cost, Predicate<long> predicate)
         {
             if (predicate == null)
             {
@@ -553,7 +572,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.ResourceSetM
         /// production</param>
         /// <param name="filter">Filter for the important resources.</param>
         /// <returns>Required seconds.</returns>
-        public double CalculateRequiredSeconds(ResourceSet productionResources, Predicate<int> filter)
+        public double CalculateRequiredSeconds(ResourceSet productionResources, Predicate<long> filter)
         {
             if (filter == null)
             {
@@ -595,7 +614,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.ResourceSetM
         public ResourceSet Clone()
         {
             var result = new ResourceSet();
-            result.resources = new Dictionary<int, double>(this.Resources);
+            result.resources = new Dictionary<long, double>(this.Resources);
             return result;
         }
 
@@ -604,7 +623,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.ResourceSetM
         /// </summary>
         /// <param name="predicate">Predicate, which determines which resources have to be cloned</param>
         /// <returns>Cloned resourceset</returns>
-        public ResourceSet Clone(Predicate<int> predicate)
+        public ResourceSet Clone(Predicate<long> predicate)
         {
             var result = new ResourceSet();
             foreach (var pair in this.resources)
@@ -660,7 +679,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.ResourceSetM
         /// <param name="predicate">Predicate, which defines the resources
         /// to be scaled</param>
         /// <returns>Scaled result</returns>
-        public ResourceSet CloneScale(double scaleFactor, Predicate<int> predicate)
+        public ResourceSet CloneScale(double scaleFactor, Predicate<long> predicate)
         {
             var result = new ResourceSet();
 
@@ -680,7 +699,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.ResourceSetM
         /// </summary>
         /// <param name="resourceType">Type of resource to be set</param>
         /// <param name="value">Number of resources</param>
-        public void SetResource(int resourceType, double value)
+        public void SetResource(long resourceType, double value)
         {
             this[resourceType] = value;
         }

@@ -2,6 +2,9 @@
 using BurnSystems.FlexBG.Modules.DeponNet.BuildingM.Interfaces;
 using BurnSystems.FlexBG.Modules.DeponNet.MapM;
 using BurnSystems.FlexBG.Modules.DeponNet.MapM.Interface;
+using BurnSystems.FlexBG.Modules.DeponNet.ResourceSetM;
+using BurnSystems.FlexBG.Modules.DeponNet.ResourceSetM.Interface;
+using BurnSystems.FlexBG.Modules.DeponNet.Rules.PlayerRulesM;
 using BurnSystems.ObjectActivation;
 using BurnSystems.Test;
 using System;
@@ -55,6 +58,21 @@ namespace BurnSystems.FlexBG.Modules.DeponNet
             public static FieldType DarkGrass;
         }
 
+        public static class Resources
+        {
+            public static ResourceType Wood;
+
+            public static ResourceType CopperOre;
+
+            public static ResourceType Stone;
+
+            public static ResourceType Girder;
+
+            public static ResourceType Copper;
+
+            public static ResourceType Oil;
+        }
+
         /// <summary>
         /// Initializes the game configuration
         /// </summary>
@@ -62,6 +80,51 @@ namespace BurnSystems.FlexBG.Modules.DeponNet
         {
             InitBuildingTypes(container);
             InitFieldTypes(container);
+            InitResourceTypes(container);
+
+            var playerRules = container.Get<PlayerRulesConfig>();
+            Ensure.That(playerRules != null);
+            playerRules.PlayerStartResources[Resources.Wood] = 1000;
+            playerRules.PlayerStartResources[Resources.CopperOre] = 1000;
+            playerRules.PlayerStartResources[Resources.Stone] = 1000;
+            playerRules.PlayerStartResources[Resources.Girder] = 1000;
+            playerRules.PlayerStartResources[Resources.Wood] = 1000;
+        }
+
+        private static void InitResourceTypes(IActivates container)
+        {
+            var resourceTypeProvider = container.Get<IResourceTypeProvider>();
+            Ensure.That(resourceTypeProvider != null, "No IResourceTypeProvider");
+
+            Resources.Wood = new ResourceType();
+            Resources.Wood.Id = 1;
+            Resources.Wood.Token = "wood";
+            resourceTypeProvider.Add(Resources.Wood);
+
+            Resources.CopperOre = new ResourceType();
+            Resources.CopperOre.Id = 2;
+            Resources.CopperOre.Token = "copperore";
+            resourceTypeProvider.Add(Resources.CopperOre);
+
+            Resources.Stone = new ResourceType();
+            Resources.Stone.Id = 3;
+            Resources.Stone.Token = "stone";
+            resourceTypeProvider.Add(Resources.Stone);
+
+            Resources.Girder = new ResourceType();
+            Resources.Girder.Id = 4;
+            Resources.Girder.Token = "girder";
+            resourceTypeProvider.Add(Resources.Girder);
+
+            Resources.Copper = new ResourceType();
+            Resources.Copper.Id = 5;
+            Resources.Copper.Token = "copper";
+            resourceTypeProvider.Add(Resources.Copper);
+
+            Resources.Oil = new ResourceType();
+            Resources.Oil.Id = 6;
+            Resources.Oil.Token = "oil";
+            resourceTypeProvider.Add(Resources.Oil);
         }
 
         private static void InitBuildingTypes(IActivates container)
@@ -148,8 +211,9 @@ namespace BurnSystems.FlexBG.Modules.DeponNet
             Fields.Air = new FieldType()
             {
                 Id = 0,
-                Title = "Air"
+                Token = "Air"
             };
+            fieldTypeProvider.Add(Fields.Air);
 
             /// <summary>
             /// Defines the grass field type as 1
@@ -157,8 +221,9 @@ namespace BurnSystems.FlexBG.Modules.DeponNet
             Fields.Grass = new FieldType()
             {
                 Id = 1,
-                Title = "Grass"
+                Token = "Grass"
             };
+            fieldTypeProvider.Add(Fields.Grass);
 
             /// <summary>
             /// Defines the grass field type as 2
@@ -166,8 +231,9 @@ namespace BurnSystems.FlexBG.Modules.DeponNet
             Fields.DarkGrass = new FieldType()
             {
                 Id = 2,
-                Title = "DarkGrass"
+                Token = "DarkGrass"
             };
+            fieldTypeProvider.Add(Fields.DarkGrass);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using BurnSystems.FlexBG.Helper.ProviderByIdM;
+using BurnSystems.FlexBG.Modules.DeponNet.MapM.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.MapM
     /// <summary>
     /// Defines the field type provider
     /// </summary>
-    public class FieldTypeProvider : IndexProviderById<FieldType>
+    public class FieldTypeProvider : IndexProviderById<FieldType>, IFieldTypeProvider
     {
     }
 }
