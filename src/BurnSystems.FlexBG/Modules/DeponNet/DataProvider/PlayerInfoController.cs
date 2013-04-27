@@ -43,7 +43,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.DataProvider
         {
             var playerData = this.CurrentPlayer.AsJson();
             var resourcesOfPlayer = this.ResourceManagement.GetResourceSet(EntityType.Player, this.CurrentPlayer.Id);
-            var convertedResources = this.ResourceManagement.AsJson(resourcesOfPlayer.Resources);
+            var convertedResources = this.ResourceManagement.AsJson(resourcesOfPlayer.Available);
 
             return this.Json(
                 new

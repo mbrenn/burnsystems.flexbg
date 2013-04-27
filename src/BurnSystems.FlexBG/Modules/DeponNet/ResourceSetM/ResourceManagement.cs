@@ -1,4 +1,7 @@
-﻿using BurnSystems.FlexBG.Modules.DeponNet.MapM.Interface;
+﻿using BurnSystems.FlexBG.Modules.DeponNet.GameClockM.Interface;
+using BurnSystems.FlexBG.Modules.DeponNet.GameM;
+using BurnSystems.FlexBG.Modules.DeponNet.GameM.Controllers;
+using BurnSystems.FlexBG.Modules.DeponNet.MapM.Interface;
 using BurnSystems.FlexBG.Modules.DeponNet.ResourceSetM.Interface;
 using BurnSystems.Logging;
 using BurnSystems.ObjectActivation;
@@ -31,14 +34,45 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.ResourceSetM
             set;
         }
 
-        public ResourceSetBag GetResourceSet(int entityType, long entityId)
+        [Inject(IsMandatory = true)]
+        public IGameClockManager GameClockManager
         {
-            return this.Database.Find(entityType, entityId);
+            get;
+            set;
         }
 
-        public void SetResourceSet(int entityType, long entityId, ResourceSetBag resources)
+        [Inject(IsMandatory = true, ByName = DeponGamesController.CurrentGameName)]
+        public Game CurrentGame
         {
-            this.Database.Find(entityType, entityId).Set(resources);
+            get;
+            set;
+        }
+
+        public ResourceSetBag GetResourceSet(int entityType, long entityId)
+        {
+            var resourceBag = this.Database.Find(entityType, entityId);
+
+            this.UpdateResources(resourceBag);
+
+
+            return resourceBag;
+        }
+
+        public void SetAvailable(int entityType, long entityId, ResourceSet resources)
+        {
+            var resourceBag = this.Database.Find(entityType, entityId);
+
+            // No update is necessary. Amont is directly set
+            resourceBag.Available.Set(resources);
+        }
+
+        /// <summary>
+        /// Updates the available resources by adding the change to the maximum. 
+        /// </summary>
+        /// <param name="resourceBag">Resource Bag which shall be updated</param>
+        private void UpdateResources(ResourceSetBag resourceBag)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>

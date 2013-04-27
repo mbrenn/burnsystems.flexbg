@@ -16,20 +16,69 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.ResourceSetM
         /// <summary>
         /// Stores the resource set
         /// </summary>
-        private ResourceSet resources = new ResourceSet();
+        private ResourceSet available = new ResourceSet();
 
-        public ResourceSet Resources
+        /// <summary>
+        /// Stores the change per tick
+        /// </summary>
+        private ResourceSet change = new ResourceSet();
+
+        /// <summary>
+        /// Stores the allowed resources
+        /// </summary>
+        private ResourceSet maximum = new ResourceSet();
+
+        /// <summary>
+        /// Stores the last update
+        /// </summary>
+        private long lastUpdate = -1;
+
+        public ResourceSet Available
         {
-            get { return this.resources; }
+            get
+            {
+                if (this.available == null)
+                {
+                    this.available = new ResourceSet();
+                }
+
+                return this.available;
+            }
+        }
+
+        public ResourceSet Change
+        {
+            get
+            {
+                if (this.change == null)
+                {
+                    this.change = new ResourceSet();
+                }
+
+                return this.change;
+            }
+        }
+
+        public ResourceSet Maximum
+        {
+            get
+            {
+                if (this.maximum == null)
+                {
+                    this.maximum = new ResourceSet();
+                }
+
+                return this.maximum;
+            }
         }
 
         /// <summary>
-        /// Sets the resource set bag
+        /// Gets or sets the time when the 
         /// </summary>
-        /// <param name="other">Other resource set bag</param>
-        public void Set(ResourceSetBag other)
+        public long LastUpdate
         {
-            this.Resources.Set(other.Resources);
+            get;
+            set;
         }
 
         /// <summary>

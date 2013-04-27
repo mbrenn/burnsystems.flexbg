@@ -118,11 +118,11 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.Rules.PlayerRulesM
 
                 // Initializes the player
                 var playerResources = new ResourceSetBag();
-                playerResources.Resources.Set(this.Config.PlayerStartResources);
+                playerResources.Available.Set(this.Config.PlayerStartResources);
                 this.ResourceManagement.SetResourceSet(EntityType.Player, playerId, playerResources);
 
                 var townResources = new ResourceSetBag();
-                townResources.Resources.Set(this.Config.TownStartResources);
+                townResources.Available.Set(this.Config.TownStartResources);
                 this.ResourceManagement.SetResourceSet(EntityType.Town, townId, playerResources);
 
                 return playerId;
