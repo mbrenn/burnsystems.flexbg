@@ -63,19 +63,14 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.ResourceSetM
         {
             get
             {
-                if (this.maximum == null)
-                {
-                    this.maximum = new ResourceSet();
-                }
-
                 return this.maximum;
             }
         }
 
         /// <summary>
-        /// Gets or sets the time when the 
+        /// Gets or sets the time when the available resources have been updated the last time. 
         /// </summary>
-        public long LastUpdate
+        public long TicksOfLastUpdate
         {
             get;
             set;

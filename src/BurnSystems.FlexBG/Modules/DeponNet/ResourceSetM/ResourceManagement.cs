@@ -50,20 +50,26 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.ResourceSetM
 
         public ResourceSetBag GetResourceSet(int entityType, long entityId)
         {
-            var resourceBag = this.Database.Find(entityType, entityId);
+            bool isNew;
+            var resourceBag = this.Database.Find(entityType, entityId, out isNew);
+            if (isNew)
+            {
+                // Resourcebag has been recently created, so set the ticks of last update
+                resourceBag.TicksOfLastUpdate = this.GameClockManager.GetTicks(this.CurrentGame.Id);
+            }
 
             this.UpdateResources(resourceBag);
-
-
             return resourceBag;
         }
 
         public void SetAvailable(int entityType, long entityId, ResourceSet resources)
         {
-            var resourceBag = this.Database.Find(entityType, entityId);
+            bool isNew; 
+            var resourceBag = this.Database.Find(entityType, entityId, out isNew);
 
             // No update is necessary. Amont is directly set
             resourceBag.Available.Set(resources);
+            resourceBag.TicksOfLastUpdate = this.GameClockManager.GetTicks(this.CurrentGame.Id);
         }
 
         /// <summary>
@@ -72,7 +78,22 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.ResourceSetM
         /// <param name="resourceBag">Resource Bag which shall be updated</param>
         private void UpdateResources(ResourceSetBag resourceBag)
         {
-            throw new NotImplementedException();
+            lock (resourceBag)
+            {
+                var gameTicks = this.GameClockManager.GetTicks(this.CurrentGame.Id);
+
+                var difference = gameTicks - resourceBag.TicksOfLastUpdate;
+
+                var current = resourceBag.Change.CloneScale(difference);
+                current.Add(resourceBag.Available);
+                if (resourceBag.Maximum != null)
+                {
+                    current.ApplyMaximum(resourceBag.Maximum);
+                }
+
+                resourceBag.Available.Set(current);
+                resourceBag.TicksOfLastUpdate = gameTicks;
+            }
         }
 
         /// <summary>

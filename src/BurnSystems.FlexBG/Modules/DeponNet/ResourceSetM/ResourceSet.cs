@@ -813,5 +813,17 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.ResourceSetM
         {
             return this.resources.Any(x => x.Value < 0);
         }
+
+        /// <summary>
+        /// Sets all resource of this resourceset to the given maximum
+        /// </summary>
+        /// <param name="resourceSet">Resourceset to be evaluated</param>
+        internal void ApplyMaximum(ResourceSet resourceSet)
+        {
+            foreach ( var pair in this.resources.ToList())
+            {
+                this.resources[pair.Key] = Math.Min(pair.Value, resourceSet[pair.Key]);
+            }
+        }
     }
 }

@@ -53,7 +53,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.ResourceSetM
         /// <param name="entityType">Type of the entity</param>
         /// <param name="entityId">ID of the entity</param>
         /// <returns>Found bag</returns>
-        public ResourceSetBag Find(int entityType, long entityId)
+        public ResourceSetBag Find(int entityType, long entityId, out bool isNew)
         {
             lock (this.syncObject)
             {
@@ -65,6 +65,12 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.ResourceSetM
                     found = new ResourceSetBag();
                     found.EntityType = entityType;
                     found.EntityId = entityId;
+                    found.TicksOfLastUpdate = -1;
+                    isNew = true;
+                }
+                else
+                {
+                    isNew = false;
                 }
 
                 return found;

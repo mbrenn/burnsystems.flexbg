@@ -49,14 +49,17 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.GameM.Controllers
         }
 
         [Inject(IsMandatory = true)]
-        public IPlayerRulesLogic PlayerRules
+        public Session Session
         {
             get;
             set;
         }
 
+        /// <summary>
+        /// Gets or sets the activation container
+        /// </summary>
         [Inject(IsMandatory = true)]
-        public Session Session
+        public ActivationBlock ActivationBlock
         {
             get;
             set;
@@ -106,38 +109,48 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.GameM.Controllers
         [WebMethod]
         public IActionResult JoinGame([PostModel] JoinGameModel model)
         {
-            var playerId = this.PlayerRules.CreatePlayer(
-                new PlayerCreationParams()
-                {
-                    Playername = model.Playername,
-                    Empirename = model.Empirename,
-                    GameId = model.GameId,
-                    FirstTownName = model.Townname,
-                    UserId = this.CurrentUser.Id
-                });
-                    
-            var result = new
+            using (var block = CreateActivationBlockInGameScope(this.ActivationBlock, this.GameManagement, model.GameId))
             {
-                success = true, 
-                playerId = playerId
-            };
+                var playerRules = block.Get<IPlayerRulesLogic>();
 
-            return this.Json(result);
+                var playerId = playerRules.CreatePlayer(
+                    new PlayerCreationParams()
+                    {
+                        Playername = model.Playername,
+                        Empirename = model.Empirename,
+                        GameId = model.GameId,
+                        FirstTownName = model.Townname,
+                        UserId = this.CurrentUser.Id
+                    });
+
+                var result = new
+                {
+                    success = true,
+                    playerId = playerId
+                };
+
+                return this.Json(result);
+            }
         }
 
         [WebMethod]
         public IActionResult ContinueGame([PostModel] ContinueGameModel model)
         {
-            if (!this.PlayerRules.CanUserContinueGame(this.CurrentUser.Id, model.GameId))
+            using (var block = CreateActivationBlockInGameScope(this.ActivationBlock, this.GameManagement, model.GameId))
             {
-                throw new MVCProcessException("continuegame_playernotingame", "Player cannot join game.");
-            }
-            else
-            {
-                // Ok, we are in game, now add a cookie for game (Cookies are for games, mjam)
-                this.Session["FlexBG.CurrentGame"] = model.GameId;
+                var playerRules = block.Get<IPlayerRulesLogic>();
 
-                return this.SuccessJson();
+                if (!playerRules.CanUserContinueGame(this.CurrentUser.Id, model.GameId))
+                {
+                    throw new MVCProcessException("continuegame_playernotingame", "Player cannot join game.");
+                }
+                else
+                {
+                    // Ok, we are in game, now add a cookie for game (Cookies are for games, mjam)
+                    this.Session["FlexBG.CurrentGame"] = model.GameId;
+
+                    return this.SuccessJson();
+                }
             }
         }
 
@@ -218,6 +231,22 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.GameM.Controllers
             }
 
             return gameManagement.Get((long)gameIdObj);
+        }
+
+        /// <summary>
+        /// Creates an ActivationBlock, where the CurrentGame has been set with the given id. 
+        /// </summary>
+        /// <param name="block">Activationblock to be used</param>
+        /// <param name="gameManagement">Game Management being used to retrieve the information</param>
+        /// <param name="gameId">Id of the game</param>
+        /// <returns>Inner activation which shall be disposed by the caller</returns>
+        public static ActivationBlock CreateActivationBlockInGameScope(ActivationBlock block, IGameManagement gameManagement, long gameId)
+        {
+            var container = new ActivationContainer("GameScope");
+            container.BindToName(DeponGamesController.CurrentGameName)
+                .ToConstant(gameManagement.Get(gameId));
+
+            return new ActivationBlock("GameScope Block", container, block);
         }
     }
 }

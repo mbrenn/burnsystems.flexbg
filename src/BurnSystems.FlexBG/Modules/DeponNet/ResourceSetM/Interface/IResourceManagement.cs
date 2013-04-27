@@ -25,7 +25,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.ResourceSetM.Interface
         /// <param name="entityType">Type of the entity</param>
         /// <param name="entityId">Id of the entity</param>
         /// <param name="resources">Resources to be set</param>
-        void SetResourceSet(int entityType, long entityId, ResourceSetBag resources);
+        void SetAvailable(int entityType, long entityId, ResourceSet resources);
 
         /// <summary>
         /// Converts the resourceset to json object
