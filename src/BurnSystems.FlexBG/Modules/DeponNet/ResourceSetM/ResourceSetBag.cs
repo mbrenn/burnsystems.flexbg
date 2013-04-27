@@ -33,15 +33,20 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.ResourceSetM
         /// </summary>
         private long lastUpdate = -1;
 
+        /// <summary>
+        /// Id of the entity
+        /// </summary>
+        private long entityId;
+
+        /// <summary>
+        /// Type of the entity
+        /// </summary>
+        private int entityType;
+
         public ResourceSet Available
         {
             get
             {
-                if (this.available == null)
-                {
-                    this.available = new ResourceSet();
-                }
-
                 return this.available;
             }
         }
@@ -50,11 +55,6 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.ResourceSetM
         {
             get
             {
-                if (this.change == null)
-                {
-                    this.change = new ResourceSet();
-                }
-
                 return this.change;
             }
         }
@@ -72,8 +72,8 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.ResourceSetM
         /// </summary>
         public long TicksOfLastUpdate
         {
-            get;
-            set;
+            get { return this.lastUpdate; }
+            set { this.lastUpdate = value; }
         }
 
         /// <summary>
@@ -81,8 +81,8 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.ResourceSetM
         /// </summary>
         public long EntityId
         {
-            get;
-            set;
+            get { return this.entityId; }
+            private set { this.entityId = value; }
         }
 
         /// <summary>
@@ -90,8 +90,14 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.ResourceSetM
         /// </summary>
         public int EntityType
         {
-            get;
-            set;
+            get { return this.entityType; }
+            private set { this.entityType = value; }
+        }
+
+        public ResourceSetBag(int entityType, long entityId)
+        {
+            this.EntityId = entityId;
+            this.EntityType = entityType;
         }
     }
 }

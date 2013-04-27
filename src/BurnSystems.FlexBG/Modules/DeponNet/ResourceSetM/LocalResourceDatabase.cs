@@ -62,10 +62,10 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.ResourceSetM
 
                 if (found == null)
                 {
-                    found = new ResourceSetBag();
-                    found.EntityType = entityType;
-                    found.EntityId = entityId;
+                    found = new ResourceSetBag(entityType, entityId);
                     found.TicksOfLastUpdate = -1;
+                    this.ResourceStore.Resources.Add(found);
+
                     isNew = true;
                 }
                 else

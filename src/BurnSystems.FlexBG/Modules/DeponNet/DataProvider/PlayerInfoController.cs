@@ -42,8 +42,8 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.DataProvider
         public IActionResult GetCurrentPlayer()
         {
             var playerData = this.CurrentPlayer.AsJson();
-            var resourcesOfPlayer = this.ResourceManagement.GetResourceSet(EntityType.Player, this.CurrentPlayer.Id);
-            var convertedResources = this.ResourceManagement.AsJson(resourcesOfPlayer.Available);
+            var resourcesOfPlayer = this.ResourceManagement.GetResources(EntityType.Player, this.CurrentPlayer.Id);
+            var convertedResources = this.ResourceManagement.AsJson(resourcesOfPlayer);
 
             return this.Json(
                 new

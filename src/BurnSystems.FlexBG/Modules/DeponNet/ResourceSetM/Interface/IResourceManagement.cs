@@ -17,7 +17,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.ResourceSetM.Interface
         /// <param name="entityType">Type of the entity</param>
         /// <param name="entityId">Id of the entity</param>
         /// <returns>Found resources</returns>
-        ResourceSetBag GetResourceSet(int entityType, long entityId);
+        ResourceSetBag GetResources(int entityType, long entityId);
 
         /// <summary>
         /// Sets the resource set
@@ -32,6 +32,6 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.ResourceSetM.Interface
         /// </summary>
         /// <param name="resources">Resources to be converted</param>
         /// <returns>Converted json object</returns>
-        object AsJson(ResourceSet resources);
+        object AsJson(ResourceSetBag resources);
     }
 }

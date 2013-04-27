@@ -189,7 +189,8 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.GameM.Controllers
         [WebMethod]
         public IActionResult HasUserJoined()
         {
-            if (this.CurrentGame == null)
+            if (this.CurrentGame == null
+                || this.PlayerManagement.GetPlayersOfUser(this.CurrentUser.Id).All(x => x.GameId != this.CurrentGame.Id))
             {
                 return this.Json(
                     new

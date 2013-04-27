@@ -28,7 +28,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.ResourceSetM
         }
 
         [Inject(IsMandatory = true)]
-        public IFieldTypeProvider FieldTypeProvider
+        public IResourceTypeProvider ResourceTypeProvider
         {
             get;
             set;
@@ -48,7 +48,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.ResourceSetM
             set;
         }
 
-        public ResourceSetBag GetResourceSet(int entityType, long entityId)
+        public ResourceSetBag GetResources(int entityType, long entityId)
         {
             bool isNew;
             var resourceBag = this.Database.Find(entityType, entityId, out isNew);
@@ -64,7 +64,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.ResourceSetM
 
         public void SetAvailable(int entityType, long entityId, ResourceSet resources)
         {
-            bool isNew; 
+            bool isNew; // Not required, since ticks of last update will always be updated
             var resourceBag = this.Database.Find(entityType, entityId, out isNew);
 
             // No update is necessary. Amont is directly set
@@ -88,7 +88,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.ResourceSetM
                 current.Add(resourceBag.Available);
                 if (resourceBag.Maximum != null)
                 {
-                    current.ApplyMaximum(resourceBag.Maximum);
+                    current.ApplyMaximum(resourceBag.Maximum, false);
                 }
 
                 resourceBag.Available.Set(current);
@@ -100,16 +100,21 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.ResourceSetM
         /// Converts a resource set as json 
         /// </summary>
         /// <returns></returns>
-        public object AsJson(ResourceSet resourceSet)
+        public object AsJson(ResourceSetBag resourceSetBag)
         {
-            var result = new Dictionary<string, double>();
-
-            foreach (var pair in resourceSet.Resources)
+            var result = new Dictionary<string, object>();
+            
+            foreach (var pair in resourceSetBag.Available.Resources)
             {
-                var fieldType = this.FieldTypeProvider.Get(pair.Key);
+                var fieldType = this.ResourceTypeProvider.Get(pair.Key);
                 if (fieldType != null)
                 {
-                    result[fieldType.Token] = pair.Value;
+                    result[fieldType.Token] =
+                        new
+                        {
+                            available = pair.Value,
+                            change = resourceSetBag.Change[pair.Key]
+                        };
                 }
                 else
                 {
