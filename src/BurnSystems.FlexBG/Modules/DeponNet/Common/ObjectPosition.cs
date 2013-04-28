@@ -77,5 +77,15 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.Common
         {
             this.Position.Normalize();
         }
+
+        public object AsJson()
+        {
+            return new
+            {
+                x = this.X,
+                y = this.Y,
+                z = this.Z
+            };
+        }
     }
 }

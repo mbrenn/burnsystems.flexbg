@@ -1,4 +1,5 @@
 ﻿using BurnSystems.FlexBG.Modules.DeponNet.BuildingM.Interface;
+using BurnSystems.FlexBG.Modules.DeponNet.Common;
 using BurnSystems.FlexBG.Modules.DeponNet.GameM;
 using BurnSystems.FlexBG.Modules.DeponNet.GameM.Controllers;
 using BurnSystems.FlexBG.Modules.DeponNet.TownM.Interface;
@@ -52,7 +53,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.BuildingM
         /// <param name="buildingType">Type of the building</param>
         /// <param name="townId">Id of the town, where building shall be created</param>
         /// <returns>Id of the created building</returns>
-        public long CreateBuilding(BuildingType buildingType, long townId, double x, double y)
+        public long CreateBuilding(BuildingType buildingType, long townId, ObjectPosition position)
         {
             var ownerTown = this.TownManagement.GetTown(townId);
             if (ownerTown == null)
@@ -68,7 +69,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.BuildingM
             building.Productivity = 1;
             building.TownId = townId;
             building.BuildingTypeId = buildingType.Id;
-            building.Position = new Common.ObjectPosition(x, y, 0);
+            building.Position = position;
 
             lock (this.BuildingDb.BuildingsStore)
             {
@@ -83,7 +84,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.BuildingM
         /// </summary>
         /// <param name="playerId">Id of the player</param>
         /// <returns>Enumeration of buildings</returns>
-        public IEnumerable<Building> GetAllBuildingsOfPlayer(long playerId)
+        public IEnumerable<Building> GetBuildingsOfPlayer(long playerId)
         {
             lock (this.BuildingDb.BuildingsStore)
             {
@@ -96,7 +97,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.BuildingM
         /// </summary>
         /// <param name="townId">Id of the town</param>
         /// <returns>Enumeration of towns</returns>
-        public IEnumerable<Building> GetAllBuildingsOfTown(long townId)
+        public IEnumerable<Building> GetBuildingsOfTown(long townId)
         {
             lock (this.BuildingDb.BuildingsStore)
             {

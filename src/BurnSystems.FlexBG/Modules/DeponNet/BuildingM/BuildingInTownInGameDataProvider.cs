@@ -1,6 +1,7 @@
 ﻿using BurnSystems.FlexBG.Modules.DeponNet.BuildingM.Interface;
 using BurnSystems.FlexBG.Modules.DeponNet.GameM;
 using BurnSystems.FlexBG.Modules.DeponNet.GameM.Controllers;
+using BurnSystems.FlexBG.Modules.DeponNet.PlayerM.Interface;
 using BurnSystems.FlexBG.Modules.DeponNet.TownM.Interface;
 using BurnSystems.ObjectActivation;
 using System;
@@ -17,6 +18,13 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.BuildingM
     /// </summary>
     public class BuildingInTownInGameDataProvider : IBuildingDataProvider
     {
+        [Inject(IsMandatory = true)]
+        public IPlayerManagement PlayerManagement
+        {
+            get;
+            set;
+        }
+
         [Inject(IsMandatory = true )]
         public ITownManagement TownManagement
         {
@@ -46,17 +54,30 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.BuildingM
         /// <param name="y1">Top Y-Coordinate in the map</param>
         /// <param name="y2">Bottom Y-Coordinate in the map</param>
         /// <returns>Enumeration of buildings</returns>
-        public IEnumerable<Building> GetAllBuildingsInRegion(int x1, int x2, int y1, int y2)
+        public IEnumerable<Building> GetBuildingsInRegion(int x1, int x2, int y1, int y2)
         {
-            throw new NotImplementedException();
-            /*lock (this.BuildingDb.BuildingsStore)
-            {
-                return this.BuildingDb.BuildingsStore.Buildings.Where(x =>
+            var gameId = this.CurrentGame.Id;
+            var players = this.PlayerManagement.GetPlayersOfGame(gameId);
+            var towns = players.SelectMany(x => this.TownManagement.GetTownsOfPlayer(x.Id));
+            var buildings = towns.SelectMany(x => this.BuildingManagement.GetBuildingsOfTown(x.Id));
+
+            return buildings.Where(
+                x =>
                     x.Position.X >= x1 &&
                     x.Position.X <= x2 &&
                     x.Position.Y >= y1 &&
                     x.Position.Y <= y2).ToList();
-            }*/
+        }
+
+        /// <summary>
+        /// Gets the buildings of the player
+        /// </summary>
+        /// <param name="playerId">Id of the player</param>
+        /// <returns>Enumeration of buildings</returns>
+        public IEnumerable<Building> GetBuildingsOfPlayer(long playerId)
+        {
+            var towns = this.TownManagement.GetTownsOfPlayer(playerId);
+            return towns.SelectMany(x => this.BuildingManagement.GetBuildingsOfTown(x.Id));
         }
     }
 }

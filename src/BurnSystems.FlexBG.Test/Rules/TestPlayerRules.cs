@@ -39,7 +39,7 @@ namespace BurnSystems.FlexBG.Test.Rules
                 var playerId = rules.CreatePlayer(userId);
                 var townManagement = rules.Container.Get<ITownManagement>();
 
-                var towns = townManagement.GetAllTownsOfPlayer(playerId);
+                var towns = townManagement.GetTownsOfPlayer(playerId);
                 Assert.That(towns.Count(), Is.EqualTo(1));
 
                 var town = towns.Single();
@@ -58,13 +58,13 @@ namespace BurnSystems.FlexBG.Test.Rules
                 var townManagement = rules.Container.Get<ITownManagement>();
                 var buildingManagement = rules.Container.Get<IBuildingManagement>();
 
-                var towns = townManagement.GetAllTownsOfPlayer(playerId);
+                var towns = townManagement.GetTownsOfPlayer(playerId);
                 var town = towns.First();
 
-                var buildings = buildingManagement.GetAllBuildingsOfPlayer(playerId);
+                var buildings = buildingManagement.GetBuildingsOfPlayer(playerId);
                 Assert.That(buildings.Count(), Is.EqualTo(1));
 
-                var buildingsInTown = buildingManagement.GetAllBuildingsOfTown(town.Id);
+                var buildingsInTown = buildingManagement.GetBuildingsOfTown(town.Id);
                 Assert.That(buildingsInTown.Count(), Is.EqualTo(1));
 
                 Assert.That(buildings.Single().Id == buildingsInTown.Single().Id);

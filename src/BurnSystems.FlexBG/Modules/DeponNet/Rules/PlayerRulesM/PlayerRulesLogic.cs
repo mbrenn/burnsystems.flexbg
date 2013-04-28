@@ -1,4 +1,5 @@
 ﻿using BurnSystems.FlexBG.Modules.DeponNet.BuildingM.Interface;
+using BurnSystems.FlexBG.Modules.DeponNet.Common;
 using BurnSystems.FlexBG.Modules.DeponNet.PlayerM;
 using BurnSystems.FlexBG.Modules.DeponNet.PlayerM.Interface;
 using BurnSystems.FlexBG.Modules.DeponNet.ResourceSetM;
@@ -100,21 +101,19 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.Rules.PlayerRulesM
                     param.Playername,
                     param.Empirename);
 
+                var position = this.FindStartRandomPositionForPlayer(param.GameId);
+
                 var townId = this.TownManagement.CreateTown(
                     playerId,
                     param.FirstTownName,
-                    true);
-
-                double x;
-                double y;
-                this.FindStartRandomPositionForPlayer(param.GameId, out x, out y);
+                    true,
+                    position);
 
                 // Creates the building
                 var buildingId = this.BuildingManagement.CreateBuilding(
                     GameConfig.Buildings.Temple,
                     townId,
-                    x,
-                    y);
+                    position);
 
                 // Initializes the player
                 var playerResources = new ResourceSet();
@@ -142,12 +141,14 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.Rules.PlayerRulesM
             }
         }
 
-        public void FindStartRandomPositionForPlayer(long gameId, out double x, out double y)
+        public ObjectPosition FindStartRandomPositionForPlayer(long gameId)
         {
             var info = this.VoxelMap.GetInfo(gameId);
             Ensure.That(info != null, "No Information of map has been found");
-            x = Math.Floor(MathHelper.Random.NextDouble() * info.SizeX);
-            y = Math.Floor(MathHelper.Random.NextDouble() * info.SizeY);
+            return new ObjectPosition(
+                Math.Floor(MathHelper.Random.NextDouble() * info.SizeX), 
+                Math.Floor(MathHelper.Random.NextDouble() * info.SizeY),
+                0);
         }
 
         /// <summary>

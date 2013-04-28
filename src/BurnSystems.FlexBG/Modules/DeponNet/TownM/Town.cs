@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BurnSystems.FlexBG.Modules.DeponNet.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,13 +13,19 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.TownM
     [Serializable]
     public class Town
     {
+        private long id;
+        private long ownerId;
+        private string townName;
+        private bool isCapital;
+        private ObjectPosition position;
+
         /// <summary>
         /// Gets or sets the id
         /// </summary>
         public long Id
         {
-            get;
-            set;
+            get { return this.id; }
+            set { this.id = value; }
         }
 
         /// <summary>
@@ -26,8 +33,8 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.TownM
         /// </summary>
         public long OwnerId
         {
-            get;
-            set;
+            get { return this.ownerId; }
+            set { this.ownerId = value; }
         }
 
         /// <summary>
@@ -35,8 +42,8 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.TownM
         /// </summary>
         public string TownName
         {
-            get;
-            set;
+            get { return this.townName; }
+            set { this.townName = value; }
         }
 
         /// <summary>
@@ -44,8 +51,17 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.TownM
         /// </summary>
         public bool IsCapital
         {
-            get;
-            set;
+            get { return this.isCapital; }
+            set { this.isCapital = true; }
+        }
+
+        /// <summary>
+        /// Gets the position of the town
+        /// </summary>
+        public ObjectPosition Position
+        {
+            get { return this.position; }
+            set { this.position = value; }
         }
     }
 }

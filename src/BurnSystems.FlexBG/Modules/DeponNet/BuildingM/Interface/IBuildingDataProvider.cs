@@ -19,6 +19,13 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.BuildingM.Interface
         /// <param name="y1">Top Y-Coordinate in the map</param>
         /// <param name="y2">Bottom Y-Coordinate in the map</param>
         /// <returns>Enumeration of buildings</returns>
-        IEnumerable<Building> GetAllBuildingsInRegion(int x1, int x2, int y1, int y2);
+        IEnumerable<Building> GetBuildingsInRegion(int x1, int x2, int y1, int y2);
+
+        /// <summary>
+        /// Gets all buildings of a player
+        /// </summary>
+        /// <param name="playerId">Id of Player</param>
+        /// <returns>Enumeration of buildings</returns>
+        IEnumerable<Building> GetBuildingsOfPlayer(long playerId);
     }
 }

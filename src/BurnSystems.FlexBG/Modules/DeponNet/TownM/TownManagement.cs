@@ -1,4 +1,5 @@
-﻿using BurnSystems.FlexBG.Modules.DeponNet.TownM.Interface;
+﻿using BurnSystems.FlexBG.Modules.DeponNet.Common;
+using BurnSystems.FlexBG.Modules.DeponNet.TownM.Interface;
 using BurnSystems.FlexBG.Modules.IdGeneratorM;
 using BurnSystems.ObjectActivation;
 using System;
@@ -36,14 +37,15 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.TownM
         /// <param name="playerName">Name of the player</param>
         /// <param name="empireName">Name of the empire</param>
         /// <returns>Id of the new player</returns>
-        public long CreateTown(long playerId, string townName, bool isCapital = false)
+        public long CreateTown(long playerId, string townName, bool isCapital = false, ObjectPosition position = null)
         {
             var town = new Town()
             {
                 Id = this.IdGenerator.NextId(EntityType.Town),
                 IsCapital = isCapital,
                 OwnerId = playerId,
-                TownName = townName
+                TownName = townName,
+                Position = position
             };
 
             lock (this.Data.SyncObject)
@@ -59,7 +61,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.TownM
         /// </summary>
         /// <param name="playerId">Id of player</param>
         /// <returns>Enumeration of all towns</returns>
-        public IEnumerable<Town> GetAllTownsOfPlayer(long playerId)
+        public IEnumerable<Town> GetTownsOfPlayer(long playerId)
         {
             lock (this.Data.SyncObject)
             {

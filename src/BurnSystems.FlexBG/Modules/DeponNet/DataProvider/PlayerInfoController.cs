@@ -2,6 +2,8 @@
 using BurnSystems.FlexBG.Modules.DeponNet.PlayerM.Controllers;
 using BurnSystems.FlexBG.Modules.DeponNet.PlayerM.Interface;
 using BurnSystems.FlexBG.Modules.DeponNet.ResourceSetM.Interface;
+using BurnSystems.FlexBG.Modules.DeponNet.TownM.Interface;
+using BurnSystems.FlexBG.Modules.LockMasterM;
 using BurnSystems.ObjectActivation;
 using BurnSystems.WebServer.Modules.MVC;
 using System;
@@ -31,8 +33,22 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.DataProvider
             set;
         }
 
+        [Inject(IsMandatory = true)]
+        public ITownManagement TownManagement
+        {
+            get;
+            set;
+        }
+
         [Inject(ByName = DeponPlayersController.CurrentPlayerName, IsMandatory = true)]
         public Player CurrentPlayer
+        {
+            get;
+            set;
+        }
+
+        [Inject(IsMandatory = true)]
+        public ILockMaster LockMaster
         {
             get;
             set;
@@ -41,17 +57,24 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.DataProvider
         [WebMethod]
         public IActionResult GetCurrentPlayer()
         {
-            var playerData = this.CurrentPlayer.AsJson();
-            var resourcesOfPlayer = this.ResourceManagement.GetResources(EntityType.Player, this.CurrentPlayer.Id);
-            var convertedResources = this.ResourceManagement.AsJson(resourcesOfPlayer);
+            using (this.LockMaster.AcquireReadLock())
+            {
+                var playerData = this.CurrentPlayer.AsJson();
+                var resourcesOfPlayer = this.ResourceManagement.GetResources(EntityType.Player, this.CurrentPlayer.Id);
+                var convertedResources = this.ResourceManagement.AsJson(resourcesOfPlayer);
 
-            return this.Json(
-                new
-                {
-                    playerResources = convertedResources,
-                    player = playerData,
-                    success = true
-                });
+                // Get start position
+                var startPosition = this.TownManagement.GetTownsOfPlayer(this.CurrentPlayer.Id).Where(x => x.IsCapital).First().Position;
+
+                return this.Json(
+                    new
+                    {
+                        playerResources = convertedResources,
+                        player = playerData,
+                        startPosition = startPosition.AsJson(),
+                        success = true
+                    });
+            }
         }
     }
 }
