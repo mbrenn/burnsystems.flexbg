@@ -55,10 +55,12 @@
     <Compile Include="Modules\ConfigurationStorageM\ConfigurationStorage.cs" />
     <Compile Include="Modules\ConfigurationStorageM\IConfigurationStorage.cs" />
     <Compile Include="Modules\DeponNet\BuildingM\Building.cs" />
+    <Compile Include="Modules\DeponNet\BuildingM\BuildingInTownInGameDataProvider.cs" />
     <Compile Include="Modules\DeponNet\BuildingM\BuildingManagement.cs" />
     <Compile Include="Modules\DeponNet\BuildingM\BuildingsData.cs" />
     <Compile Include="Modules\DeponNet\BuildingM\BuildingType.cs" />
     <Compile Include="Modules\DeponNet\BuildingM\BuildingTypeProvider.cs" />
+    <Compile Include="Modules\DeponNet\BuildingM\Interface\IBuildingDataProvider.cs" />
     <Compile Include="Modules\DeponNet\BuildingM\Interface\IBuildingManagement.cs" />
     <Compile Include="Modules\DeponNet\BuildingM\Interface\IBuildingTypeProvider.cs" />
     <Compile Include="Modules\DeponNet\BuildingM\LocalBuildingDatabase.cs" />

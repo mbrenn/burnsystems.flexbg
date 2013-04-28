@@ -37,7 +37,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.MapM.Controllers
         }
 
         [Inject]
-        public IBuildingManagement BuildingManagement
+        public IBuildingDataProvider BuildingDataProvider
         {
             get;
             set;
@@ -77,7 +77,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.MapM.Controllers
         {   
             var gameObjects = new List<object>();
 
-            var buildings = this.BuildingManagement.GetAllBuildingsInRegion(x1, x2, y1, y2);
+            var buildings = this.BuildingDataProvider.GetAllBuildingsInRegion(x1, x2, y1, y2);
             foreach (var building in buildings)
             {
                 var player = this.PlayerManagement.GetPlayer(building.PlayerId) ?? new Player();
