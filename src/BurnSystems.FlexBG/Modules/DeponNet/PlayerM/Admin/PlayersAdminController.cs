@@ -1,6 +1,8 @@
-﻿using BurnSystems.FlexBG.Modules.DeponNet.PlayerM.Interface;
+﻿using BurnSystems.FlexBG.Modules.DeponNet.GameM.Controllers;
+using BurnSystems.FlexBG.Modules.DeponNet.PlayerM.Interface;
 using BurnSystems.FlexBG.Modules.DeponNet.Rules.PlayerRulesM;
 using BurnSystems.ObjectActivation;
+using BurnSystems.Test;
 using BurnSystems.WebServer.Modules.MVC;
 using System;
 using System.Collections.Generic;
@@ -12,8 +14,15 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.PlayerM.Admin
 {
     public class PlayersAdminController : Controller
     {
+        [Inject(IsMandatory = true)]
+        public IPlayerManagement PlayerManagement
+        {
+            get;
+            set;
+        }
+
         [Inject]
-        public IPlayerRulesLogic PlayerRules
+        public ActivationBlock ActivationBlock
         {
             get;
             set;
@@ -22,7 +31,19 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.PlayerM.Admin
         [WebMethod]
         public IActionResult DropPlayer([PostModel] Models.DropPlayerModel model)
         {
-            this.PlayerRules.DropPlayer(model.Id);
+            var player = this.PlayerManagement.GetPlayer(model.Id);
+            if (player == null)
+            {
+                return this.SuccessJson(false);
+            }
+
+            using (var block = DeponGamesController.CreateActivationBlockInGameScope(this.ActivationBlock, player.GameId))
+            {
+                var playerRules = block.Get<IPlayerRulesLogic>();
+                Ensure.That(playerRules != null);
+
+                playerRules.DropPlayer(model.Id);
+            }
 
             return this.SuccessJson();
         }

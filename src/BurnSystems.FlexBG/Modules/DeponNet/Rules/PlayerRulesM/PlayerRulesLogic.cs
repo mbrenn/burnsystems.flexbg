@@ -5,6 +5,8 @@ using BurnSystems.FlexBG.Modules.DeponNet.PlayerM.Interface;
 using BurnSystems.FlexBG.Modules.DeponNet.ResourceSetM;
 using BurnSystems.FlexBG.Modules.DeponNet.ResourceSetM.Interface;
 using BurnSystems.FlexBG.Modules.DeponNet.TownM.Interface;
+using BurnSystems.FlexBG.Modules.DeponNet.UnitM.Data;
+using BurnSystems.FlexBG.Modules.DeponNet.UnitM.Interfaces;
 using BurnSystems.FlexBG.Modules.LockMasterM;
 using BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage;
 using BurnSystems.ObjectActivation;
@@ -79,6 +81,16 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.Rules.PlayerRulesM
             set;
         }
 
+        /// <summary>
+        /// Gets or sets the unit management
+        /// </summary>
+        [Inject(IsMandatory = true)]
+        public IUnitManagement UnitManagement
+        {
+            get;
+            set;
+        }
+
         [Inject(IsMandatory = true)]
         public PlayerRulesConfig Config
         {
@@ -123,6 +135,13 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.Rules.PlayerRulesM
                 var townResources = new ResourceSet();
                 townResources.Set(this.Config.TownStartResources);
                 this.ResourceManagement.SetAvailable(EntityType.Town, townId, townResources);
+
+                // Creates one constructor
+                this.UnitManagement.CreateUnit(
+                    playerId,
+                    GameConfig.Units.Constructor.Id,
+                    1,
+                    new ObjectPosition(position.X + 1, position.Y + 1, 0));
 
                 return playerId;
             }

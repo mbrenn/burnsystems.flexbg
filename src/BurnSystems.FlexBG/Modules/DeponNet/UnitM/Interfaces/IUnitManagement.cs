@@ -25,7 +25,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.UnitM.Interfaces
         /// <param name="unitTypeId">Id of the unit type</param>
         /// <param name="position">Position of the unit</param>
         /// <returns>Id of the new unit</returns>
-        long CreateUnit(long ownerId, int unitTypeId, int amount, ObjectPosition position);
+        long CreateUnit(long ownerId, long unitTypeId, int amount, ObjectPosition position);
 
         /// <summary>
         /// Dissolves the unit
@@ -37,9 +37,18 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.UnitM.Interfaces
 
         Unit GetUnit(long unitId);
 
+        /// <summary>
+        /// Gets all units in database (independent from game). 
+        /// </summary>
+        /// <returns>Enumeration of units</returns>
         IEnumerable<Unit> GetAllUnits();
 
-        IEnumerable<Unit> GetUnitsOfPlayer(long ownerId);
+        /// <summary>
+        /// Gets all units of a certain owner
+        /// </summary>
+        /// <param name="ownerId">Id of the owner</param>
+        /// <returns>Enumeration of units</returns>
+        IEnumerable<Unit> GetUnitsOfOwner(long ownerId);
 
         /// <summary>
         /// Inserts a job for the unit. 

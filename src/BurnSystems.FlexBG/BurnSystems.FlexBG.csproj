@@ -137,6 +137,7 @@
     <Compile Include="Modules\DeponNet\TownM\TownManagement.cs" />
     <Compile Include="Modules\DeponNet\TownM\TownsData.cs" />
     <Compile Include="Modules\DeponNet\UnitM\Data\UnitInstance.cs" />
+    <Compile Include="Modules\DeponNet\UnitM\Interfaces\IUnitDataProvider.cs" />
     <Compile Include="Modules\DeponNet\UnitM\Interfaces\IUnitGroupManagement.cs" />
     <Compile Include="Modules\DeponNet\UnitM\Interfaces\IUnitManagement.cs" />
     <Compile Include="Modules\DeponNet\UnitM\Interfaces\IUnitTypeProvider.cs" />
@@ -151,6 +152,7 @@
     <Compile Include="Modules\DeponNet\UnitM\UnitJobs\MoveJob.cs" />
     <Compile Include="Modules\DeponNet\UnitM\UnitManagement.cs" />
     <Compile Include="Modules\DeponNet\UnitM\Data\UnitsData.cs" />
+    <Compile Include="Modules\DeponNet\UnitM\UnitsInPlayerInGameDataProvider.cs" />
     <Compile Include="Modules\DeponNet\UnitM\UnitType.cs" />
     <Compile Include="Modules\DeponNet\UnitM\UnitTypeProvider.cs" />
     <Compile Include="Modules\FlexBgModule.cs" />

@@ -5,6 +5,8 @@ using BurnSystems.FlexBG.Modules.DeponNet.MapM.Interface;
 using BurnSystems.FlexBG.Modules.DeponNet.ResourceSetM;
 using BurnSystems.FlexBG.Modules.DeponNet.ResourceSetM.Interface;
 using BurnSystems.FlexBG.Modules.DeponNet.Rules.PlayerRulesM;
+using BurnSystems.FlexBG.Modules.DeponNet.UnitM;
+using BurnSystems.FlexBG.Modules.DeponNet.UnitM.Interfaces;
 using BurnSystems.ObjectActivation;
 using BurnSystems.Test;
 using System;
@@ -73,6 +75,13 @@ namespace BurnSystems.FlexBG.Modules.DeponNet
             public static ResourceType Oil;
         }
 
+        public static class Units
+        {
+            public static UnitType Settler;
+
+            public static UnitType Constructor;
+        }
+
         /// <summary>
         /// Initializes the game configuration
         /// </summary>
@@ -81,6 +90,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet
             InitBuildingTypes(container);
             InitFieldTypes(container);
             InitResourceTypes(container);
+            InitUnitTypes(container);
 
             var playerRules = container.Get<PlayerRulesConfig>();
             Ensure.That(playerRules != null);
@@ -234,6 +244,39 @@ namespace BurnSystems.FlexBG.Modules.DeponNet
                 Token = "DarkGrass"
             };
             fieldTypeProvider.Add(Fields.DarkGrass);
+        }
+
+        /// <summary>
+        /// Initializes the unit types
+        /// </summary>
+        /// <param name="activates">Activation Container</param>
+        private static void InitUnitTypes(IActivates activates)
+        {
+            var unitTypeProvider = activates.Get<IUnitTypeProvider>();
+            Ensure.That(unitTypeProvider != null);
+
+            Units.Settler = new UnitType()
+            {
+                Id = 1,
+                Token = "settler", 
+                Velocity = 1, 
+                LifePoints = 100,
+                AttackPoints = 1, 
+                DefensePoints = 5
+            };
+
+            Units.Constructor = new UnitType()
+            {
+                Id = 2,
+                Token = "constructor", 
+                Velocity = 1, 
+                LifePoints = 50,
+                AttackPoints = 1, 
+                DefensePoints = 5
+            };
+
+            unitTypeProvider.Add(Units.Settler);
+            unitTypeProvider.Add(Units.Constructor);
         }
     }
 }

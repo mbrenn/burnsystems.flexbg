@@ -179,7 +179,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.Rules.UnitRulesM
             }
 
             // Same player
-            if (attacker.PlayerId == defender.PlayerId)
+            if (attacker.OwnerId == defender.OwnerId)
             {
                 return false;
             }

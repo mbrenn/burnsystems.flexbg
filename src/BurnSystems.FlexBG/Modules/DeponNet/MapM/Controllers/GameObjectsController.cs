@@ -7,6 +7,8 @@ using BurnSystems.FlexBG.Modules.DeponNet.PlayerM.Controllers;
 using BurnSystems.FlexBG.Modules.DeponNet.PlayerM.Interface;
 using BurnSystems.FlexBG.Modules.DeponNet.TownM;
 using BurnSystems.FlexBG.Modules.DeponNet.TownM.Interface;
+using BurnSystems.FlexBG.Modules.DeponNet.UnitM.Interfaces;
+using BurnSystems.FlexBG.Modules.LockMasterM;
 using BurnSystems.ObjectActivation;
 using BurnSystems.WebServer.Modules.MVC;
 using System;
@@ -22,28 +24,38 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.MapM.Controllers
     /// </summary>
     public class GameObjectsController : Controller
     {
-        [Inject(ByName = DeponGamesController.CurrentGameName)]
+        [Inject(ByName = DeponGamesController.CurrentGameName, IsMandatory = true)]
         public Game CurrentGame
         {
             get;
             set;
         }
 
-        [Inject(ByName = DeponPlayersController.CurrentPlayerName)]
+        [Inject(ByName = DeponPlayersController.CurrentPlayerName, IsMandatory=true)]
         public Player CurrentPlayer
         {
             get;
             set;
         }
 
-        [Inject]
+        [Inject(IsMandatory = true)]
         public IBuildingDataProvider BuildingDataProvider
         {
             get;
             set;
         }
 
-        [Inject]
+        /// <summary>
+        /// Gets orsets the unit data provider
+        /// </summary>
+        [Inject(IsMandatory = true)]
+        public IUnitDataProvider UnitDataProvider
+        {
+            get;
+            set;
+        }
+
+        [Inject(IsMandatory = true)]
         public IPlayerManagement PlayerManagement
         {
             get;
@@ -57,8 +69,29 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.MapM.Controllers
             set;
         }
 
-        [Inject]
+        [Inject(IsMandatory = true)]
+        public IUnitManagement UnitManagement
+        {
+            get;
+            set;
+        }
+
+        [Inject(IsMandatory = true)]
         public IBuildingTypeProvider BuildingTypeProvider
+        {
+            get;
+            set;
+        }
+
+        [Inject(IsMandatory = true)]
+        public IUnitTypeProvider UnitTypeProvider
+        {
+            get;
+            set;
+        }
+
+        [Inject(IsMandatory=true)]
+        public ILockMaster LockMaster
         {
             get;
             set;
@@ -74,9 +107,33 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.MapM.Controllers
         /// <returns>Enumeration of gameobjects</returns>
         [WebMethod]
         public IActionResult GetGameObjects(int x1, int x2, int y1, int y2)
-        {   
-            var gameObjects = new List<object>();
+        {
+            using (this.LockMaster.AcquireReadLock())
+            {
+                var gameObjects = new List<object>();
+                this.ListBuildings(x1, x2, y1, y2, gameObjects);
+                this.ListUnits(x1, x2, y1, y2, gameObjects);
 
+                var result = new
+                {
+                    success = true,
+                    gameObjects = gameObjects
+                };
+
+                return this.Json(result);
+            }
+        }
+
+        /// <summary>
+        /// Lists all buildings within the given region 
+        /// </summary>
+        /// <param name="x1">Left Coordinate</param>
+        /// <param name="x2">Right Coordinate</param>
+        /// <param name="y1">Top Coordinate</param>
+        /// <param name="y2">Bottom Coordinate</param>
+        /// <param name="gameObjects">List of game objects, where buildings will be attached</param>
+        private void ListBuildings(int x1, int x2, int y1, int y2, List<object> gameObjects)
+        {
             var buildings = this.BuildingDataProvider.GetBuildingsInRegion(x1, x2, y1, y2);
             foreach (var building in buildings)
             {
@@ -86,29 +143,52 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.MapM.Controllers
                 gameObjects.Add(
                     new
                     {
-                        Id = building.Id,
-                        BuildingTypeId = building.BuildingTypeId,
-                        BuildingType = this.BuildingTypeProvider.Get(building.BuildingTypeId),
-                        Level = building.Level,
-                        TownId = building.TownId,
-                        PlayerId = building.PlayerId,
-                        Playername = player.Playername,
-                        Townname = town.TownName,
-                        GameObjectType = "building",
-                        X = building.Position.X,
-                        Y = building.Position.Y,
-                        Z = building.Position.Z
+                        id = building.Id,
+                        bildingTypeId = building.BuildingTypeId,
+                        buildingType = this.BuildingTypeProvider.Get(building.BuildingTypeId).Token,
+                        lvel = building.Level,
+                        townId = building.TownId,
+                        playerId = building.PlayerId,
+                        playername = player.Playername,
+                        townname = town.TownName,
+                        gameObjectType = "building",
+                        x = building.Position.X,
+                        y = building.Position.Y,
+                        t = building.Position.Z
                     });
             }
-            
+        }
 
-            var result = new 
+        /// <summary>
+        /// Lists all units within the game objects
+        /// </summary>
+        /// <param name="x1">Left Coordinate</param>
+        /// <param name="x2">Right Coordinate</param>
+        /// <param name="y1">Top Coordinate</param>
+        /// <param name="y2">Bottom Coordinate</param>
+        /// <param name="gameObjects">List of game objects, where buildings will be attached</param>
+        private void ListUnits(int x1, int x2, int y1, int y2, List<object> gameObjects)
+        {
+            var units = this.UnitDataProvider.GetUnitsInRegion(x1, x2, y1, y2);
+            foreach (var unit in units)
             {
-                success = true,
-                gameObjects = gameObjects
-            };
+                var player = this.PlayerManagement.GetPlayer(unit.OwnerId) ?? new Player();
 
-            return this.Json(result);
+                gameObjects.Add(
+                    new
+                    {
+                        id = unit.Id,
+                        unitTypeId = unit.UnitTypeId,
+                        unitType = this.UnitTypeProvider.Get(unit.UnitTypeId).Token,
+                        amount = unit.Amount,
+                        playerId = player.Id,
+                        playername = player.Playername,
+                        gameObjectType = "unit",
+                        x = unit.Position.X,
+                        y = unit.Position.Y,
+                        t = unit.Position.Z
+                    });
+            }
         }
     }
 }

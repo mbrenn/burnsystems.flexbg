@@ -60,10 +60,10 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.UnitM
         /// <param name="amount">Amount of units</param>
         /// <param name="position">Position of unit</param>
         /// <returns>Id of the created unit</returns>
-        public long CreateUnit(long ownerId, int unitTypeId, int amount, ObjectPosition position)
+        public long CreateUnit(long ownerId, long unitTypeId, int amount, ObjectPosition position)
         {
             var unit = new Unit();
-            unit.PlayerId = ownerId;
+            unit.OwnerId = ownerId;
             unit.UnitTypeId= unitTypeId;
             unit.Position = position;
             unit.Id = this.IdGenerator.NextId(EntityType.Unit);
@@ -135,9 +135,12 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.UnitM
             }
         }
 
-        public IEnumerable<Unit> GetUnitsOfPlayer(long ownerId)
+        public IEnumerable<Unit> GetUnitsOfOwner(long ownerId)
         {
-            throw new NotImplementedException();
+            lock (this.Data.SyncObject)
+            {
+                return this.Data.UnitsStore.Units.Where(x=>x.OwnerId == ownerId).ToList();
+            }
         }
 
         /// <summary>

@@ -15,7 +15,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.UnitM.Data
     {
         private long id;
 
-        private long playerId;
+        private long ownerId;
 
         public ObjectPosition Position;
 
@@ -45,12 +45,12 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.UnitM.Data
         }
 
         /// <summary>
-        /// Gets or sets the owning player
+        /// Gets or sets the owning entity
         /// </summary>
-        public long PlayerId
+        public long OwnerId
         {
-            get { return this.playerId; }
-            set { this.playerId = value; }
+            get { return this.ownerId; }
+            set { this.ownerId = value; }
         }
 
         /// <summary>
@@ -71,6 +71,9 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.UnitM.Data
             set { this.strategy = value; }
         }
 
+        /// <summary>
+        /// Gets the jobs of the unit
+        /// </summary>
         public List<IJob> Jobs
         {
             get
@@ -88,6 +91,9 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.UnitM.Data
             set { this.currentJobIndex = value; }
         }
 
+        /// <summary>
+        /// Gets the instance of the units
+        /// </summary>
         public List<UnitInstance> Instances
         {
             get { return this.instances; }
@@ -101,6 +107,9 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.UnitM.Data
             this.IndexCurrentJob = -1;
         }
 
+        /// <summary>
+        /// Gets the amount of unit instances
+        /// </summary>
         public double Amount
         {
             get { return this.Instances.Count; }

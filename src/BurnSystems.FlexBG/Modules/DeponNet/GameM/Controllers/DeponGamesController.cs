@@ -249,5 +249,17 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.GameM.Controllers
 
             return new ActivationBlock("GameScope Block", container, block);
         }
+
+        /// <summary>
+        /// Creates an ActivationBlock, where the CurrentGame has been set with the given id. 
+        /// </summary>
+        /// <param name="block">Activationblock to be used</param>
+        /// <param name="gameId">Id of the game</param>
+        /// <returns>Inner activation which shall be disposed by the caller</returns>
+        public static ActivationBlock CreateActivationBlockInGameScope(ActivationBlock block, long gameId)
+        {
+            var gameManagement = block.Get<IGameManagement>();
+            return CreateActivationBlockInGameScope(block, gameManagement, gameId);
+        }
     }
 }
