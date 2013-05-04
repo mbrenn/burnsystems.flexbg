@@ -34,6 +34,7 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
         /// <summary>
         /// Sets the field type for a certain range
         /// </summary>
+        /// <param name="instanceId">Id of the instance whose information shall be retrieved</param>
         /// <param name="column">Column of the fieldtype</param>
         /// <param name="fieldType">Fieldtype to be set</param>
         /// <param name="startingHeight">Starting Height of new field type</param>
@@ -41,12 +42,31 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
         byte GetFieldType(long instanceId, int x, int y, float height);
 
         /// <summary>
+        /// Sets the data for one column
+        /// </summary>
+        /// <param name="instanceId">Id of the instance whose column shall be modified</param>
+        /// <param name="x">X-Coordinate of the column</param>
+        /// <param name="y">Y-Coordinate of the column</param>
+        /// <param name="key">Key of the data</param>
+        /// <param name="data">Data to be assinged</param>
+        void SetData(long instanceId, int x, int y, int key, byte[] data);
+
+        /// <summary>
+        /// Gets the data for one column
+        /// </summary>
+        /// <param name="instanceId">Id of the instance whose column shall be read-out</param>
+        /// <param name="x">X-Coordinate of the column</param>
+        /// <param name="y">Y-Coordinate of the column</param>
+        /// <param name="key">Key of the data</param>
+        byte[] GetData(long instanceId, int x, int y, int key);
+
+        /// <summary>
         /// Gets a complete column of a certain position
         /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
+        /// <param name="x">X-Coordinate of the Position</param>
+        /// <param name="y">Y-Coordinate of the position</param>
         /// <returns>Queried column</returns>
-        List<FieldTypeChangeInfo> GetColumn(long instanceId, int x, int y);
+        VoxelMapColumn GetColumn(long instanceId, int x, int y);
 
         /// <summary>
         /// Sets a complete column of a certain position
@@ -54,7 +74,7 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
         /// <param name="x">Absolute X-Coordinate of the requested column</param>
         /// <param name="y">Absolute Y-Coordinate of the requested column</param>
         /// <param name="column">Column to be queried</param>
-        void SetColumn(long instanceId, int x, int y, List<FieldTypeChangeInfo> column);
+        void SetColumn(long instanceId, int x, int y, VoxelMapColumn column);
             
         /// <summary>
         /// Gets the surface information

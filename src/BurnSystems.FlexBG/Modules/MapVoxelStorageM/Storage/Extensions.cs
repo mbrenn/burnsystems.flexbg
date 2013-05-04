@@ -15,16 +15,16 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
         /// Initializes the columns
         /// </summary>
         /// <param name="list"></param>
-        public static void InitFields(this List<FieldTypeChangeInfo> list)
+        public static void InitFields(this VoxelMapColumn list)
         {
             // First: Clear
-            list.Clear();
+            list.Changes.Clear();
 
             // Add air
             var info = new FieldTypeChangeInfo();
             info.Init();
 
-            list.Add(info);
+            list.Changes.Add(info);
         }
 
         /// <summary>
@@ -32,17 +32,17 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
         /// </summary>
         /// <param name="column">Column to be checked</param>
         /// <returns>true, if column is valid</returns>
-        public static bool IsValid(this List<FieldTypeChangeInfo> column)
+        public static bool IsValid(this VoxelMapColumn column)
         {
             // Checks, if we have a value
-            if (column.Count <= 0)
+            if (column.Changes.Count <= 0)
             {
                 logger.LogEntry(LogLevel.Fail, "Column is not valid: column.Count <= 0");
                 return false;
             }
 
             // Checks, if we have a maximum value
-            if (column[0].ChangeHeight != float.MaxValue)
+            if (column.Changes[0].ChangeHeight != float.MaxValue)
             {
                 logger.LogEntry(LogLevel.Fail, "Column is not valid: column[0].ChangeHeight != float.MaxValue");
                 return false;
@@ -50,11 +50,11 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
 
             // Checks if height information is ordered
             var lastHeight = float.MaxValue;
-            var lastFieldType = column[0].FieldType;
-            for (var m = 1; m < column.Count; m++)
+            var lastFieldType = column.Changes[0].FieldType;
+            for (var m = 1; m < column.Changes.Count; m++)
             {
-                var newHeight = column[m].ChangeHeight;
-                var newFieldType = column[m].FieldType;
+                var newHeight = column.Changes[m].ChangeHeight;
+                var newFieldType = column.Changes[m].FieldType;
                 if (newHeight >= lastHeight)
                 {
                     logger.LogEntry(LogLevel.Fail, "Column is not valid: Not correctly ordered");
@@ -72,6 +72,19 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
                 lastFieldType = newFieldType;
             }
 
+            // Checks, if two data items have the same key. They shall not have the same key
+            var hasFound = new List<int>();
+            foreach (var data in column.Data)
+            {
+                if (hasFound.Contains(data.Key))
+                {
+                    logger.LogEntry(LogLevel.Fail, "Column is not valid: Two data items with key: " + data.Key.ToString());
+                    return false;
+                }
+
+                hasFound.Add(data.Key);
+            }
+
             return true;
         }
 
@@ -81,11 +94,11 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
         /// <param name="column">Column to be queried</param>
         /// <param name="height">Height of the map</param>
         /// <returns>Fieldtype</returns>
-        public static byte GetFieldType(this List<FieldTypeChangeInfo> column, float height)
+        public static byte GetFieldType(this VoxelMapColumn column, float height)
         {
             byte result = 0;
 
-            foreach (var fieldTypeInfo in column)
+            foreach (var fieldTypeInfo in column.Changes)
             {
                 if (fieldTypeInfo.ChangeHeight >= height)
                 {
@@ -107,7 +120,7 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
         /// <param name="fieldType">Fieldtype to be set</param>
         /// <param name="startingHeight">Starting Height of new field type</param>
         /// <param name="endingHeight">Ending height of new field type</param>
-        public static void SetFieldType(this List<FieldTypeChangeInfo> column, byte fieldType, float startingHeight, float endingHeight)
+        public static void SetFieldType(this VoxelMapColumn column, byte fieldType, float startingHeight, float endingHeight)
         {
             if (startingHeight < endingHeight)
             {
@@ -126,23 +139,23 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
             var endingFieldType = column.GetFieldType(endingHeight);
 
             // Removes all fields equal to or between boundaries
-            column.RemoveAll(x =>
-            {
-                var height = x.ChangeHeight;
-                return height <= startingHeight && height >= endingHeight;
-            });
+            column.Changes.RemoveAll(x =>
+                {
+                    var height = x.ChangeHeight;
+                    return height <= startingHeight && height >= endingHeight;
+                });
 
-            if (column.GetFieldType(startingHeight) != fieldType || column.Count == 0)
+            if (column.GetFieldType(startingHeight) != fieldType || column.Changes.Count == 0)
             {
                 // Adds top with new fieldtype
                 var topField = new FieldTypeChangeInfo();
                 topField.FieldType = fieldType;
                 topField.ChangeHeight = startingHeight;
-                column.Add(topField);
+                column.Changes.Add(topField);
             }
 
             // Sorts
-            column.Sort((x, y) =>
+            column.Changes.Sort((x, y) =>
             {
                 return y.ChangeHeight.CompareTo(x.ChangeHeight);
             });
@@ -153,11 +166,11 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
                 var endField = new FieldTypeChangeInfo();
                 endField.FieldType = endingFieldType;
                 endField.ChangeHeight = endingHeight;
-                column.Add(endField);
+                column.Changes.Add(endField);
             }
 
             // Sorts
-            column.Sort((x,y) =>
+            column.Changes.Sort((x, y) =>
                 {
                     return y.ChangeHeight.CompareTo(x.ChangeHeight);
                 });
@@ -175,11 +188,11 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
         /// </summary>
         /// <param name="column">Column to be evaluated</param>
         /// <param name="fieldType">Fieldtype being queried</param>
-        public static IEnumerable<float> GetHeightsOfFieldType(this List<FieldTypeChangeInfo> column, byte fieldType)
+        public static IEnumerable<float> GetHeightsOfFieldType(this VoxelMapColumn column, byte fieldType)
         {
-            for(var n = 0; n < column.Count; n++)
+            for(var n = 0; n < column.Changes.Count; n++)
             {
-                var change = column[n];
+                var change = column.Changes[n];
                 if (change.FieldType == fieldType)
                 {
                     yield return change.ChangeHeight;
@@ -192,16 +205,16 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
         /// </summary>
         /// <param name="column">Column to be used</param>
         /// <returns>Height of first field change</returns>
-        public static double GetHeight(this List<FieldTypeChangeInfo> column)
+        public static double GetHeight(this VoxelMapColumn column)
         {
-            if (column == null || column.Count <= 1)
+            if (column == null || column.Changes.Count <= 1)
             {
                 // Column has not been found, maximum height
                 // Or column just consists of air
                 return double.MaxValue;
             }
 
-            return column[1].ChangeHeight;
+            return column.Changes[1].ChangeHeight;
         }
 
         /// <summary>

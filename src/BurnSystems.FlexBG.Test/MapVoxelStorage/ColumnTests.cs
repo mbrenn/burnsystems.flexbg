@@ -19,18 +19,18 @@ namespace BurnSystems.FlexBG.Test.MapVoxelStorage
         [Test]
         public void TestInit()
         {
-            var column = new List<FieldTypeChangeInfo>();
+            var column = new VoxelMapColumn();
             column.InitFields();
 
-            Assert.That(column.Count, Is.EqualTo(1));
-            Assert.That(column[0].ChangeHeight, Is.EqualTo(float.MaxValue));
-            Assert.That(column[0].FieldType, Is.EqualTo(0));
+            Assert.That(column.Changes.Count, Is.EqualTo(1));
+            Assert.That(column.Changes[0].ChangeHeight, Is.EqualTo(float.MaxValue));
+            Assert.That(column.Changes[0].FieldType, Is.EqualTo(0));
         }
 
         [Test]
         public void TestGet()
         {
-            var column = new List<FieldTypeChangeInfo>();
+            var column = new VoxelMapColumn();
             column.InitFields();
 
             Assert.That(column.GetFieldType(0), Is.EqualTo(0));
@@ -43,7 +43,7 @@ namespace BurnSystems.FlexBG.Test.MapVoxelStorage
         [Test]
         public void TestSingleSet()
         {
-            var column = new List<FieldTypeChangeInfo>();
+            var column = new VoxelMapColumn();
             column.InitFields();
             column.SetFieldType(1, 0, -1000);
 
@@ -59,7 +59,7 @@ namespace BurnSystems.FlexBG.Test.MapVoxelStorage
         [Test]
         public void TestMultipleSet()
         {
-            var column = new List<FieldTypeChangeInfo>();
+            var column = new VoxelMapColumn();
             column.InitFields();
             column.SetFieldType(1, 0, -1000);
             column.SetFieldType(2, 3000, 1000);
@@ -80,7 +80,7 @@ namespace BurnSystems.FlexBG.Test.MapVoxelStorage
         [Test]
         public void TestInterlappingSet()
         {
-            var column = new List<FieldTypeChangeInfo>();
+            var column = new VoxelMapColumn();
             column.InitFields();
             column.SetFieldType(1, 1000, -1000);
             column.SetFieldType(2, -500, -2000);
@@ -104,7 +104,7 @@ namespace BurnSystems.FlexBG.Test.MapVoxelStorage
         [Test]
         public void TestRandomSettings()
         {
-            var column = new List<FieldTypeChangeInfo>();
+            var column = new VoxelMapColumn();
             column.InitFields();
 
             var random = new Random();
@@ -130,7 +130,7 @@ namespace BurnSystems.FlexBG.Test.MapVoxelStorage
         [Test]
         public void TestInnerSetting()
         {
-            var column = new List<FieldTypeChangeInfo>();
+            var column = new VoxelMapColumn();
             column.InitFields();
             column.SetFieldType(1, 1000, 500);
             column.SetFieldType(1, 900, 800);
@@ -154,7 +154,7 @@ namespace BurnSystems.FlexBG.Test.MapVoxelStorage
         [Test]
         public void TestOuterSetting()
         {
-            var column = new List<FieldTypeChangeInfo>();
+            var column = new VoxelMapColumn();
             column.InitFields();
             column.SetFieldType(1, 1000, 500);
             column.SetFieldType(1, 1500, 400);
@@ -182,7 +182,7 @@ namespace BurnSystems.FlexBG.Test.MapVoxelStorage
         [Test]
         public void TestRepeatingSetting()
         {
-            var column = new List<FieldTypeChangeInfo>();
+            var column = new VoxelMapColumn();
             column.InitFields();
 
             column.SetFieldType(2, 1000, 500);
@@ -200,7 +200,7 @@ namespace BurnSystems.FlexBG.Test.MapVoxelStorage
         [Test]
         public void TestAttachingOfSameFieldTypes()
         {
-            var column = new List<FieldTypeChangeInfo>();
+            var column = new VoxelMapColumn();
             column.InitFields();
 
             column.SetFieldType(2, 1000, 500);
@@ -214,13 +214,13 @@ namespace BurnSystems.FlexBG.Test.MapVoxelStorage
             Assert.That(column.GetFieldType(0), Is.EqualTo(0));
 
             // Air -> 2 -> Air
-            Assert.That(column.Count, Is.EqualTo(3));
+            Assert.That(column.Changes.Count, Is.EqualTo(3));
         }
 
         [Test]
         public void TestAttachingOfDifferentFieldTypes()
         {
-            var column = new List<FieldTypeChangeInfo>();
+            var column = new VoxelMapColumn();
             column.InitFields();
 
             column.SetFieldType(2, 1000, 500);
@@ -234,7 +234,7 @@ namespace BurnSystems.FlexBG.Test.MapVoxelStorage
             Assert.That(column.GetFieldType(0), Is.EqualTo(0));
 
             // Air -> 2 -> 1 -> Air
-            Assert.That(column.Count, Is.EqualTo(4));
+            Assert.That(column.Changes.Count, Is.EqualTo(4));
         }
     }
 }

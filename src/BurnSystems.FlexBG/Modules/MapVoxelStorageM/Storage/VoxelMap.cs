@@ -67,6 +67,9 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
             var info = this.Loader.LoadInfoData(instanceId);
             Ensure.That(info != null, "No Info Data for instance " + instanceId);
 
+            Ensure.That(columnX >= 0 && columnY >= 0
+                && columnX < info.SizeX && columnY < info.SizeY);
+
             partitionX = columnX / info.PartitionLength;
             partitionY = columnY / info.PartitionLength;
             relX = columnX % info.PartitionLength;
@@ -152,6 +155,43 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
         }
 
         /// <summary>
+        /// Sets the data for one column
+        /// </summary>
+        /// <param name="instanceId">Id of the instance whose column shall be modified</param>
+        /// <param name="x">X-Coordinate of the column</param>
+        /// <param name="y">Y-Coordinate of the column</param>
+        /// <param name="key">Key of the data</param>
+        /// <param name="data">Data to be assinged</param>
+        public void SetData(long instanceId, int x, int y, int key, byte[] data)
+        {
+            // 1: Convert partition
+            int relX, relY;
+            var partition = this.GetPartitionFor(instanceId, x, y, out relX, out relY);
+
+            // 3. Change partition
+            var column = partition.GetColumn(relX, relY);
+            column.Set(key, data);
+
+            // 4. Store partition
+            this.Loader.StorePartition(partition);
+        }
+
+        /// <summary>
+        /// Gets the data for one column
+        /// </summary>
+        /// <param name="instanceId">Id of the instance whose column shall be read-out</param>
+        /// <param name="x">X-Coordinate of the column</param>
+        /// <param name="y">Y-Coordinate of the column</param>
+        /// <param name="key">Key of the data</param>
+        public byte[] GetData(long instanceId, int x, int y, int key)
+        {
+            int relX;
+            int relY;
+            var partition = GetPartitionFor(instanceId, x, y, out relX, out relY);
+            return partition.GetColumn(relX, relY).Get(key);
+        }
+
+        /// <summary>
         /// Gets the surface information
         /// </summary>
         /// <param name="x1">Upper left X-Coordinate</param>
@@ -179,7 +219,7 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
                     this.CalculatePartitionCoordinates(instanceId, x, y, out partitionX, out partitionY, out relX, out relY);
 
                     var partition = this.Loader.LoadPartition(instanceId, partitionX, partitionY);
-                    var column = partition.GetColumn(relX, relY);
+                    var column = partition.GetColumn(relX, relY).Changes;
 
                     if (column.Count == 1)
                     {
@@ -203,7 +243,7 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        public List<FieldTypeChangeInfo> GetColumn(long instanceId, int x, int y)
+        public VoxelMapColumn GetColumn(long instanceId, int x, int y)
         {
             int relX, relY;
             var partition = GetPartitionFor(instanceId, x, y, out relX, out relY);
@@ -218,7 +258,7 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        public void SetColumn(long instanceId, int x, int y, List<FieldTypeChangeInfo> column)
+        public void SetColumn(long instanceId, int x, int y, VoxelMapColumn column)
         {
             int relX, relY;
             var partition = GetPartitionFor(instanceId, x, y, out relX, out relY);

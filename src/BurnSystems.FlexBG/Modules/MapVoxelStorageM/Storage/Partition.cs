@@ -1,4 +1,5 @@
 ﻿using BurnSystems.Test;
+using System.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -42,9 +43,14 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
         }
 
         /// <summary>
+        /// Number of the version
+        /// </summary>
+        private const byte StreamVersionNumber = 1;
+
+        /// <summary>
         /// Stores the columns
         /// </summary>
-        private List<List<FieldTypeChangeInfo>> columns;
+        private List<VoxelMapColumn> columns;
 
         /// <summary>
         /// Initializes a new instance of the Partition class
@@ -59,10 +65,10 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
             this.PartitionY = y;
             this.PartitionSize = partitionSize;
 
-            this.columns = new List<List<FieldTypeChangeInfo>>(partitionSize * partitionSize);
+            this.columns = new List<VoxelMapColumn>(partitionSize * partitionSize);
             for (var n = 0; n < partitionSize * partitionSize; n++)
             {
-                this.columns.Add(new List<FieldTypeChangeInfo>());
+                this.columns.Add(new VoxelMapColumn());
             }
         }
 
@@ -98,7 +104,7 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
         /// <param name="x">X-Position, relative to the partition</param>
         /// <param name="y">Y-Position, relative to the partition</param>
         /// <returns></returns>
-        public List<FieldTypeChangeInfo> GetColumn(int x, int y)
+        public VoxelMapColumn GetColumn(int x, int y)
         {
             // Checks boundaries
             Ensure.That(x >= 0 && x < this.PartitionSize && y >= 0 && y < this.PartitionSize, "x and y are not in partition");
@@ -113,7 +119,7 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
         /// <param name="x">X-Position, relative to the partition</param>
         /// <param name="y">Y-Position, relative to the partition</param>
         /// <returns></returns>
-        public void SetColumn(int x, int y, List<FieldTypeChangeInfo> column)
+        public void SetColumn(int x, int y, VoxelMapColumn column)
         {
             // Checks boundaries
             Ensure.That(x >= 0 && x < this.PartitionSize && y >= 0 && y < this.PartitionSize, "x and y are not in partition");
@@ -129,7 +135,7 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
         {
             foreach (var list in this.columns)
             {
-                list.Clear();
+                list.Changes.Clear();
                 list.InitFields();
             }
         }
@@ -143,6 +149,7 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
 #if DEBUG
             Ensure.That(this.IsValid());
 #endif
+            stream.WriteByte(StreamVersionNumber);
 
             var data = new byte[5];
             for (var y = 0; y < this.PartitionSize; y++)
@@ -151,7 +158,13 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
                 {
                     var column = this.GetColumn(x, y);
 
-                    foreach (var info in column)
+                    // Stores the data
+                    var bytes = BitConverter.GetBytes(column.Changes.Count());
+                    Ensure.That(bytes.Length == 4);
+                    stream.Write(bytes, 0, 4);
+
+                    // Stores the information about field changes
+                    foreach (var info in column.Changes)
                     {
                         var byteHeight = BitConverter.GetBytes(info.ChangeHeight);
 #if DEBUG
@@ -159,6 +172,25 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
 #endif
                         stream.WriteByte(info.FieldType);
                         stream.Write(byteHeight, 0, 4);
+                    }
+
+                    // Stores the data
+                    bytes = BitConverter.GetBytes(column.Data.Count());
+                    Ensure.That(bytes.Length == 4);
+                    stream.Write(bytes, 0, 4);
+
+                    // Write data itself
+                    foreach (var myData in column.Data)
+                    {
+                        bytes = BitConverter.GetBytes(myData.Key);
+                        Ensure.That(bytes.Length == 4);
+                        stream.Write(bytes, 0, 4);
+
+                        bytes = BitConverter.GetBytes(myData.Data.Length);
+                        Ensure.That(bytes.Length == 4);
+                        stream.Write(bytes, 0, 4);
+
+                        stream.Write(myData.Data, 0, myData.Data.Length);
                     }
                 }
             }
@@ -170,44 +202,72 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
         /// <param name="stream">Stream, where partition will be retrieved</param>
         public void Load(Stream stream)
         {
+            var versionNumber = stream.ReadByte();
+            Ensure.That(versionNumber == StreamVersionNumber);
+
             var data = new byte[5];
 
-            var current = -1;
-            List<FieldTypeChangeInfo> column = null;
+            VoxelMapColumn column = null;
 
-            while (true)
+            for (var y = 0; y < this.PartitionSize; y++)
             {
-                var dataRead = stream.Read(data, 0, 5);
-                if (dataRead == 0)
+                for (var x = 0; x < this.PartitionSize; x++)
                 {
-                    break;
-                }
-
-                Ensure.That(dataRead == 5);
-                // Loads data from stream
-
-                var fieldChangeInfo = new FieldTypeChangeInfo();
-                fieldChangeInfo.FieldType = data[0];
-                fieldChangeInfo.ChangeHeight = BitConverter.ToSingle(data, 1);
-
-                // Checks, if we are on a new column
-                if (fieldChangeInfo.ChangeHeight == float.MaxValue)
-                {
-                    current++;
-
-                    var y = current / this.PartitionSize;
-                    var x = current - y * this.PartitionSize;
-
+                    // Gets columns
                     column = this.GetColumn(x, y);
-                    column.Clear();
-                }
+                    column.Changes.Clear();
+                    column.Data.Clear();
+
+                    // Read the number of Changes
+                    var dataRead = stream.Read(data, 0, 4);
+                    Ensure.That(dataRead == 4);
+                    var dataCount = BitConverter.ToInt32(data, 0);
+                    Ensure.That(dataCount < 1000 && dataCount >= 0);
+
+                    for (var n = 0; n < dataCount; n++)
+                    {
+                        dataRead = stream.Read(data, 0, 5);
+                        if (dataRead == 0)
+                        {
+                            break;
+                        }
+
+                        Ensure.That(dataRead == 5);
+
+                        // Loads data from stream
+                        var fieldChangeInfo = new FieldTypeChangeInfo();
+                        fieldChangeInfo.FieldType = data[0];
+                        fieldChangeInfo.ChangeHeight = BitConverter.ToSingle(data, 1);
+                        column.Changes.Add(fieldChangeInfo);
+                    }
+
+                    // Ok, we are finished, now load the information about data
+                    dataRead = stream.Read(data, 0, 4);
+                    Ensure.That(dataRead == 4);
+                    dataCount = BitConverter.ToInt32(data, 0);
+                    Ensure.That(dataCount < 1000 && dataCount >= 0);
+
+                    for (var n = 0; n < dataCount; n++)
+                    {
+                        dataRead = stream.Read(data, 0, 4);
+                        Ensure.That(dataRead == 4);
+                        var key = BitConverter.ToInt32(data, 0);
+
+                        dataRead = stream.Read(data, 0, 4);
+                        Ensure.That(dataRead == 4);
+                        var lengthCount = BitConverter.ToInt32(data, 0);
+                        Ensure.That(lengthCount < 1000 && lengthCount >= 0);
+
+                        var newData = new byte[lengthCount];
+                        dataRead = stream.Read(newData, 0, lengthCount);
+                        Ensure.That(dataRead == lengthCount);
+                        column.Set(key, newData);
+                    }
 
 #if DEBUG
-                Ensure.That(column != null);
+                    Ensure.That(column != null);
 #endif
-
-                // Adds fieldchange info to column
-                column.Add(fieldChangeInfo);
+                }
             }
 
 #if DEBUG

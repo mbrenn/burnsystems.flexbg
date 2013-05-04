@@ -11,26 +11,9 @@ namespace BurnSystems.FlexBG.Test.MapVoxelStorage
         [Test]
         public void TestMapCreation()
         {
-            var info = new VoxelMapInfo()
-            {
-                PartitionLength = 100,
-                SizeX = 1000,
-                SizeY = 2000
-            };
+            var voxelMap = CreateMap();
 
-            var database = new PartitionLoader(
-                Path.Combine(
-                    Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
-                    "MapTests"));
-            database.Clear();
-            var cache = new PartitionCache(database, 5);
-
-            var voxelMap = new VoxelMap();
-            voxelMap.Loader = cache;
-
-            voxelMap.CreateMap(0, info);
-
-            for (var x = 0; x < 1000; x += 10)
+            for (var x = 0; x < 80; x += 10)
             {
                 Assert.That(voxelMap.GetFieldType(0, x, x / 2, 100), Is.EqualTo(0));
             }
@@ -310,6 +293,50 @@ namespace BurnSystems.FlexBG.Test.MapVoxelStorage
 
             Assert.That(fieldType1, Is.EqualTo(1));
             Assert.That(fieldType2, Is.EqualTo(2));
+        }
+
+        /// <summary>
+        /// Create a map that can be used for testing
+        /// </summary>
+        /// <returns></returns>
+        public static VoxelMap CreateMap()
+        {
+            var info = new VoxelMapInfo()
+            {
+                PartitionLength = 100,
+                SizeX = 100,
+                SizeY = 200
+            };
+
+            var database = new PartitionLoader(
+                Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
+                    "MapTests"));
+            database.Clear();
+            var cache = new PartitionCache(database, 5);
+
+            var voxelMap = new VoxelMap();
+            voxelMap.Loader = cache;
+
+            voxelMap.CreateMap(0, info);
+            return voxelMap;
+        }
+
+        /// <summary>
+        /// Create a map that can be used for testing
+        /// </summary>
+        /// <returns></returns>
+        public static VoxelMap LoadMap()
+        {
+            var database = new PartitionLoader(
+                Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
+                    "MapTests"));
+            var cache = new PartitionCache(database, 5);
+
+            var voxelMap = new VoxelMap();
+            voxelMap.Loader = cache;
+            return voxelMap;
         }
     }
 }

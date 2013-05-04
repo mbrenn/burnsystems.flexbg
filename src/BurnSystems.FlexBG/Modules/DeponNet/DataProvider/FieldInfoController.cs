@@ -65,7 +65,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.DataProvider
         [WebMethod]
         public IActionResult GetDetailFieldInfo(int x, int y)
         {
-            var field = this.VoxelMap.GetColumn(this.CurrentGame.Id, x, y);
+            var field = this.VoxelMap.GetColumn(this.CurrentGame.Id, x, y).Changes;
 
             var data = new FieldInfoContent[]
             {

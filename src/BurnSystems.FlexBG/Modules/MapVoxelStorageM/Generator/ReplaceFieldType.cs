@@ -76,13 +76,13 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Generator
                     var column = this.VoxelMap.GetColumn(instanceId, x, y);
 
                     var modified = false;
-                    for (var n = 0; n < column.Count; n++)
+                    for (var n = 0; n < column.Changes.Count; n++)
                     {
-                        if (column[n].FieldType == this.OldFieldType)
+                        if (column.Changes[n].FieldType == this.OldFieldType)
                         {
-                            var change = column[n];
+                            var change = column.Changes[n];
                             change.FieldType = this.NewFieldType;
-                            column[n] = change;
+                            column.Changes[n] = change;
                             modified = true;
                         }
                     }

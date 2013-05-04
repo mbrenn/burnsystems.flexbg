@@ -1,5 +1,6 @@
 ﻿using BurnSystems.FlexBG.Helper;
 using BurnSystems.FlexBG.Modules.DeponNet.GameM.Controllers;
+using BurnSystems.FlexBG.Modules.DeponNet.GameM.Interface;
 using BurnSystems.FlexBG.Modules.DeponNet.Rules.PlayerRulesM;
 using BurnSystems.FlexBG.Modules.UserM.Controllers;
 using BurnSystems.FlexBG.Modules.UserM.Interfaces;
@@ -39,15 +40,16 @@ namespace BurnSystems.FlexBG.Test.Rules
             SerializedFile.ClearCompleteDataDirectory();
 
             // Creates the game
-            this.Container = new ActivationContainer("Game");
-            DeponNet2.Init.CreateGameLogic(this.Container, false);
+            var container = new ActivationContainer("Game");
+            DeponNet2.Init.CreateGameLogic(container, false);
 
-            this.runtime = new Runtime(this.Container, "config");
+            this.runtime = new Runtime(container, "config");
 
             this.runtime.StartUpCore();
 
             // Creates game
-            var controller = this.Container.Create<DeponGamesAdminController>();
+            var gameManagement = container.Get<IGameManagement>();
+            var controller = container.Create<DeponGamesAdminController>();
             this.GameId = controller.CreateGame(
                 new Modules.DeponNet.GameM.Admin.DeponCreateGameModel()
                 {
@@ -57,6 +59,9 @@ namespace BurnSystems.FlexBG.Test.Rules
                     MapHeight = 200,
                     MapWidth = 200
                 });
+
+            this.Container = new ActivationContainer("Inner", container);
+            this.Container.BindToName(DeponGamesController.CurrentGameName).ToConstant(gameManagement.Get(this.GameId));
         }
 
         /// <summary>

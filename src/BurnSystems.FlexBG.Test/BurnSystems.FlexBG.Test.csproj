@@ -15,7 +15,7 @@
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\..\..\Depon.Net 2.0\</SolutionDir>
     <RestorePackages>true</RestorePackages>
     <StartAction>Program</StartAction>
-    <StartProgram>C:\Users\mbrenn\Programme\NUnit\bin\net-2.0\nunit.exe</StartProgram>
+    <StartProgram>C:\Users\Martin\Programme\NUnit\bin\net-2.0\nunit.exe</StartProgram>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -59,6 +59,7 @@
     <Compile Include="MapVoxelStorage\CompleteGameTests.cs" />
     <Compile Include="MapVoxelStorage\DatabaseCacheTests.cs" />
     <Compile Include="MapVoxelStorage\DatabaseTests.cs" />
+    <Compile Include="MapVoxelStorage\DataFieldTests.cs" />
     <Compile Include="MapVoxelStorage\MapGeneratorTests.cs" />
     <Compile Include="MapVoxelStorage\VoxelMapTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

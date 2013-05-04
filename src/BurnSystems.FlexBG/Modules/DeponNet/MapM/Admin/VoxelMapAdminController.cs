@@ -34,7 +34,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.MapM.Admin
                 new
                 {
                     success = true,
-                    fieldInfos = fieldInfos.Select(x =>
+                    fieldInfos = fieldInfos.Changes.Select(x =>
                         new
                         {
                             changeHeight = x.ChangeHeight,

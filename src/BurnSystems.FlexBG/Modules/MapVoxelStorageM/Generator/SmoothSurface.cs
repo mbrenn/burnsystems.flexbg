@@ -124,9 +124,9 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Generator
             var startingHeight = float.MinValue;
             var endingHeight = float.MinValue;
             var lastFieldType = (byte)0;
-            for (var n = 0; n < relevantColumn.Count; n++)
+            for (var n = 0; n < relevantColumn.Changes.Count; n++)
             {
-                var change = relevantColumn[n];
+                var change = relevantColumn.Changes[n];
                 if (hit)
                 {
                     // 3. We need to know how big we are, so ask for end of change height. 
