@@ -77,7 +77,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.DataProvider
                     data = new {
                         x = x,
                         y = y,
-                        fieldTypeTitle = this.FieldTypeProvider.Get ( field.Last().FieldType).Token
+                        fieldTypeTitle = this.FieldTypeProvider.Get(field.Last().FieldType).Token
                     }
                 }
             };
