@@ -56,10 +56,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.BuildingM
         /// <returns>Enumeration of buildings</returns>
         public IEnumerable<Building> GetBuildingsInRegion(int x1, int x2, int y1, int y2)
         {
-            var gameId = this.CurrentGame.Id;
-            var players = this.PlayerManagement.GetPlayersOfGame(gameId);
-            var towns = players.SelectMany(x => this.TownManagement.GetTownsOfPlayer(x.Id));
-            var buildings = towns.SelectMany(x => this.BuildingManagement.GetBuildingsOfTown(x.Id));
+            var buildings = this.GetAllBuildings();
 
             return buildings.Where(
                 x =>
@@ -67,6 +64,19 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.BuildingM
                     x.Position.X <= x2 &&
                     x.Position.Y >= y1 &&
                     x.Position.Y <= y2).ToList();
+        }
+
+        /// <summary>
+        /// Gets all buildings of game
+        /// </summary>
+        /// <returns>Enumeration of buildings</returns>
+        public IEnumerable<Building> GetAllBuildings()
+        {
+            var gameId = this.CurrentGame.Id;
+            var players = this.PlayerManagement.GetPlayersOfGame(gameId);
+            var towns = players.SelectMany(x => this.TownManagement.GetTownsOfPlayer(x.Id));
+            var buildings = towns.SelectMany(x => this.BuildingManagement.GetBuildingsOfTown(x.Id));
+            return buildings;
         }
 
         /// <summary>

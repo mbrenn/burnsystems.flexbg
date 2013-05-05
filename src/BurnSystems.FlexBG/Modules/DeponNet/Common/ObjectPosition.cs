@@ -87,5 +87,16 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.Common
                 z = this.Z
             };
         }
+
+        public static double Distance(ObjectPosition o1, ObjectPosition o2)
+        {
+            var dx = o1.X - o2.X;
+            var dy = o1.Y - o2.Y;
+            var dz = o1.Z - o2.Z;
+
+            return
+                Math.Sqrt(dx * dx + dy * dy + dz * dz);
+        }
+
     }
 }

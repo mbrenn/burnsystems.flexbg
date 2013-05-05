@@ -1,5 +1,6 @@
 ﻿using BurnSystems.FlexBG.Modules.BackgroundWorkerM.Interface;
 using BurnSystems.FlexBG.Modules.DeponNet.GameClockM.Interface;
+using BurnSystems.FlexBG.Modules.DeponNet.GameM.Controllers;
 using BurnSystems.FlexBG.Modules.DeponNet.GameM.Interface;
 using BurnSystems.Logging;
 using BurnSystems.ObjectActivation;
@@ -91,9 +92,9 @@ namespace BurnSystems.FlexBG.Modules.BackgroundWorkerM.Logic
                 //    -8       =    90         +     2    -        100
                 var difference = nextExecution - currentGameTick;
                 if (difference <= 0)
-                {                    
+                {
                     var innerContainer = new ActivationContainer("Background Task Game");
-                    innerContainer.BindToName("CurrentGame").ToConstant(game);
+                    innerContainer.BindToName(DeponGamesController.CurrentGameName).ToConstant(game);
 
                     using (var block = new ActivationBlock("Background Task Game", innerContainer, container as ActivationBlock))
                     {

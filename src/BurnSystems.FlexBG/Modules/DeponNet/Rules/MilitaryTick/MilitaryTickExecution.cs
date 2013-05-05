@@ -1,8 +1,10 @@
 ﻿using BurnSystems.FlexBG.Modules.DeponNet.GameM;
+using BurnSystems.FlexBG.Modules.DeponNet.GameM.Controllers;
 using BurnSystems.Logging;
 using BurnSystems.ObjectActivation;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,7 +13,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.Rules.MilitaryTick
 {
     public class MilitaryTickExecution
     {
-        [Inject(ByName = "CurrentGame")]
+        [Inject(ByName = DeponGamesController.CurrentGameName)]
         public Game CurrentGame
         {
             get;
@@ -25,16 +27,22 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.Rules.MilitaryTick
 
         public static void Execute(IActivates container)
         {
+            var watch = new Stopwatch();
+            watch.Start();
+
             var tick = container.Create<MilitaryTickExecution>();
-            tick.PerformTick();
+            tick.PerformTick(container);
+            watch.Stop();
+
+            logger.LogEntry(LogLevel.Message, "Military Tick: (" + watch.Elapsed.ToString() + ")");
         }
 
         /// <summary>
         /// Performs the tick
         /// </summary>
-        private void PerformTick()
+        private void PerformTick(IActivates container)
         {
-            logger.LogEntry(LogLevel.Message, "Military Tick: " + this.CurrentGame.Id);
+
         }
     }
 }

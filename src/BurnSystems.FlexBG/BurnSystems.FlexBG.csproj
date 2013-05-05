@@ -90,6 +90,11 @@
     <Compile Include="Modules\DeponNet\GameM\GamesData.cs" />
     <Compile Include="Modules\DeponNet\GameM\GameManagement.cs" />
     <Compile Include="Modules\DeponNet\GameM\Interface\IGameManagement.cs" />
+    <Compile Include="Modules\DeponNet\MapFieldOwnerM\AlgorithmConfig.cs" />
+    <Compile Include="Modules\DeponNet\MapFieldOwnerM\FieldOwner.cs" />
+    <Compile Include="Modules\DeponNet\MapFieldOwnerM\FieldOwnershipByBuilding.cs" />
+    <Compile Include="Modules\DeponNet\MapFieldOwnerM\FieldOwnershipByBuildingConfig.cs" />
+    <Compile Include="Modules\DeponNet\MapFieldOwnerM\MapFieldOwnerAlgorithm.cs" />
     <Compile Include="Modules\DeponNet\MapM\Admin\VoxelMapAdminController.cs" />
     <Compile Include="Modules\DeponNet\MapM\Admin\VoxelMapAdminInterface.cs" />
     <Compile Include="Modules\DeponNet\MapM\Admin\MapTreeViewItem.cs" />

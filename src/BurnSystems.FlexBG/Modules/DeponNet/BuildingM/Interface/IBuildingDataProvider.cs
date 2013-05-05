@@ -27,5 +27,11 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.BuildingM.Interface
         /// <param name="playerId">Id of Player</param>
         /// <returns>Enumeration of buildings</returns>
         IEnumerable<Building> GetBuildingsOfPlayer(long playerId);
+
+        /// <summary>
+        /// Gets all buildings of the game
+        /// </summary>
+        /// <returns>Enumeration of buildings</returns>
+        IEnumerable<Building> GetAllBuildings();
     }
 }

@@ -1,5 +1,6 @@
 ﻿using BurnSystems.FlexBG.Modules.DeponNet.BuildingM;
 using BurnSystems.FlexBG.Modules.DeponNet.BuildingM.Interfaces;
+using BurnSystems.FlexBG.Modules.DeponNet.MapFieldOwnerM;
 using BurnSystems.FlexBG.Modules.DeponNet.MapM;
 using BurnSystems.FlexBG.Modules.DeponNet.MapM.Interface;
 using BurnSystems.FlexBG.Modules.DeponNet.ResourceSetM;
@@ -82,6 +83,13 @@ namespace BurnSystems.FlexBG.Modules.DeponNet
             public static UnitType Constructor;
         }
 
+        public static class Rules
+        {
+            public static FieldOwnershipByBuildingConfig EmpireRules;
+
+            public static int EmpireRuleDataKey = 0x1001;
+        }
+
         /// <summary>
         /// Initializes the game configuration
         /// </summary>
@@ -91,6 +99,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet
             InitFieldTypes(container);
             InitResourceTypes(container);
             InitUnitTypes(container);
+            InitRules(container);
 
             var playerRules = container.Get<PlayerRulesConfig>();
             Ensure.That(playerRules != null);
@@ -277,6 +286,21 @@ namespace BurnSystems.FlexBG.Modules.DeponNet
 
             unitTypeProvider.Add(Units.Settler);
             unitTypeProvider.Add(Units.Constructor);
+        }
+
+        private static void InitRules(IActivates container)
+        {
+            Rules.EmpireRules = new FieldOwnershipByBuildingConfig();
+            Rules.EmpireRules.DataKey = Rules.EmpireRuleDataKey;
+            Rules.EmpireRules.MaxRadius = 5;
+
+            Rules.EmpireRules.AddBuilding(Buildings.Temple.Id, 10);
+            Rules.EmpireRules.AddBuilding(Buildings.Townhall.Id, 5);
+            Rules.EmpireRules.AddBuilding(Buildings.Coppermine.Id, 2);
+            Rules.EmpireRules.AddBuilding(Buildings.ForestersPlace.Id, 2);
+            Rules.EmpireRules.AddBuilding(Buildings.LivingHouse.Id, 3);
+            Rules.EmpireRules.AddBuilding(Buildings.SawingPlace.Id, 2);
+            Rules.EmpireRules.AddBuilding(Buildings.SmeltingPlace.Id, 2);
         }
     }
 }

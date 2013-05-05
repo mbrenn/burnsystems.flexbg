@@ -1,5 +1,6 @@
 ﻿using BurnSystems.Logging;
 using BurnSystems.Test;
+using System;
 using System.Collections.Generic;
 
 namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
@@ -231,6 +232,54 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
             }
 
             return column.GetHeight();
+        }
+
+        public static void SetDataByInt64(this IVoxelMap voxelMap, long instanceId, int x, int y, int dataKey, long data)
+        {
+            voxelMap.SetData(
+                instanceId,
+                x,
+                y,
+                dataKey,
+                BitConverter.GetBytes(data));
+        }
+
+        public static int GetDataAsInt32(this IVoxelMap voxelMap, long instanceId, int x, int y, int dataKey)
+        {
+            var bytes = voxelMap.GetData(
+                instanceId,
+                x,
+                y,
+                dataKey);
+
+            if (bytes == null)
+            {
+                return 0;
+            }
+            else
+            {
+                Ensure.That(bytes.Length == 4, "Data is not 4 bytes long");
+                return BitConverter.ToInt32(bytes, 0);
+            }
+        }
+
+        public static long GetDataAsInt64(this IVoxelMap voxelMap, long instanceId, int x, int y, int dataKey)
+        {
+            var bytes = voxelMap.GetData(
+                instanceId,
+                x,
+                y,
+                dataKey);
+
+            if (bytes == null)
+            {
+                return 0;
+            }
+            else
+            {
+                Ensure.That(bytes.Length == 8, "Data is not 8 bytes long");
+                return BitConverter.ToInt64(bytes,0);
+            }
         }
     }
 }
