@@ -60,6 +60,7 @@
     <Compile Include="Modules\DeponNet\BuildingM\BuildingsData.cs" />
     <Compile Include="Modules\DeponNet\BuildingM\BuildingType.cs" />
     <Compile Include="Modules\DeponNet\BuildingM\BuildingTypeProvider.cs" />
+    <Compile Include="Modules\DeponNet\BuildingM\Extensions.cs" />
     <Compile Include="Modules\DeponNet\BuildingM\Interface\IBuildingDataProvider.cs" />
     <Compile Include="Modules\DeponNet\BuildingM\Interface\IBuildingManagement.cs" />
     <Compile Include="Modules\DeponNet\BuildingM\Interface\IBuildingTypeProvider.cs" />
