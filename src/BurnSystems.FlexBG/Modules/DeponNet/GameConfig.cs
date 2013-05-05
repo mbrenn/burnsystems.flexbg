@@ -221,7 +221,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet
             Fields.Air = new FieldType()
             {
                 Id = 0,
-                Token = "Air"
+                Token = "air"
             };
             fieldTypeProvider.Add(Fields.Air);
 
@@ -231,7 +231,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet
             Fields.Grass = new FieldType()
             {
                 Id = 1,
-                Token = "Grass"
+                Token = "grass"
             };
             fieldTypeProvider.Add(Fields.Grass);
 
@@ -241,7 +241,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet
             Fields.DarkGrass = new FieldType()
             {
                 Id = 2,
-                Token = "DarkGrass"
+                Token = "darkgrass"
             };
             fieldTypeProvider.Add(Fields.DarkGrass);
         }

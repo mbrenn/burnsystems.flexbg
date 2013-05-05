@@ -6,6 +6,8 @@ using BurnSystems.FlexBG.Modules.DeponNet.GameM.Controllers;
 using BurnSystems.FlexBG.Modules.DeponNet.MapM.Interface;
 using BurnSystems.FlexBG.Modules.DeponNet.PlayerM;
 using BurnSystems.FlexBG.Modules.DeponNet.PlayerM.Controllers;
+using BurnSystems.FlexBG.Modules.DeponNet.UnitM;
+using BurnSystems.FlexBG.Modules.DeponNet.UnitM.Interfaces;
 using BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage;
 using BurnSystems.ObjectActivation;
 using BurnSystems.WebServer.Modules.MVC;
@@ -80,6 +82,20 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.DataProvider
             set;
         }
 
+        [Inject(IsMandatory = true)]
+        public IUnitTypeProvider UnitTypeProvider
+        {
+            get;
+            set;
+        }
+
+        [Inject(IsMandatory = true)]
+        public IUnitDataProvider UnitDataProvider
+        {
+            get;
+            set;
+        }
+
         /// <summary>
         /// Gets detailled information about a certain field
         /// </summary>
@@ -95,13 +111,12 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.DataProvider
             data.Add(
                 new InfoContent()
                 {
-                    content = field.FirstOrDefault().FieldType.ToString(),
                     token = "fieldinfo",
                     data = new
                     {
                         x = x,
                         y = y,
-                        fieldTypeTitle = this.FieldTypeProvider.Get(field.Last().FieldType).Token
+                        fieldTypeTitle = this.FieldTypeProvider.Get(field.Changes.Last().FieldType).Token
                     }
                 });
 
@@ -119,11 +134,32 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.DataProvider
                             productivity = building.Productivity, 
                             buildingTypeId = building.BuildingTypeId,
                             isActive = building.IsActive,
-                            buildingType = this.BuildingTypeProvider.Get ( building.BuildingTypeId).Token,
+                            buildingTypeTitle = this.BuildingTypeProvider.Get ( building.BuildingTypeId).Token,
                             x = building.Position.X,
                             y = building.Position.Y,
                             townId = building.TownId,
                             playerId = building.PlayerId
+                        }
+                    });
+            }
+
+            // Gets the unit information
+            var units = this.UnitDataProvider.GetUnitsOnField(x, y);
+            foreach (var unit in units)
+            {
+                data.Add(
+                    new InfoContent()
+                    {
+                        token = "unitinfo",
+                        data = new
+                        {
+                            id = unit.Id,
+                            amount = unit.Amount,
+                            unitTypeId = unit.UnitTypeId,
+                            unitTypeTitle = this.UnitTypeProvider.Get(unit.UnitTypeId).Token,
+                            x = unit.Position.X,
+                            y = unit.Position.Y,
+                            playerId = unit.OwnerId
                         }
                     });
             }
@@ -141,12 +177,6 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.DataProvider
         private class InfoContent
         {
             public string token
-            {
-                get;
-                set;
-            }
-
-            public string content
             {
                 get;
                 set;

@@ -138,6 +138,7 @@
     <Compile Include="Modules\DeponNet\TownM\TownManagement.cs" />
     <Compile Include="Modules\DeponNet\TownM\TownsData.cs" />
     <Compile Include="Modules\DeponNet\UnitM\Data\UnitInstance.cs" />
+    <Compile Include="Modules\DeponNet\UnitM\Extensions.cs" />
     <Compile Include="Modules\DeponNet\UnitM\Interfaces\IUnitDataProvider.cs" />
     <Compile Include="Modules\DeponNet\UnitM\Interfaces\IUnitGroupManagement.cs" />
     <Compile Include="Modules\DeponNet\UnitM\Interfaces\IUnitManagement.cs" />
