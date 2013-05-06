@@ -68,6 +68,7 @@
     <Compile Include="Modules\DeponNet\Common\ObjectPosition.cs" />
     <Compile Include="Modules\DeponNet\DataProvider\FieldInfoController.cs" />
     <Compile Include="Modules\DeponNet\DataProvider\GameInfoController.cs" />
+    <Compile Include="Modules\DeponNet\DataProvider\MapInfoController.cs" />
     <Compile Include="Modules\DeponNet\DataProvider\PlayerInfoController.cs" />
     <Compile Include="Modules\DeponNet\GameClockM\Controllers\GameClockController.cs" />
     <Compile Include="Modules\DeponNet\GameConfig.cs" />

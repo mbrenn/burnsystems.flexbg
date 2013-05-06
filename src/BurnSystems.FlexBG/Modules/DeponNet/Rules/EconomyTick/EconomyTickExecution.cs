@@ -1,6 +1,7 @@
 ﻿using BurnSystems.FlexBG.Modules.DeponNet.GameM;
 using BurnSystems.FlexBG.Modules.DeponNet.GameM.Controllers;
 using BurnSystems.FlexBG.Modules.DeponNet.MapFieldOwnerM;
+using BurnSystems.FlexBG.Modules.LockMasterM;
 using BurnSystems.Logging;
 using BurnSystems.ObjectActivation;
 using System;
@@ -16,6 +17,13 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.Rules.EconomyTick
     {
         [Inject(ByName = DeponGamesController.CurrentGameName)]
         public Game CurrentGame
+        {
+            get;
+            set;
+        }
+
+        [Inject(IsMandatory = true)]
+        public ILockMaster LockMaster
         {
             get;
             set;
@@ -43,9 +51,12 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.Rules.EconomyTick
         /// </summary>
         private void PerformTick(IActivates container)
         {
-            var algo = container.Create<FieldOwnershipByBuilding>();
-            algo.Config = GameConfig.Rules.EmpireRules;
-            algo.Execute();
+            using (this.LockMaster.AcquireWriteLock(EntityType.Game, this.CurrentGame.Id))
+            {
+                var algo = container.Create<FieldOwnershipByBuilding>();
+                algo.Config = GameConfig.Rules.EmpireRules;
+                algo.Execute();
+            }
         }
     }
 }
