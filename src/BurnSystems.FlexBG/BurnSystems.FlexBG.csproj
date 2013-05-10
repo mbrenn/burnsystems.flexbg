@@ -115,6 +115,9 @@
     <Compile Include="Modules\DeponNet\PlayerM\PlayerManagement.cs" />
     <Compile Include="Modules\DeponNet\PlayerM\PlayersData.cs" />
     <Compile Include="Modules\DeponNet\RegionM\Region.cs" />
+    <Compile Include="Modules\DeponNet\ResearchM\Interface\IResearchTypeProvider.cs" />
+    <Compile Include="Modules\DeponNet\ResearchM\ResearchType.cs" />
+    <Compile Include="Modules\DeponNet\ResearchM\ResearchTypeProvider.cs" />
     <Compile Include="Modules\DeponNet\ResearchM\Research.cs" />
     <Compile Include="Modules\DeponNet\ResourceSetM\Extension.cs" />
     <Compile Include="Modules\DeponNet\ResourceSetM\Interface\IResourceManagement.cs" />
