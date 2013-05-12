@@ -1,25 +1,17 @@
-﻿using System;
+﻿using BurnSystems.FlexBG.Modules.MapVoxelStorageM.Controllers;
+using BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage;
+using BurnSystems.ObjectActivation;
+using BurnSystems.WebServer.Modules.MVC;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage;
-using BurnSystems.FlexBG.Modules.MapVoxelStorageM.Configuration;
-using System.Globalization;
-using BurnSystems.ObjectActivation;
-using BurnSystems.WebServer.Modules.MVC;
-using BurnSystems.FlexBG.Modules.DeponNet.GameM;
-using BurnSystems.FlexBG.Modules.DeponNet.GameM.Controllers;
-using BurnSystems.Test;
+using System.Threading.Tasks;
 
-namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Controllers
+namespace BurnSystems.FlexBG.Modules.DeponNet.DataProvider
 {
-    public class VoxelMapController : Controller
+    public class MapInfoController : Controller
     {
-        /// <summary>
-        /// Defines the activation container name for current map
-        /// </summary>
-        public const string CurrentMapInstanceName = "FlexBG.CurrentMapInstance";
-
         [Inject]
         public IVoxelMap VoxelMap
         {
@@ -27,14 +19,7 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Controllers
             set;
         }
 
-        [Inject]
-        public IVoxelMapConfiguration VoxelMapConfiguration
-        {
-            get;
-            set;
-        }
-
-        [Inject(ByName = CurrentMapInstanceName, IsMandatory = true)]
+        [Inject(ByName = VoxelMapController.CurrentMapInstanceName, IsMandatory = true)]
         public VoxelMapInfo CurrentMapInstance
         {
             get;
@@ -92,13 +77,20 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Controllers
                 var ty = 0;
                 for (var y = y1; y <= y2; y++)
                 {
+                    var ownerId = this.VoxelMap.GetDataAsInt64(
+                        this.CurrentMapInstance.InstanceId,
+                        x,
+                        y,
+                        GameConfig.Rules.EmpireRuleDataKey);
+
                     result.Add(
                         new
                         {
-                            x = x, 
+                            x = x,
                             y = y,
                             h = surface[tx][ty].ChangeHeight,
-                            t = surface[tx][ty].FieldType
+                            t = surface[tx][ty].FieldType,
+                            o = ownerId
                         });
 
                     ty++;
@@ -114,38 +106,6 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Controllers
                     success = true,
                     fields = result
                 });
-        }
-
-        /// <summary>
-        /// Returns an actionresult containing the textures
-        /// </summary>
-        public IActionResult Textures()
-        {
-            var result = new Dictionary<string, string>();
-
-            foreach (var texture in this.VoxelMapConfiguration.MapInfo.Textures)
-            {
-                result[texture.FieldType.ToString(CultureInfo.InvariantCulture)] = texture.TexturePath;
-            }
-
-            return this.Json(result);
-        }
-
-        /// <summary>
-        /// Gets the current map instance by game
-        /// </summary>
-        /// <param name="activates">Activation container to be used</param>
-        /// <returns>ID of the the map</returns>
-        public static object GetCurrentMapInstanceByGame(IActivates activates)
-        {
-            var voxelMap = activates.Get<IVoxelMap>();
-
-            var game = activates.GetByName<Game>(DeponGamesController.CurrentGameName);
-            Ensure.IsNotNull(game, "No CurrentGame available");
-
-            var mapInfo = voxelMap.GetInfo(game.Id);
-            Ensure.IsNotNull(mapInfo, "No MapInfo available");
-            return mapInfo;
         }
     }
 }
