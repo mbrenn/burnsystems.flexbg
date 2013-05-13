@@ -13,7 +13,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BurnSystems.FlexBG.Test.Rules
+/*namespace BurnSystems.FlexBG.Test.Rules
 {
     public class RuleHelper : IDisposable
     {
@@ -101,3 +101,4 @@ namespace BurnSystems.FlexBG.Test.Rules
         }
     }
 }
+*/

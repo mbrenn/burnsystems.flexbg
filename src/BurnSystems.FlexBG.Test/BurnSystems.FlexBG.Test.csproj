@@ -39,7 +39,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="nunit.framework">
-      <HintPath>..\..\..\..\src\packages\NUnit.2.5.10.11092\lib\nunit.framework.dll</HintPath>
+      <HintPath>..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="System" />
@@ -69,18 +69,11 @@
     <Compile Include="WayPointCalculationM\TestOnlyHeights.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\..\src\DeponNet2\DeponNet2.csproj">
-      <Project>{c9f7cdd6-574f-4383-8542-96a3a9b13b80}</Project>
-      <Name>DeponNet2</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\BurnSystems.WebServer\src\BurnSystems.WebServer\BurnSystems.WebServer.csproj">
+    <ProjectReference Include="..\..\dependencies\BurnSystems.WebServer\src\BurnSystems.WebServer\BurnSystems.WebServer.csproj">
       <Project>{b31df31a-f19e-4ff9-b50f-b70f4f5949f4}</Project>
       <Name>BurnSystems.WebServer</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\BurnSystems\src\BurnSystems.csproj">
+    <ProjectReference Include="..\..\dependencies\BurnSystems\src\BurnSystems.csproj">
       <Project>{42023d16-afd1-4d99-bc39-9ef46982eb54}</Project>
       <Name>BurnSystems</Name>
     </ProjectReference>
@@ -94,6 +87,9 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />

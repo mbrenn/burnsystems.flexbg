@@ -5,7 +5,6 @@ using BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage;
 using BurnSystems.Logging;
 using BurnSystems.ObjectActivation;
 using BurnSystems.WebServer.Modules.MVC;
-using DeponNet2;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -13,7 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BurnSystems.FlexBG.Test.MapVoxelStorage
+/*namespace BurnSystems.FlexBG.Test.MapVoxelStorage
 {
     [TestFixture]
     public class CompleteGameTests
@@ -77,3 +76,4 @@ namespace BurnSystems.FlexBG.Test.MapVoxelStorage
         }
     }
 }
+*/

@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+/*
 namespace BurnSystems.FlexBG.Test.Rules
 {
     [TestFixture]
@@ -75,3 +76,4 @@ namespace BurnSystems.FlexBG.Test.Rules
         }
     }
 }
+*/

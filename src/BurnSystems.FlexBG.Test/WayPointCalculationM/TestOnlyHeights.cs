@@ -12,6 +12,7 @@ using BurnSystems.ObjectActivation;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,6 +28,11 @@ namespace BurnSystems.FlexBG.Test.WayPointCalculationM
         /// <returns></returns>
         private IActivates Init(bool big = false)
         {
+            if (!Directory.Exists("config"))
+            {
+                Assert.Inconclusive("No configuration File");
+            }
+
             Log.TheLog.Reset();
             Log.TheLog.AddLogProvider(new DebugProvider());
             Log.TheLog.FilterLevel = LogLevel.Verbose;

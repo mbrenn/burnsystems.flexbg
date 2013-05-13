@@ -250,20 +250,6 @@
     <Compile Include="Runtime.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\BurnSystems.WebServer.Umbra\src\BurnSystems.WebServer.Umbra\BurnSystems.WebServer.Umbra.csproj">
-      <Project>{0d3e61d8-1a3e-47c3-b90a-e89fde6f4e90}</Project>
-      <Name>BurnSystems.WebServer.Umbra</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\BurnSystems.WebServer\src\BurnSystems.WebServer\BurnSystems.WebServer.csproj">
-      <Project>{b31df31a-f19e-4ff9-b50f-b70f4f5949f4}</Project>
-      <Name>BurnSystems.WebServer</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\BurnSystems\src\BurnSystems.csproj">
-      <Project>{42023d16-afd1-4d99-bc39-9ef46982eb54}</Project>
-      <Name>BurnSystems</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="htdocs\admin\js\lib\viewtypes\flexbg.viewtypes.voxelmapview.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -271,6 +257,24 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Modules\BackgroundWorkerM\Data\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\dependencies\BurnSystems.Parser\src\BurnSystems.Parser.csproj">
+      <Project>{24fc6cc7-afef-456d-8056-96712d1b7909}</Project>
+      <Name>BurnSystems.Parser</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\dependencies\BurnSystems.WebServer.Umbra\src\BurnSystems.WebServer.Umbra\BurnSystems.WebServer.Umbra.csproj">
+      <Project>{0d3e61d8-1a3e-47c3-b90a-e89fde6f4e90}</Project>
+      <Name>BurnSystems.WebServer.Umbra</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\dependencies\BurnSystems.WebServer\src\BurnSystems.WebServer\BurnSystems.WebServer.csproj">
+      <Project>{b31df31a-f19e-4ff9-b50f-b70f4f5949f4}</Project>
+      <Name>BurnSystems.WebServer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\dependencies\BurnSystems\src\BurnSystems.csproj">
+      <Project>{42023d16-afd1-4d99-bc39-9ef46982eb54}</Project>
+      <Name>BurnSystems</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

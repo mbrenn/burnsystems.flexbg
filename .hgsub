@@ -1,0 +1,4 @@
+dependencies/BurnSystems=https://bitbucket.org/mbrenn/burnsystems
+dependencies/BurnSystems.Parser=https://mbrenn@bitbucket.org/mbrenn/burnsystems.parser/
+dependencies/BurnSystems.WebServer=https://mbrenn@bitbucket.org/mbrenn/burnsystems.webserver/
+dependencies/BurnSystems.WebServer.Umbra=https://mbrenn@bitbucket.org/mbrenn/burnsystems.webserver.umbra/
