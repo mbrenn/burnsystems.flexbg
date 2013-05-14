@@ -11,6 +11,8 @@
     <AssemblyName>BurnSystems.FlexBG</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -30,6 +32,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MongoDB.Bson">
+      <HintPath>..\packages\mongocsharpdriver.1.8.1\lib\net35\MongoDB.Bson.dll</HintPath>
+    </Reference>
+    <Reference Include="MongoDB.Driver">
+      <HintPath>..\packages\mongocsharpdriver.1.8.1\lib\net35\MongoDB.Driver.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -54,6 +62,8 @@
     <Compile Include="Modules\BackgroundWorkerM\Logic\WorkerItem.cs" />
     <Compile Include="Modules\ConfigurationStorageM\ConfigurationStorage.cs" />
     <Compile Include="Modules\ConfigurationStorageM\IConfigurationStorage.cs" />
+    <Compile Include="Modules\Database\MongoDb\MongoDbConnection.cs" />
+    <Compile Include="Modules\Database\MongoDb\MongoDbSettings.cs" />
     <Compile Include="Modules\DeponNet\BuildingM\Building.cs" />
     <Compile Include="Modules\DeponNet\BuildingM\BuildingInTownInGameDataProvider.cs" />
     <Compile Include="Modules\DeponNet\BuildingM\BuildingManagement.cs" />
@@ -212,9 +222,6 @@
     <Compile Include="Modules\MapVoxelStorageM\Storage\PartitionLoader.cs" />
     <Compile Include="Modules\MapVoxelStorageM\Storage\VoxelMap.cs" />
     <Compile Include="Modules\MapVoxelStorageM\Storage\VoxelMapInfo.cs" />
-    <Compile Include="Modules\ServerInfoProviderM\IServerInfoProvider.cs" />
-    <Compile Include="Modules\ServerInfoProviderM\ServerInfo.cs" />
-    <Compile Include="Modules\ServerInfoProviderM\ServerInfoProvider.cs" />
     <Compile Include="Modules\UserM\Controllers\AdminSetPasswordModel.cs" />
     <Compile Include="Modules\UserM\Controllers\ChangePasswordModel.cs" />
     <Compile Include="Modules\UserM\Controllers\CreateNewPasswordModel.cs" />
@@ -224,6 +231,7 @@
     <Compile Include="Modules\UserM\Controllers\UsersAdminController.cs" />
     <Compile Include="Modules\UserM\Controllers\UsersController.cs" />
     <Compile Include="Modules\UserM\Data\UserDatabase.cs" />
+    <Compile Include="Modules\UserM\Data\UserDatabaseInfo.cs" />
     <Compile Include="Modules\UserM\Data\UserDatabaseLocal.cs" />
     <Compile Include="Modules\UserM\Interfaces\IUserManagement.cs" />
     <Compile Include="Modules\UserM\Logic\Admin\GroupsTreeView.cs" />
@@ -232,6 +240,7 @@
     <Compile Include="Modules\UserM\Logic\AllowOnlyIfUserIsInGroupFilter.cs" />
     <Compile Include="Modules\UserM\Logic\CurrentUserHelper.cs" />
     <Compile Include="Modules\UserM\Logic\CurrentWebUserHelper.cs" />
+    <Compile Include="Modules\UserM\Logic\UserManagementMongoDb.cs" />
     <Compile Include="Modules\UserM\Logic\UserManagementConfig.cs" />
     <Compile Include="Modules\UserM\Logic\UserManagementLocal.cs" />
     <Compile Include="Modules\UserM\Logic\UserManagementException.cs" />
@@ -276,7 +285,11 @@
       <Name>BurnSystems</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

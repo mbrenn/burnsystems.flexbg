@@ -7,26 +7,37 @@ using BurnSystems.FlexBG.Modules.ConfigurationStorageM;
 using System.Xml.Serialization;
 using BurnSystems.Test;
 using BurnSystems.ObjectActivation;
+using System.Reflection;
 
-namespace BurnSystems.FlexBG.Modules.GameInfoM
+namespace BurnSystems.FlexBG.Modules.ServerInfoM
 {
     public class ServerInfoProvider : IServerInfoProvider
     {
         [Inject]
         public ServerInfoProvider(IConfigurationStorage storage)
         {
-            Ensure.That(storage != null, "IConfigurationStorage not set in Constructor");
+            if (storage == null)
+            {
+                this.ServerInfo = new ServerInfoM.ServerInfo();
+            }
+            else
+            {
+                Ensure.That(storage != null, "IConfigurationStorage not set in Constructor");
 
-            var xmlInfo = storage.Documents
-                .Elements("FlexBG")
-                .Elements("Server")
-                .Elements("ServerInfo")
-                .LastOrDefault();
+                var xmlInfo = storage.Documents
+                    .Elements("FlexBG")
+                    .Elements("Server")
+                    .Elements("ServerInfo")
+                    .LastOrDefault();
 
-            Ensure.That(xmlInfo != null, "Xml-Configuration within FlexBG/Server/ServerInfo  not found");
+                Ensure.That(xmlInfo != null, "Xml-Configuration within FlexBG/Server/ServerInfo  not found");
 
-            var serializer = new XmlSerializer(typeof(ServerInfo));
-            this.ServerInfo = serializer.Deserialize(xmlInfo.CreateReader()) as ServerInfo;
+                var serializer = new XmlSerializer(typeof(ServerInfo));
+                this.ServerInfo = serializer.Deserialize(xmlInfo.CreateReader()) as ServerInfo;
+            }
+            
+            this.ServerInfo.ServerVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            this.ServerInfo.ServerStartUp = DateTime.Now;
         }
 
         public ServerInfo ServerInfo

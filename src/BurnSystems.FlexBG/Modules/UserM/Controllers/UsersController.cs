@@ -1,5 +1,5 @@
 ﻿using BurnSystems.Extensions;
-using BurnSystems.FlexBG.Modules.GameInfoM;
+using BurnSystems.FlexBG.Modules.ServerInfoM;
 using BurnSystems.FlexBG.Modules.MailSenderM;
 using BurnSystems.FlexBG.Modules.UserM.Interfaces;
 using BurnSystems.FlexBG.Modules.UserM.Logic;

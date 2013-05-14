@@ -8,7 +8,7 @@ using System.Net.Mail;
 using System.Xml.Serialization;
 using System.Net;
 using BurnSystems.Logging;
-using BurnSystems.FlexBG.Modules.GameInfoM;
+using BurnSystems.FlexBG.Modules.ServerInfoM;
 using BurnSystems.ObjectActivation;
 
 namespace BurnSystems.FlexBG.Modules.MailSenderM

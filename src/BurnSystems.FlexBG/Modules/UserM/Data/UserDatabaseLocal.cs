@@ -9,18 +9,8 @@ namespace BurnSystems.FlexBG.Modules.UserM.Data
     /// Stores the data in memory and writes it to file system if necessary
     /// </summary>
     [Serializable]
-    public class UserDatabaseLocal
+    public class UserDatabaseLocal : UserDatabaseInfo
     {
-        /// <summary>
-        /// Stores the id of the last group
-        /// </summary>
-        private long lastGroupId = 0;
-
-        /// <summary>
-        /// Stores the id of the last user
-        /// </summary>
-        private long lastUserId = 0;
-
         /// <summary>
         /// Stores a list of users
         /// </summary>
@@ -85,12 +75,19 @@ namespace BurnSystems.FlexBG.Modules.UserM.Data
         }
 
         /// <summary>
+        /// Nothing to do here
+        /// </summary>
+        public void SaveChanges()
+        {
+        }
+
+        /// <summary>
         /// Gets the next user id
         /// </summary>
         /// <returns></returns>
         public long GetNextUserId()
         {
-            return Interlocked.Increment(ref lastUserId);
+            return Interlocked.Increment(ref this.lastUserId);
         }
 
         /// <summary>
@@ -99,15 +96,9 @@ namespace BurnSystems.FlexBG.Modules.UserM.Data
         /// <returns></returns>
         public long GetNextGroupId()
         {
-            return Interlocked.Increment(ref lastGroupId);
+            return Interlocked.Increment(ref this.lastGroupId);
         }
 
-        /// <summary>
-        /// Nothing to do here
-        /// </summary>
-        public void SaveChanges()
-        {
-        }
     }
 }
 
