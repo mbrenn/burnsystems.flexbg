@@ -33,10 +33,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="MongoDB.Bson">
-      <HintPath>..\packages\mongocsharpdriver.1.8.1\lib\net35\MongoDB.Bson.dll</HintPath>
+      <HintPath>..\..\..\..\src\packages\mongocsharpdriver.1.8.1\lib\net35\MongoDB.Bson.dll</HintPath>
     </Reference>
     <Reference Include="MongoDB.Driver">
-      <HintPath>..\packages\mongocsharpdriver.1.8.1\lib\net35\MongoDB.Driver.dll</HintPath>
+      <HintPath>..\..\..\..\src\packages\mongocsharpdriver.1.8.1\lib\net35\MongoDB.Driver.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="System" />
@@ -272,11 +272,11 @@
       <Project>{24fc6cc7-afef-456d-8056-96712d1b7909}</Project>
       <Name>BurnSystems.Parser</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\dependencies\BurnSystems.WebServer.Umbra\src\BurnSystems.WebServer.Umbra\BurnSystems.WebServer.Umbra.csproj">
+    <ProjectReference Include="..\..\..\BurnSystems.WebServer.Umbra\src\BurnSystems.WebServer.Umbra\BurnSystems.WebServer.Umbra.csproj">
       <Project>{0d3e61d8-1a3e-47c3-b90a-e89fde6f4e90}</Project>
       <Name>BurnSystems.WebServer.Umbra</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\dependencies\BurnSystems.WebServer\src\BurnSystems.WebServer\BurnSystems.WebServer.csproj">
+    <ProjectReference Include="..\..\..\BurnSystems.WebServer\src\BurnSystems.WebServer\BurnSystems.WebServer.csproj">
       <Project>{b31df31a-f19e-4ff9-b50f-b70f4f5949f4}</Project>
       <Name>BurnSystems.WebServer</Name>
     </ProjectReference>
