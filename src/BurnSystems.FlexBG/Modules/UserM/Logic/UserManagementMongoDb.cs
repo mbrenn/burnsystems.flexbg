@@ -303,7 +303,6 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
             return this.MembershipCollection.AsQueryable()
                 .Where(x => x.UserId == user.Id)
                 .Select(x => this.GroupCollection.AsQueryable().Where(y => y.Id == x.GroupId).FirstOrDefault())
-                .Where(x => x != null)
                 .ToList();
         }
 
@@ -495,17 +494,17 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
             }
         }
 
-        private MongoCollection<User> UserCollection
+        public MongoCollection<User> UserCollection
         {
             get { return this.Db.Database.GetCollection<User>("Users"); }
         }
 
-        private MongoCollection<Group> GroupCollection
+        public MongoCollection<Group> GroupCollection
         {
             get { return this.Db.Database.GetCollection<Group>("Groups"); }
         }
 
-        private MongoCollection<Membership> MembershipCollection
+        public MongoCollection<Membership> MembershipCollection
         {
             get { return this.Db.Database.GetCollection<Membership>("Memberships"); }
         }
