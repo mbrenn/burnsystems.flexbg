@@ -358,10 +358,26 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         }
 
         /// <summary>
+        /// Stores the value whether the class already had been initialized. 
+        /// If not, MongoDB will get contact with our Entities
+        /// </summary>
+        private static bool alreadyInitialized = false;
+
+        /// <summary>
         /// Starts the plugin
         /// </summary>
         public void Start()
         {
+            // Initializes MongoDB
+            if (!alreadyInitialized)
+            {
+                BsonClassMap.RegisterClassMap<UserDatabaseInfo>();
+                BsonClassMap.RegisterClassMap<User>();
+                BsonClassMap.RegisterClassMap<Group>();
+                BsonClassMap.RegisterClassMap<Membership>();
+                alreadyInitialized = true;
+            }
+
             if (!this.IsUsernameExisting(AdminName) || !this.IsGroupExisting(GroupAdminName))
             {
                 if (this.UserQuery != null &&
@@ -374,12 +390,6 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
                     this.InitAdmin();
                 }
             }
-
-            // Initializes MongoDB
-            BsonClassMap.RegisterClassMap<UserDatabaseInfo>();
-            BsonClassMap.RegisterClassMap<User>();
-            BsonClassMap.RegisterClassMap<Group>();
-            BsonClassMap.RegisterClassMap<Membership>();
         }
 
         /// <summary>

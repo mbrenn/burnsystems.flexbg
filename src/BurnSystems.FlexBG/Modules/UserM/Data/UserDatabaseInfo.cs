@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace BurnSystems.FlexBG.Modules.UserM.Data
 {
+    [Serializable]
     public class UserDatabaseInfo
     {
         /// <summary>
