@@ -268,7 +268,6 @@ namespace BurnSystems.FlexBG.Modules.UserM.Controllers
         [WebMethod]
         public IActionResult Activate(long u, string a)
         {
-
             if (this.UserConfig.NoActivationViaAuthPossible)
             {
                 throw new MVCProcessException("Not allowed", "Activation is not allowed");
@@ -292,6 +291,8 @@ namespace BurnSystems.FlexBG.Modules.UserM.Controllers
                     success = true;
                 }
             }
+
+            this.UserManagement.UpdateUser(user);
 
             // Creates model and return
             var result = new
@@ -320,7 +321,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Controllers
 
             // Ok, we have user, create new activation key and send out mail
             user.ActivationKey = StringManipulation.SecureRandomString(16);
-            this.UserManagement.SaveChanges();
+            this.UserManagement.UpdateUser(user);
 
             // Creates mail to be send
             var templateContent =
@@ -362,7 +363,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Controllers
 
             var newPassword = StringManipulation.SecureRandomString(8);
             this.UserManagement.SetPassword(user, newPassword);
-            this.UserManagement.SaveChanges();
+            this.UserManagement.UpdateUser(user);
 
             var model = new
             {
