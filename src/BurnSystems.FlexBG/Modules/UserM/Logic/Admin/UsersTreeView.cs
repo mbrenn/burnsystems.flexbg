@@ -1,4 +1,5 @@
 ﻿using BurnSystems.FlexBG.Modules.UserM.Interfaces;
+using BurnSystems.FlexBG.Modules.UserM.Models;
 using BurnSystems.ObjectActivation;
 using BurnSystems.Test;
 using BurnSystems.WebServer.Umbra.Views.Treeview;
@@ -26,7 +27,14 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic.Admin
             {
                 Id = x.Id,
                 Title = x.Username,
-                Entity = x
+                Entity = x,
+                ApplyChangeFunction = (container) =>
+                {
+                    var user = x as User;
+                    Ensure.IsNotNull(user, "Entity is not a user");
+
+                    userManagement.UpdateUser(user);
+                }
             });
         }
 

@@ -37,6 +37,13 @@ namespace BurnSystems.FlexBG.Modules.UserM.Controllers
             set;
         }
 
+        [Inject()]
+        public IServerInfoProvider ServerInfo
+        {
+            get;
+            set;
+        }
+
         /// <summary>
         /// Gets or sets the mailsender
         /// </summary>
@@ -51,7 +58,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Controllers
         /// Gets or sets the configuration of the usermanagement
         /// </summary>
         [Inject(IsMandatory = true)]
-        public UserManagementConfig Configuration
+        public UserManagementConfig UserConfig
         {
             get;
             set;
@@ -172,6 +179,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Controllers
                 user.Username = model.Username;
                 this.UserManagement.SetPassword(user, model.Password);
                 user.EMail = model.EMail;
+                user.IsActive = this.UserConfig.AutomaticActivation;
 
                 this.UserManagement.AddUser(user);
 
@@ -182,9 +190,15 @@ namespace BurnSystems.FlexBG.Modules.UserM.Controllers
                     user.Id,
                     user.ActivationKey);
 
-                var subject = this.Configuration.RegisterDoneMailSubject;
+                if (this.UserConfig.NoActivationViaAuthPossible)
+                {
+                    // Not possible, no link
+                    authLink = string.Empty;
+                }
+
+                var subject = this.UserConfig.RegisterDoneMailSubject;
                 var template = this.TemplateParser.Parse(
-                    this.Configuration.RegisterDoneMailTemplate,
+                    this.UserConfig.RegisterDoneMailTemplate,
                     user,
                     new System.Collections.Generic.Dictionary<string, object>()
                         .With("AuthLink", authLink));
@@ -193,6 +207,14 @@ namespace BurnSystems.FlexBG.Modules.UserM.Controllers
                     user.EMail,
                     subject,
                     template);
+
+                if (this.UserConfig.RegisterMailToAdmin && this.ServerInfo != null)
+                {
+                    this.MailSender.SendMail(
+                        this.ServerInfo.ServerInfo.AdminEMail,
+                        "[ADMININFO]: " + subject,
+                        template);
+                }
 
                 hasSuccess = true;
             }
@@ -246,6 +268,12 @@ namespace BurnSystems.FlexBG.Modules.UserM.Controllers
         [WebMethod]
         public IActionResult Activate(long u, string a)
         {
+
+            if (this.UserConfig.NoActivationViaAuthPossible)
+            {
+                throw new MVCProcessException("Not allowed", "Activation is not allowed");
+            }
+
             var success = false;
 
             var user = this.UserManagement.GetUser(u);
@@ -297,13 +325,13 @@ namespace BurnSystems.FlexBG.Modules.UserM.Controllers
             // Creates mail to be send
             var templateContent =
                 this.TemplateParser.Parse(
-                    this.Configuration.ForgotPwdMailTemplate,
+                    this.UserConfig.ForgotPwdMailTemplate,
                     user,
                     new System.Collections.Generic.Dictionary<string, object>()
                         .With("ForgotLink", this.GameInfo.ServerInfo.Url + "newpassword.bspx?u=" + user.Id.ToString() + "&a=" + user.ActivationKey));
             this.MailSender.SendMail(
                 user.EMail,
-                this.Configuration.ForgotPwdMailSubject,
+                this.UserConfig.ForgotPwdMailSubject,
                 templateContent);
 
             var result = new

@@ -20,7 +20,7 @@ namespace BurnSystems.FlexBG.Modules.MailSenderM
     {
         private ILog logger = new ClassLogger(typeof(MailSender));
 
-        private bool sendAsync = false;
+        private bool sendAsync = true;
 
         [Inject(IsMandatory = true)]
         public IServerInfoProvider GameInfo

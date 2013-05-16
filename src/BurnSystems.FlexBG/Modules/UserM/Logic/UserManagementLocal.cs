@@ -196,6 +196,14 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         }
 
         /// <summary>
+        /// Stores the user into database
+        /// </summary>
+        /// <param name="user">User to be updated</param>
+        public void UpdateUser(User user)
+        {
+        }
+
+        /// <summary>
         /// Gets all users
         /// </summary>
         /// <returns></returns>

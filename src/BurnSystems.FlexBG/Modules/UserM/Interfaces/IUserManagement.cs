@@ -45,5 +45,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Interfaces
         void InitAdmin();
 
         void SaveChanges();
+
+        void UpdateUser(User user);
     }
 }

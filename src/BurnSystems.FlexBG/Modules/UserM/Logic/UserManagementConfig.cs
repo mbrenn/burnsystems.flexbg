@@ -46,5 +46,33 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
             get;
             set;
         }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the user shall be activated automatically
+        /// </summary>
+        public bool AutomaticActivation
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Gets or sets a value whether the authentication via auth shall be inhibited
+        /// </summary>
+        public bool NoActivationViaAuthPossible
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether a mail shall also be send to administrator. 
+        /// The same mail as "RegisterDoneMailTemplate" will be sent.
+        /// </summary>
+        public bool RegisterMailToAdmin
+        {
+            get;
+            set;
+        }
     }
 }

@@ -273,6 +273,15 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         }
 
         /// <summary>
+        /// Stores the user into database
+        /// </summary>
+        /// <param name="user">User to be updated</param>
+        public void UpdateUser(User user)
+        {
+            this.UserCollection.Save(user);
+        }
+
+        /// <summary>
         /// Removes membership
         /// </summary>
         /// <param name="group">Group of membership to be removed</param>
