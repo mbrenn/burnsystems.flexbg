@@ -134,7 +134,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Controllers
             }
         }
 
-        
+
         [WebMethod]
         public IActionResult Logout()
         {
@@ -252,7 +252,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Controllers
                 return this.TemplateOrJson(
                     new
                     {
-                        success= true,
+                        success = true,
                         isloggedin = true,
                         username = currentUser.Username,
                         id = currentUser.Id
@@ -376,7 +376,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Controllers
         }
 
         [WebMethod]
-        public IActionResult ChangePassword([PostModel] ChangePasswordModel model, [Inject(ByName = "CurrentUser", IsMandatory=true)] User currentUser)
+        public IActionResult ChangePassword([PostModel] ChangePasswordModel model, [Inject(ByName = "CurrentUser", IsMandatory = true)] User currentUser)
         {
             if (!this.UserManagement.IsPasswordCorrect(currentUser, model.OldPassword))
             {
