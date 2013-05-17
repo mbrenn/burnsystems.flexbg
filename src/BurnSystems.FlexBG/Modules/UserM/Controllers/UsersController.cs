@@ -337,7 +337,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Controllers
 
             var result = new
             {
-                User = user,
+                Username = user.Username,
                 success = true
             };
 
