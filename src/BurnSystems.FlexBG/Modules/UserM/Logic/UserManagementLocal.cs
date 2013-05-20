@@ -204,6 +204,39 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         }
 
         /// <summary>
+        /// Sets the user data for a certain user
+        /// </summary>
+        /// <param name="user">User to be updated</param>
+        /// <param name="key">Key of the userdata</param>
+        /// <param name="value">Value of the userdata</param>
+        public void SetUserData(User user, string key, object value)
+        {
+            user.UserData[key] = value;
+            this.UpdateUser(user);
+        }
+
+        /// <summary>
+        /// Gets userdata of a certain type
+        /// </summary>
+        /// <typeparam name="T">Type of the userdata</typeparam>
+        /// <param name="user">User to be used</param>
+        /// <param name="key">Key of the userdata</param>
+        /// <returns>Returned data or null, if not correct type or not existing</returns>
+        public T GetUserData<T>(User user, string key)
+        {
+            object result;
+            if (user.UserData.TryGetValue(key, out result))
+            {
+                if (result is T)
+                {
+                    return (T)result;
+                }
+            }
+
+            return default(T);
+        }
+
+        /// <summary>
         /// Gets all users
         /// </summary>
         /// <returns></returns>

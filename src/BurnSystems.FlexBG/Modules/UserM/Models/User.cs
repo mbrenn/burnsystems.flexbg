@@ -1,4 +1,6 @@
 ﻿using BurnSystems.WebServer.Modules.UserManagement;
+using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Bson.Serialization.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,6 +41,11 @@ namespace BurnSystems.FlexBG.Modules.UserM.Models
         private bool hasNoCredentials;
 
         private Guid tokenId;
+
+        /// <summary>
+        /// Stores the userdata of the complete class
+        /// </summary>
+        private Dictionary<string, object> userData;
 
         /// <summary>
         /// Gets or sets the user id
@@ -159,6 +166,27 @@ namespace BurnSystems.FlexBG.Modules.UserM.Models
         public override string ToString()
         {
             return this.Username;
+        }
+
+        /// <summary>
+        /// Gets the user data array
+        /// </summary>
+        [BsonDictionaryOptions(DictionaryRepresentation.Document)]
+        internal Dictionary<string, object> UserData
+        {
+            get
+            {
+                if (this.userData == null)
+                {
+                    this.userData = new Dictionary<string, object>();
+                }
+
+                return this.userData;
+            }
+            set
+            {
+                this.userData = value;
+            }
         }
     }
 }
