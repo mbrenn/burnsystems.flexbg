@@ -74,5 +74,15 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
             get;
             set;
         }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the displayname is required to be set
+        /// for displaynem
+        /// </summary>
+        public bool UseDisplayNameForRegister
+        {
+            get;
+            set;
+        }
     }
 }

@@ -32,5 +32,11 @@ namespace BurnSystems.FlexBG.Modules.UserM.Controllers
             get;
             set;
         }
+
+        public string DisplayName
+        {
+            get;
+            set;
+        }
     }
 }

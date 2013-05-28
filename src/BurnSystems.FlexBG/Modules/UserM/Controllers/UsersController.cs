@@ -171,6 +171,14 @@ namespace BurnSystems.FlexBG.Modules.UserM.Controllers
                     "The given passwords are not equal");
             }
 
+            if (this.UserConfig.UseDisplayNameForRegister &&
+                string.IsNullOrEmpty(model.DisplayName))
+            {
+                throw new MVCProcessException(
+                    "register_displayname",
+                    "Thie Displayname is not given");
+            }
+
             try
             {
                 // Everything seems ok, create and add user
@@ -182,6 +190,11 @@ namespace BurnSystems.FlexBG.Modules.UserM.Controllers
                 user.IsActive = this.UserConfig.AutomaticActivation;
 
                 this.UserManagement.AddUser(user);
+
+                if (this.UserConfig.UseDisplayNameForRegister)
+                {
+                    this.UserManagement.SetUserData(user, UserDataTokens.DisplayName, model.DisplayName);
+                }
 
                 // Send mail to user
                 var authLink = string.Format(
