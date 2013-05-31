@@ -3,19 +3,19 @@ namespace BurnSystems.FlexBG.Modules.UserM.Controllers
 {
     public class ChangePasswordModel
     {
-        public string OldPassword
+        public string oldPassword
         {
             get;
             set;
         }
 
-        public string NewPassword
+        public string newPassword
         {
             get;
             set;
         }
 
-        public string NewPassword2
+        public string newPassword2
         {
             get;
             set;

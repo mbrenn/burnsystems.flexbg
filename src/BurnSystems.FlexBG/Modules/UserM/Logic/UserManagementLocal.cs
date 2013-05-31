@@ -436,6 +436,12 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         /// <param name="password">Password to be encrypted</param>
         public void SetPassword(User user, string password)
         {
+            Ensure.That(user != null);
+            if (string.IsNullOrEmpty(password))
+            {
+                throw new InvalidOperationException("password is empty");
+            }
+
             using (this.Db.Sync.GetWriteLock())
             {
                 var completePassword = user.Username + password + this.GameInfoProvider.ServerInfo.PasswordSalt;
@@ -451,6 +457,8 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         /// <returns>true, if password is correct</returns>
         public bool IsPasswordCorrect(User user, string password)
         {
+            Ensure.That(user != null);
+
             using (this.Db.Sync.GetReadLock())
             {
                 var completePassword = user.Username + password + this.GameInfoProvider.ServerInfo.PasswordSalt;

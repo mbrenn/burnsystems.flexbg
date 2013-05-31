@@ -391,12 +391,12 @@ namespace BurnSystems.FlexBG.Modules.UserM.Controllers
         [WebMethod]
         public IActionResult ChangePassword([PostModel] ChangePasswordModel model, [Inject(ByName = "CurrentUser", IsMandatory = true)] User currentUser)
         {
-            if (!this.UserManagement.IsPasswordCorrect(currentUser, model.OldPassword))
+            if (!this.UserManagement.IsPasswordCorrect(currentUser, model.oldPassword))
             {
                 throw new MVCProcessException("changepassword_wrongpassword", "Old password is not correct");
             }
 
-            this.UserManagement.SetPassword(currentUser, model.NewPassword);
+            this.UserManagement.SetPassword(currentUser, model.newPassword);
             this.UserManagement.SaveChanges();
 
             var result = new

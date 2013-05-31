@@ -383,8 +383,16 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         /// <param name="password">Password to be encrypted</param>
         public void SetPassword(User user, string password)
         {
+            Ensure.That(user != null);
+            if (string.IsNullOrEmpty(password))
+            {
+                throw new InvalidOperationException("password is empty");
+            }
+
             var completePassword = user.Username + password + this.GameInfoProvider.ServerInfo.PasswordSalt;
             user.EncryptedPassword = completePassword.Sha1();
+
+            this.UpdateUser(user);
         }
 
         /// <summary>
