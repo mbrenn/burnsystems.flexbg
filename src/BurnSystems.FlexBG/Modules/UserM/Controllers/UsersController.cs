@@ -185,11 +185,11 @@ namespace BurnSystems.FlexBG.Modules.UserM.Controllers
                 var user = new UserM.Models.User();
                 user.HasAgreedToTOS = true;
                 user.Username = model.Username;
-                this.UserManagement.SetPassword(user, model.Password);
                 user.EMail = model.EMail;
                 user.IsActive = this.UserConfig.AutomaticActivation;
 
                 this.UserManagement.AddUser(user);
+                this.UserManagement.SetPassword(user, model.Password);
 
                 if (this.UserConfig.UseDisplayNameForRegister)
                 {
