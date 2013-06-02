@@ -528,6 +528,18 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         }
 
         /// <summary>
+        /// Gets a specific user by token id
+        /// </summary>
+        /// <param name="id">Id of the user</param>
+        public User GetUserByToken(Guid id)
+        {
+            lock (syncObject)
+            {
+                return this.UserCollection.AsQueryable().Where(x => x.TokenId == id).FirstOrDefault();
+            }
+        }
+
+        /// <summary>
         /// Gets the next user id
         /// </summary>
         /// <returns></returns>

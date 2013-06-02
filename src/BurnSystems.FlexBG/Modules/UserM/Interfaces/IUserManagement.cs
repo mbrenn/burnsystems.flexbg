@@ -64,5 +64,11 @@ namespace BurnSystems.FlexBG.Modules.UserM.Interfaces
         void SaveChanges();
 
         void UpdateUser(User user);
+
+        /// <summary>
+        /// Gets a specific user by token id
+        /// </summary>
+        /// <param name="id">Id of the user</param>
+        User GetUserByToken(Guid id);
     }
 }

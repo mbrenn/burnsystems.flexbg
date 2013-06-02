@@ -545,5 +545,17 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
                 this.AddToGroup(adminGroup, adminUser);
             }
         }
+
+        /// <summary>
+        /// Gets a specific user by token id
+        /// </summary>
+        /// <param name="id">Id of the user</param>
+        public User GetUserByToken(Guid id)
+        {
+            using (this.Db.Sync.GetReadLock())
+            {
+                return this.Db.Data.Users.Where(x => x.TokenId == id).FirstOrDefault();
+            }
+        }
     }
 }
