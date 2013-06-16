@@ -1,4 +1,5 @@
-﻿using BurnSystems.WebServer.Modules.UserManagement;
+﻿using BurnSystems.Collections;
+using BurnSystems.WebServer.Modules.UserManagement;
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson.Serialization.Options;
 using System;
@@ -41,6 +42,11 @@ namespace BurnSystems.FlexBG.Modules.UserM.Models
         private bool hasNoCredentials;
 
         private Guid tokenId;
+
+        /// <summary>
+        /// Stores the tokens 
+        /// </summary>
+        private NiceDictionary<string, string> persistantTokens = new NiceDictionary<string, string>();
 
         /// <summary>
         /// Stores the userdata of the complete class
@@ -146,6 +152,15 @@ namespace BurnSystems.FlexBG.Modules.UserM.Models
             set { this.hasNoCredentials = value; }
         }
 
+        /// <summary>
+        /// Gets or sets the dictionary for persistant tokens
+        /// </summary>
+        public NiceDictionary<string, string> PersistantTokens
+        {
+            get { return this.persistantTokens; }
+            set { this.persistantTokens = value; }
+        }
+
         public Guid TokenId
         {
             get { return this.tokenId; }
@@ -163,6 +178,10 @@ namespace BurnSystems.FlexBG.Modules.UserM.Models
             }
         }
 
+        /// <summary>
+        /// Converts to string
+        /// </summary>
+        /// <returns>User that had been converted to string</returns>
         public override string ToString()
         {
             return this.Username;

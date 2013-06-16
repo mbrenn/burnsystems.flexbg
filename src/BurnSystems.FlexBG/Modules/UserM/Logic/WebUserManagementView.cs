@@ -47,5 +47,21 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
 
             return new WebUserView(this.usermanagement, user);
         }
+
+
+        public void SetPersistantCookie(IWebUser user, string series, string token)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool CheckPersistantCookie(IWebUser user, string series, string token)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DeletePersistantCookie(IWebUser user, string series)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

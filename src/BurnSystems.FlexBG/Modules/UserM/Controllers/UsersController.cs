@@ -108,7 +108,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Controllers
                 isLoggedIn = true;
 
                 // Logged in! 
-                this.Authentication.LoginUser(model.Username, model.Password);
+                this.Authentication.LoginUser(model.Username, model.Password, model.IsPersistant);
 
                 if (!string.IsNullOrEmpty(returnUrl) && returnUrl.StartsWith("/"))
                 {
