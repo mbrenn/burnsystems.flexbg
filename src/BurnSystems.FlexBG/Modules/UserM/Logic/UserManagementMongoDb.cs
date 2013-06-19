@@ -566,6 +566,70 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
             }
         }
 
+        public void SetPersistantCookie(long userId, string series, string token)
+        {
+            lock (syncObject)
+            {
+                var user = this.GetUser(userId);
+                if (user == null)
+                {
+                    throw new InvalidOperationException("User not found");
+                }
+
+                user.PersistantTokens[series] = token;
+                this.UpdateUser(user);
+            }
+        }
+
+        public bool CheckPersistantCookie(long userId, string series, string token)
+        {
+            lock (syncObject)
+            {
+                var user = this.GetUser(userId);
+                if (user == null)
+                {
+                    throw new InvalidOperationException("User not found");
+                }
+
+                string tokenCheck;
+
+                if (user.PersistantTokens.TryGetValue(series, out tokenCheck))
+                {
+                    if (token == tokenCheck)
+                    {
+                        user.PersistantTokens.Remove(series);
+                        this.UpdateUser(user);
+                        return true;
+                    }
+                    else
+                    {
+                        classLogger.Fail("Perhabs Security breach of cookie for user " + userId);
+
+                        // Clears all cookies
+                        user.PersistantTokens.Clear();
+                        this.UpdateUser(user);
+                    }
+                }
+
+                return false;
+            }
+        }
+
+        public void DeletePersistantCookie(long userId, string series)
+        {
+            lock (syncObject)
+            {
+                var user = this.GetUser(userId);
+                if (user == null)
+                {
+                    throw new InvalidOperationException("User not found");
+                }
+
+                user.PersistantTokens.Remove(series);
+                this.UpdateUser(user);
+            }
+        }
+
         public MongoCollection<User> UserCollection
         {
             get { return this.Db.Database.GetCollection<User>("Users"); }

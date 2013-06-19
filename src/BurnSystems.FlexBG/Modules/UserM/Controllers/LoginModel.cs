@@ -19,7 +19,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Controllers
             set;
         }
 
-        public bool IsPersistant
+        public bool IsPersistent
         {
             get;
             set;

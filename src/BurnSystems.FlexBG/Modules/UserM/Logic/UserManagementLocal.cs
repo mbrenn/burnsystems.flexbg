@@ -557,5 +557,65 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
                 return this.Db.Data.Users.Where(x => x.TokenId == id).FirstOrDefault();
             }
         }
+        
+        public void SetPersistantCookie(long userId, string series, string token)
+        {
+            using (this.Db.Sync.GetWriteLock())
+            {
+                var user = this.GetUser(userId);
+                if (user == null)
+                {
+                    throw new InvalidOperationException("User not found");
+                }
+
+                user.PersistantTokens[series] = token;
+            }
+        }
+
+        public bool CheckPersistantCookie(long userId, string series, string token)
+        {
+            using (this.Db.Sync.GetWriteLock())
+            {
+                var user = this.GetUser(userId);
+                if (user == null)
+                {
+                    throw new InvalidOperationException("User not found");
+                }
+
+                string tokenCheck;
+
+                if (user.PersistantTokens.TryGetValue(series, out tokenCheck))
+                {
+                    if (token == tokenCheck)
+                    {
+                        user.PersistantTokens.Remove(series);
+                        return true;
+                    }
+                    else
+                    {
+                        classLogger.Fail("Perhabs Security breach of cookie for user " + userId);
+
+                        // Clears all cookies
+                        user.PersistantTokens.Clear();
+                    }
+                }
+
+                return false;
+            }
+        }
+
+        public void DeletePersistantCookie(long userId, string series)
+        {
+            using (this.Db.Sync.GetWriteLock())
+            {
+                var user = this.GetUser(userId);
+                if (user == null)
+                {
+                    throw new InvalidOperationException("User not found");
+                }
+
+                user.PersistantTokens.Remove(series);
+            }
+        }
     }
 }

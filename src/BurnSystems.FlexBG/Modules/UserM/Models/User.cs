@@ -46,7 +46,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Models
         /// <summary>
         /// Stores the tokens 
         /// </summary>
-        private NiceDictionary<string, string> persistantTokens = new NiceDictionary<string, string>();
+        private Dictionary<string, string> persistantTokens = new Dictionary<string, string>();
 
         /// <summary>
         /// Stores the userdata of the complete class
@@ -155,7 +155,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Models
         /// <summary>
         /// Gets or sets the dictionary for persistant tokens
         /// </summary>
-        public NiceDictionary<string, string> PersistantTokens
+        public Dictionary<string, string> PersistantTokens
         {
             get { return this.persistantTokens; }
             set { this.persistantTokens = value; }

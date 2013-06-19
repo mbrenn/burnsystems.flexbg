@@ -108,7 +108,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Controllers
                 isLoggedIn = true;
 
                 // Logged in! 
-                this.Authentication.LoginUser(model.Username, model.Password, model.IsPersistant);
+                this.Authentication.LoginUser(model.Username, model.Password, model.IsPersistent);
 
                 if (!string.IsNullOrEmpty(returnUrl) && returnUrl.StartsWith("/"))
                 {
@@ -248,10 +248,23 @@ namespace BurnSystems.FlexBG.Modules.UserM.Controllers
             return this.TemplateOrJson(result);
         }
 
+        /// <summary>
+        /// Checks if user is logged in. 
+        /// This is the only function that is allowed whether user has a persistent cookie
+        /// </summary>
+        /// <param name="currentUser">Current user</param>
+        /// <returns>Login status of current user</returns>
         [WebMethod]
-        public IActionResult GetLoginStatus([Inject(ByName = "CurrentUser")] User currentUser)
+        public IActionResult GetLoginStatus()
         {
-            if (currentUser == null)
+            var isLoggedIn = this.Authentication.IsUserLoggedIn();
+
+            if (!isLoggedIn)
+            {
+                isLoggedIn = this.Authentication.IsLoggedInByPersistentCookie();
+            }
+
+            if (!isLoggedIn)
             {
                 return this.TemplateOrJson(
                     new
@@ -262,6 +275,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Controllers
             }
             else
             {
+                var currentUser = this.Authentication.GetLoggedInUser();
                 return this.TemplateOrJson(
                     new
                     {

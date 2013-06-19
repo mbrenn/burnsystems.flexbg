@@ -25,6 +25,17 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
 
             this.usermanagement = local;
         }
+
+        public IWebUser GetUser(long userId)
+        {
+            var user = this.usermanagement.GetUser(userId);
+            if (user == null)
+            {
+                return null;
+            }
+
+            return new WebUserView(this.usermanagement, user);
+        }
     
         public IWebUser GetUser(string username)
         {
@@ -49,19 +60,19 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         }
 
 
-        public void SetPersistantCookie(IWebUser user, string series, string token)
+        public void SetPersistentCookie(IWebUser webUser, string series, string token)
         {
-            throw new NotImplementedException();
+            this.usermanagement.SetPersistantCookie(webUser.Id, series, token);            
         }
 
-        public bool CheckPersistantCookie(IWebUser user, string series, string token)
-        {
-            throw new NotImplementedException();
+        public bool CheckPersistentCookie(IWebUser webUser, string series, string token)
+        {            
+            return this.usermanagement.CheckPersistantCookie(webUser.Id, series, token);
         }
 
-        public void DeletePersistantCookie(IWebUser user, string series)
+        public void DeletePersistentCookie(IWebUser webUser, string series)
         {
-            throw new NotImplementedException();
+            this.usermanagement.DeletePersistantCookie(webUser.Id, series);
         }
     }
 }
