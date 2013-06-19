@@ -1,5 +1,6 @@
 ﻿using BurnSystems.FlexBG.Interfaces;
 using BurnSystems.FlexBG.Modules.AdminInterfaceM;
+using BurnSystems.FlexBG.Modules.UserM.Interfaces;
 using BurnSystems.FlexBG.Modules.UserM.Models;
 using BurnSystems.ObjectActivation;
 using BurnSystems.WebServer.Umbra.Views.DetailView;
@@ -149,7 +150,29 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic.Admin
                                 .For("NewPassword")
                                 .AsString()
                                 .AsWriteOnly())
-                            .WithOverrideUrl("users/SetPassword"))));
+                            .WithOverrideUrl("users/SetPassword"),
+                        new EntityViewDetailTable(
+                            "UpdatProfile",
+                            EntityViewElementProperty.Create()
+                                .Labelled("User Id")
+                                .For("Id")
+                                .AsString()
+                                .AsReadOnly(),
+                            EntityViewElementProperty.Create()
+                                .Labelled("Displayname")
+                                .For("Displayname")
+                                .AsString())
+                            .WithOverrideUrl("users/UpdateProfile")
+                            .WithSelector<User>((a, e) =>
+                             {
+                                 var userManagement = a.Get<IUserManagement>();
+
+                                 return new
+                                 {
+                                     Id = e.Id, 
+                                     Displayname = userManagement.GetUserData<string>(e, UserDataTokens.DisplayName)
+                                 };
+                             }))));
 
             // Creates entity view for groups
             this.ViewResolver.Add(

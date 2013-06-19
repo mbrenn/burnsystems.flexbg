@@ -223,6 +223,7 @@
     <Compile Include="Modules\MapVoxelStorageM\Storage\VoxelMap.cs" />
     <Compile Include="Modules\MapVoxelStorageM\Storage\VoxelMapInfo.cs" />
     <Compile Include="Modules\UserM\Controllers\AdminSetPasswordModel.cs" />
+    <Compile Include="Modules\UserM\Controllers\AdminUpdateProfileModel.cs" />
     <Compile Include="Modules\UserM\Controllers\ChangePasswordModel.cs" />
     <Compile Include="Modules\UserM\Controllers\CreateNewPasswordModel.cs" />
     <Compile Include="Modules\UserM\Controllers\ForgotPasswordModel.cs" />
