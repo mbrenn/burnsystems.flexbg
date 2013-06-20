@@ -264,7 +264,14 @@ namespace BurnSystems.FlexBG.Modules.UserM.Controllers
                 isLoggedIn = this.Authentication.IsLoggedInByPersistentCookie();
             }
 
-            if (!isLoggedIn)
+            IWebUser currentUser = null;
+            if (isLoggedIn)
+            {
+                currentUser = this.Authentication.GetLoggedInUser();
+                isLoggedIn = currentUser != null;
+            }
+
+            if (!isLoggedIn || currentUser == null)
             {
                 return this.TemplateOrJson(
                     new
@@ -275,7 +282,6 @@ namespace BurnSystems.FlexBG.Modules.UserM.Controllers
             }
             else
             {
-                var currentUser = this.Authentication.GetLoggedInUser();
                 return this.TemplateOrJson(
                     new
                     {

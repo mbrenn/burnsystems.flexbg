@@ -480,9 +480,9 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
                 user.HasNoCredentials = false;
                 user.IsActive = true;
 
-                this.SetPassword(user, password);
-
                 this.AddUser(user);
+
+                this.SetPassword(user, password);
             }
 
             if (!this.IsGroupExisting(GroupAdminName))
