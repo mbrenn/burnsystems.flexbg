@@ -30,5 +30,21 @@ namespace BurnSystems.FlexBG.Modules.UserM.Models
         /// Token for the birthday
         /// </summary>
         public const string Birthday = "Birthday";
+
+
+        /// <summary>
+        /// Token for the date when the user received a mail since the last time
+        /// </summary>
+        public const string AcceptsUserMails = "AcceptsUserMails";
+
+        /// <summary>
+        /// Token for the date when the user received a mail since the last time
+        /// </summary>
+        public const string LastMailSending = "LastMailSending";
+
+        /// <summary>
+        /// Token for the date when the user had his last login
+        /// </summary>
+        public const string LastLogin = "LastLogin";
     }
 }

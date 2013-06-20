@@ -74,5 +74,25 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         {
             this.usermanagement.DeletePersistantCookie(webUser.Id, series);
         }
+
+
+        /// <summary>
+        /// Updates the login date for a certain user
+        /// </summary>
+        /// <param name="userId">Id of the user</param>
+        /// <param name="date">Date which shall be set</param>
+        public void UpdateLoginDate(long userId, DateTime date)
+        {
+            if (date == DateTime.MinValue)
+            {
+                date = DateTime.Now;
+            }
+
+            var user = this.usermanagement.GetUser(userId);
+            if (user != null)
+            {
+                this.usermanagement.SetUserData(user, UserDataTokens.LastLogin, date);
+            }
+        }
     }
 }

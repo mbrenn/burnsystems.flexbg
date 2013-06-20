@@ -177,6 +177,9 @@
     <Compile Include="Modules\DeponNet\UnitM\UnitType.cs" />
     <Compile Include="Modules\DeponNet\UnitM\UnitTypeProvider.cs" />
     <Compile Include="Modules\FlexBgModule.cs" />
+    <Compile Include="Modules\MailSenderM\IUserMailSender.cs" />
+    <Compile Include="Modules\MailSenderM\UserMailSender.cs" />
+    <Compile Include="Modules\MailSenderM\UserMailSenderSettings.cs" />
     <Compile Include="Modules\MapVoxelStorageM\Storage\VoxelMapColumn.cs" />
     <Compile Include="Modules\MapVoxelStorageM\Storage\VoxelMapDataItem.cs" />
     <Compile Include="Modules\ServerInfoM\ServerInfo.cs" />
