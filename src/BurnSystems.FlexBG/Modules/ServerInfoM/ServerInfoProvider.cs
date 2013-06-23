@@ -30,7 +30,7 @@ namespace BurnSystems.FlexBG.Modules.ServerInfoM
                     .Elements("ServerInfo")
                     .LastOrDefault();
 
-                Ensure.That(xmlInfo != null, "Xml-Configuration within FlexBG/Server/ServerInfo  not found");
+                Ensure.That(xmlInfo != null, "Xml-Configuration within Xml-node: 'FlexBG/Server/ServerInfo' not found");
 
                 var serializer = new XmlSerializer(typeof(ServerInfo));
                 this.ServerInfo = serializer.Deserialize(xmlInfo.CreateReader()) as ServerInfo;

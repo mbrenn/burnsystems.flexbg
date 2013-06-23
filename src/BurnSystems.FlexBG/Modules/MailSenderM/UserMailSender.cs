@@ -50,13 +50,14 @@ namespace BurnSystems.FlexBG.Modules.MailSenderM
         /// <param name="userId">Id of the user, who shal receive te mail</param>
         /// <param name="subject">Subject of the mail</param>
         /// <param name="content">Content to be sent</param>
-        public void SendMailToUser(long userId, string subject, string content)
+        /// <returns>Defines the information whether a mail had been sent to user</returns>
+        public bool SendMailToUser(long userId, string subject, string content)
         {
             var user = this.UserManagement.GetUser(userId);
             if (user == null)
             {
                 logger.Fail("User is not known " + userId.ToString());
-                return;
+                return false;
             }
 
             // Check the information about the last mail sending and login date
@@ -69,24 +70,26 @@ namespace BurnSystems.FlexBG.Modules.MailSenderM
             if (!acceptsMails)
             {
                 logger.Message("Mail " + subject + " to user " + email + " not sent due to settings");
-                return;
+                return false;
             }
 
             if (now - lastLogin > this.Settings.TimeSinceLastLogin)
             {
                 logger.Message("Mail " + subject + " to user " + email + " not sent due to last login");
-                return;
+                return false;
             }
 
             if (now - lastSending < this.Settings.MaxMailInterval)
             {
                 logger.Message("Mail " + subject + " to user " + email + " not sent due to last mail sending");
-                return;
+                return false;
             }
 
             this.UserManagement.SetUserData(user, UserDataTokens.LastMailSending, DateTime.Now);
 
             this.MailSender.SendMail(email, subject, content);
+
+            return true;
         }
     }
 }

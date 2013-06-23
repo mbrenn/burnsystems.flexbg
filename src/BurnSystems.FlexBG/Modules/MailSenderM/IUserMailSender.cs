@@ -18,6 +18,7 @@ namespace BurnSystems.FlexBG.Modules.MailSenderM
         /// <param name="userId">Id of the user, who shall receive the message</param>
         /// <param name="subject">Subject of the message</param>
         /// <param name="content">Content of the message</param>
-        void SendMailToUser(long userId, string subject, string content);
+        /// <returns>Defines the information whether a mail had been sent to user</returns>
+        bool SendMailToUser(long userId, string subject, string content);
     }
 }

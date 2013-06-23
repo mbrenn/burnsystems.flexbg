@@ -11,6 +11,7 @@
 
 namespace BurnSystems.FlexBG.Modules.MailSenderM
 {
+    using BurnSystems.Logging;
     using System.Collections.Generic;
     using System.Net.Mail;
 
@@ -20,6 +21,11 @@ namespace BurnSystems.FlexBG.Modules.MailSenderM
     /// </summary>
     public class DummyMailSenderHandler : IMailSender
     {
+        /// <summary>
+        /// Stores the logger
+        /// </summary>
+        private static ILog logger = new ClassLogger(typeof(DummyMailSenderHandler));
+
         /// <summary>
         /// Stores the list of sent mails
         /// </summary>
@@ -37,6 +43,8 @@ namespace BurnSystems.FlexBG.Modules.MailSenderM
             mail.Body = message;
             mail.Subject = subject;
             this.SendMail(mail);
+
+            logger.Message("Dummy-Mail has received request to send mail '" + subject + " to '" + receiver + "'");
         }
 
         /// <summary>
