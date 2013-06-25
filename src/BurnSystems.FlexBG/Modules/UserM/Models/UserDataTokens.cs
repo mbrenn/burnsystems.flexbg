@@ -46,5 +46,10 @@ namespace BurnSystems.FlexBG.Modules.UserM.Models
         /// Token for the date when the user had his last login
         /// </summary>
         public const string LastLogin = "LastLogin";
+
+        /// <summary>
+        /// Stores the id of the profile
+        /// </summary>
+        public const string ProfilePhoto = "ProfilePhoto";
     }
 }
