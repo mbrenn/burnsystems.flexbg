@@ -17,6 +17,7 @@ namespace BurnSystems.FlexBG.Modules.LockMasterM.Simple
         /// <summary>
         /// Stores the relationships, where the child type is the index and the parent type the value
         /// </summary>
+        // TODO: This does not work! Here, rework has to be performed
         private List<int> parentRelationShips = new List<int>();
 
         /// <summary>

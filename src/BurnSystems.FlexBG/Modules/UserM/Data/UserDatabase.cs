@@ -33,7 +33,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Data
         /// <summary>
         /// Gets the synchronization object
         /// </summary>
-        public ReadWriteLock Sync
+        protected ReadWriteLock Sync
         {
             get { return this.sync; }
         }

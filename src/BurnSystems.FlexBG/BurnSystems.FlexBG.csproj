@@ -242,6 +242,7 @@
     <Compile Include="Modules\UserM\Interfaces\IUserManagement.cs" />
     <Compile Include="Modules\UserM\Logic\Admin\GroupsTreeView.cs" />
     <Compile Include="Modules\UserM\Logic\Admin\UserAdminInterface.cs" />
+    <Compile Include="Modules\UserM\Logic\UserManagementFramework.cs" />
     <Compile Include="Modules\UserM\Logic\Admin\UsersTreeView.cs" />
     <Compile Include="Modules\UserM\Logic\AllowOnlyIfUserIsInGroupFilter.cs" />
     <Compile Include="Modules\UserM\Logic\CurrentUserHelper.cs" />

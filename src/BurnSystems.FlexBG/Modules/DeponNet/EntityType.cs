@@ -13,54 +13,59 @@ namespace BurnSystems.FlexBG.Modules.DeponNet
     public static class EntityType
     {
         /// <summary>
+        /// Stores the entity type for a user
+        /// </summary>
+        public const int User = 1;
+
+        /// <summary>
         /// Stores the entity type id of the player
         /// </summary>
-        public const int Player = 1;
+        public const int Player = 2;
 
         /// <summary>
         /// Stores the entity type id of the town
         /// </summary>
-        public const int Town = 2;
+        public const int Town = 3;
 
         /// <summary>
         /// Stores the entity type id of the unit
         /// </summary>
-        public const int Unit = 3;
+        public const int Unit = 4;
 
         /// <summary>
         /// Stores the entity type id of game
         /// </summary>
-        public const int Game = 4;
+        public const int Game = 5;
 
         /// <summary>
         /// Stores the entity type id of building
         /// </summary>
-        public const int Building = 5;
+        public const int Building = 6;
 
         /// <summary>
         /// Stores the entity type id of region
         /// </summary>
-        public const int Map = 6;
+        public const int Map = 7;
 
         /// <summary>
         /// Stores the entity type id of region
         /// </summary>
-        public const int Region = 7;
+        public const int Region = 8;
 
         /// <summary>
         /// Stores the entity type id of research
         /// </summary>
-        public const int Research = 8;
+        public const int Research = 9;
 
         /// <summary>
         /// Stores the entity type id of unit groups
         /// </summary>
-        public const int UnitGroup = 9;
+        public const int UnitGroup = 10;
 
         /// <summary>
         /// Stores the entity type id of the unit instance
         /// </summary>
-        public const int UnitInstance = 10;
+        public const int UnitInstance = 11;
 
         /// <summary>
         /// Stores the entity type for server
@@ -73,6 +78,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet
         /// <param name="lockMaster">Lock master to be used</param>
         public static void Apply(ILockMaster lockMaster)
         {
+            lockMaster.AddRelationShip(Server, User);
             lockMaster.AddRelationShip(Server, Game);
             lockMaster.AddRelationShip(Game, Player);
             lockMaster.AddRelationShip(Player, Building);

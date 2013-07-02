@@ -61,8 +61,6 @@ namespace BurnSystems.FlexBG.Modules.UserM.Interfaces
 
         void InitAdmin();
 
-        void SaveChanges();
-
         void UpdateUser(User user);
 
         /// <summary>
@@ -99,5 +97,13 @@ namespace BurnSystems.FlexBG.Modules.UserM.Interfaces
         /// <param name="userId">Id of the user</param>
         /// <param name="series">Series to be deleted</param>
         void DeletePersistantCookie(long userId, string series);
+
+        /// <summary>
+        /// Changes the username of the given username.
+        /// It will be checked whether the username is allowed and is already existing
+        /// </summary>
+        /// <param name="user">User to be checked</param>
+        /// <param name="newUsername">New Username to be used</param>
+        void ChangeUsername(User user, string newUsername);
     }
 }

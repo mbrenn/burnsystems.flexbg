@@ -320,7 +320,6 @@ namespace BurnSystems.FlexBG.Modules.UserM.Controllers
                 {
                     user.IsActive = true;
                     user.ActivationKey = string.Empty;
-                    this.UserManagement.SaveChanges();
                     success = true;
                 }
             }
@@ -417,7 +416,6 @@ namespace BurnSystems.FlexBG.Modules.UserM.Controllers
             }
 
             this.UserManagement.SetPassword(currentUser, model.newPassword);
-            this.UserManagement.SaveChanges();
 
             var result = new
             {
