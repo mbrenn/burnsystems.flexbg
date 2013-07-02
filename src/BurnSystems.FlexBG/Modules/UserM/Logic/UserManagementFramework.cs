@@ -279,11 +279,8 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         {
             Ensure.That(user != null);
 
-            using (this.AcquireReadLock())
-            {
-                var completePassword = user.Username + password + this.GameInfoProvider.ServerInfo.PasswordSalt;
-                return user.EncryptedPassword == completePassword.Sha1();
-            }
+            var completePassword = user.Username + password + this.GameInfoProvider.ServerInfo.PasswordSalt;
+            return user.EncryptedPassword == completePassword.Sha1();
         }
 
         /// <summary>
