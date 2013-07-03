@@ -4,6 +4,7 @@ using BurnSystems.FlexBG.Modules.UserM.Interfaces;
 using BurnSystems.FlexBG.Modules.UserM.Models;
 using BurnSystems.Logging;
 using BurnSystems.ObjectActivation;
+using BurnSystems.Synchronisation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,11 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
     [BindAlsoTo(typeof(IFlexBgRuntimeModule))]
     public class UserManagementLocal : UserManagementFramework, IUserManagement, IFlexBgRuntimeModule
     {
+        /// <summary>
+        /// Stores the read write lock
+        /// </summary>
+        private ReadWriteLock readWriteLock = new ReadWriteLock();
+
         /// <summary>
         /// Stores the logger instance for this class
         /// </summary>
@@ -49,7 +55,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         /// <returns>Containing the user</returns>
         public override User GetUser(long userId)
         {
-            using (this.AcquireReadLock())
+            using (this.readWriteLock.GetReadLock())
             {
                 return this.Db.Data.Users.Where(x => x.Id == userId).FirstOrDefault();
             }
@@ -62,7 +68,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         /// <returns>Containing the user</returns>
         public override User GetUser(string username)
         {
-            using (this.AcquireReadLock())
+            using (this.readWriteLock.GetReadLock())
             {
                 return this.Db.Data.Users.Where(x => x.Username == username).FirstOrDefault();
             }
@@ -74,7 +80,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         /// <param name="user">User to be removed</param>
         public void RemoveUser(User user)
         {
-            using (this.AcquireWriteLock())
+            using (this.readWriteLock.GetWriteLock())
             {
                 this.Db.Data.Users.Remove(user);
 
@@ -132,7 +138,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         /// <returns></returns>
         public IEnumerable<User> GetAllUsers()
         {
-            using (this.AcquireReadLock())
+            using (this.readWriteLock.GetReadLock())
             {
                 return this.Db.Data.Users.ToList();
             }
@@ -156,7 +162,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         /// <returns></returns>
         public IEnumerable<Group> GetAllGroups()
         {
-            using (this.AcquireReadLock())
+            using (this.readWriteLock.GetReadLock())
             {
                 return this.Db.Data.Groups.ToList();
             }
@@ -168,7 +174,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         /// <param name="groupId">Id of the group</param>
         public override Group GetGroup(long groupId)
         {
-            using (this.AcquireReadLock())
+            using (this.readWriteLock.GetReadLock())
             {
                 return this.Db.Data.Groups.FirstOrDefault(x => x.Id == groupId);
             }
@@ -180,7 +186,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         /// <param name="groupName">NAme of the group</param>
         public override Group GetGroup(string groupName)
         {
-            using (this.AcquireReadLock())
+            using (this.readWriteLock.GetReadLock())
             {
                 return this.Db.Data.Groups.FirstOrDefault(x => x.Name == groupName);
             }
@@ -192,7 +198,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         /// <param name="group">Group to be removed</param>
         public void RemoveGroup(Group group)
         {
-            using (this.AcquireWriteLock())
+            using (this.readWriteLock.GetWriteLock())
             {
                 this.Db.Data.Groups.Remove(group);
 
@@ -210,7 +216,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         /// <param name="user">User to be associated</param>
         public override void AddToGroup(Group group, User user)
         {
-            using (this.AcquireWriteLock())
+            using (this.readWriteLock.GetWriteLock())
             {
                 this.RemoveFromGroup(group, user);
 
@@ -231,7 +237,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         /// <param name="user">User of membership to be removed</param>
         public void RemoveFromGroup(Group group, User user)
         {
-            using (this.AcquireWriteLock())
+            using (this.readWriteLock.GetWriteLock())
             {
                 foreach (var found in this.Db.Data.Memberships.Where(x => x.GroupId == group.Id && x.UserId == user.Id).ToList())
                 {
@@ -247,7 +253,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         /// <param name="user">User to be checked</param>
         public bool IsInGroup(Group group, User user)
         {
-            using (this.AcquireReadLock())
+            using (this.readWriteLock.GetReadLock())
             {
                 return this.Db.Data.Memberships.Any(x => x.GroupId == group.Id && x.UserId == user.Id);
             }
@@ -260,7 +266,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         /// <returns>Enumeration of users</returns>
         public IEnumerable<Group> GetGroupsOfUser(User user)
         {
-            using (this.AcquireReadLock())
+            using (this.readWriteLock.GetReadLock())
             {
                 return this.Db.Data.Memberships
                     .Where(x => x.UserId == user.Id)
@@ -277,7 +283,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         /// <returns>true, if username is existing</returns>
         public override bool IsUsernameExisting(string username)
         {
-            using (this.AcquireReadLock())
+            using (this.readWriteLock.GetReadLock())
             {
                 return this.Db.Data.Users.Any(x => x.Username == username);
             }
@@ -290,7 +296,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         /// <returns>True, if group is existing</returns>
         public override bool IsGroupExisting(string groupName)
         {
-            using (this.AcquireReadLock())
+            using (this.readWriteLock.GetReadLock())
             {
                 return this.Db.Data.Groups.Any(x => x.Name == groupName);
             }
@@ -317,7 +323,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         /// <param name="id">Id of the user</param>
         public User GetUserByToken(Guid id)
         {
-            using (this.AcquireReadLock())
+            using (this.readWriteLock.GetReadLock())
             {
                 return this.Db.Data.Users.Where(x => x.TokenId == id).FirstOrDefault();
             }

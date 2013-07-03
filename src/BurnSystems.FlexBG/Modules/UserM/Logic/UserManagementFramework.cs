@@ -146,7 +146,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         /// Acquires the readlock
         /// </summary>
         /// <returns></returns>
-        public IDisposable AcquireReadLock()
+        private IDisposable AcquireReadLock()
         {
             return this.LockMaster.AcquireReadLock(EntityType.User, 1);
         }
@@ -155,7 +155,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         /// Acquires the write lock
         /// </summary>
         /// <returns></returns>
-        public IDisposable AcquireWriteLock()
+        private IDisposable AcquireWriteLock()
         {
             return this.LockMaster.AcquireWriteLock(EntityType.User, 1);
         }

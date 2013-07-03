@@ -5,6 +5,7 @@ using BurnSystems.FlexBG.Modules.UserM.Interfaces;
 using BurnSystems.FlexBG.Modules.UserM.Models;
 using BurnSystems.Logging;
 using BurnSystems.ObjectActivation;
+using BurnSystems.Synchronisation;
 using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
@@ -21,6 +22,11 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
     [BindAlsoTo(typeof(IFlexBgRuntimeModule))]
     public class UserManagementMongoDb : UserManagementFramework, IUserManagement, IFlexBgRuntimeModule
     {
+        /// <summary>
+        /// Stores the read write lock
+        /// </summary>
+        private ReadWriteLock readWriteLock = new ReadWriteLock();
+
         /// <summary>
         /// Stores the logger instance for this class
         /// </summary>
@@ -286,7 +292,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         /// <returns></returns>
         public long GetNextUserId()
         {
-            lock (this.AcquireWriteLock())
+            lock (this.readWriteLock.GetWriteLock())
             {
                 var collection = this.Db.Database.GetCollection<UserDatabaseInfo>("UserdatabaseInfo");
                 var info = collection.AsQueryable().SingleOrDefault();
@@ -313,7 +319,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         /// <param name="id">Id of the user</param>
         public User GetUserByToken(Guid id)
         {
-            lock (this.AcquireReadLock())
+            lock (this.readWriteLock.GetWriteLock())
             {
                 return this.UserCollection.AsQueryable().Where(x => x.TokenId == id).FirstOrDefault();
             }
@@ -325,7 +331,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         /// <returns></returns>
         public long GetNextGroupId()
         {
-            lock (this.AcquireWriteLock())
+            lock (this.readWriteLock.GetWriteLock())
             {
                 var collection = this.Db.Database.GetCollection<UserDatabaseInfo>("UserdatabaseInfo");
                 var info = collection.AsQueryable().SingleOrDefault();
