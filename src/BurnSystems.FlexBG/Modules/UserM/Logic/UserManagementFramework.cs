@@ -33,7 +33,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         /// <summary>
         /// Stores the logger instance for this class
         /// </summary>
-        private static ILog classLogger = new ClassLogger(typeof(UserManagementFramework));
+        private static ILog logger = new ClassLogger(typeof(UserManagementFramework));
 
         /// <summary>
         /// Gets or sets the lockmaster to be used
@@ -340,7 +340,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
 
                 // Everything ok, perform the change
                 user.Username = newUsername;
-                classLogger.Notify("'" + oldUsername + "' has been renamed to '" + newUsername + "'");
+                logger.Notify("'" + oldUsername + "' has been renamed to '" + newUsername + "'");
 
                 this.UpdateUser(user);
             }
@@ -383,7 +383,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
                     }
                     else
                     {
-                        classLogger.Fail("Perhabs Security breach of cookie for user " + userId);
+                        logger.Fail("Perhabs Security breach of cookie for user " + userId);
 
                         // Clears all cookies
                         user.PersistantTokens.Clear();
@@ -430,7 +430,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
                         new[] { "y", "n" },
                         "y") == "y")
                 {
-                    classLogger.LogEntry(LogLevel.Message, "Administrator is initialized");
+                    logger.LogEntry(LogLevel.Message, "Administrator is initialized");
                     this.InitAdmin();
                 }
             }
@@ -443,7 +443,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         {
             if (!this.IsUsernameExisting(AdminName))
             {
-                classLogger.Message("Creating user with name: " + AdminName);
+                logger.Message("Creating user with name: " + AdminName);
                 var password = this.UserQuery.Ask(
                     "Give password: ",
                     null,

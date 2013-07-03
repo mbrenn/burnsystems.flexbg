@@ -14,11 +14,6 @@ namespace BurnSystems.FlexBG.Modules.LockMasterM.Simple
     class LockScope : IDisposable
     {
         /// <summary>
-        /// Stores the sync object
-        /// </summary>
-        private object syncObject;
-
-        /// <summary>
         /// Action to be executed on disposal
         /// </summary>
         private Action action;
@@ -27,12 +22,10 @@ namespace BurnSystems.FlexBG.Modules.LockMasterM.Simple
         /// Initializes a new instnace of the LockScope class
         /// </summary>
         /// <param name="syncObject">Synchronizationobject to be used</param>
-        public LockScope(object syncObject, Action action)
+        public LockScope(Action action)
         {
-            Ensure.That(syncObject != null);
             Ensure.That(action != null);
 
-            this.syncObject = syncObject;
             this.action = action;
         }
 
@@ -42,7 +35,6 @@ namespace BurnSystems.FlexBG.Modules.LockMasterM.Simple
         public void Dispose()
         {
             this.action();
-            Monitor.Exit(this.syncObject);
         }
     }
 }
