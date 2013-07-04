@@ -278,9 +278,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         public bool IsPasswordCorrect(User user, string password)
         {
             Ensure.That(user != null);
-
-            var completePassword = user.Username + password + this.GameInfoProvider.ServerInfo.PasswordSalt;
-            return user.EncryptedPassword == completePassword.Sha1();
+            return user.EncryptedPassword == CreatePasswordHash(user, password);
         }
 
         /// <summary>
@@ -297,10 +295,22 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
                 throw new InvalidOperationException("password is empty");
             }
 
-            var completePassword = user.Username + password + this.GameInfoProvider.ServerInfo.PasswordSalt;
-            user.EncryptedPassword = completePassword.Sha1();
+            user.EncryptedPassword = this.CreatePasswordHash(user, password);
 
             this.UpdateUser(user);
+        }
+
+        /// <summary>
+        /// Creates the password hash for a specific user. 
+        /// Be aware that all passwords get invalid, if you modify this function
+        /// </summary>
+        /// <param name="user">User, for whom a password will be created</param>
+        /// <param name="password">Password to be used</param>
+        /// <returns>Password hash</returns>
+        private string CreatePasswordHash(User user, string password)
+        {
+            var completePassword = user.Id.ToString("") + user.TokenId.ToString() + password + this.GameInfoProvider.ServerInfo.PasswordSalt;
+            return completePassword.Sha1();
         }
 
         /// <summary>
