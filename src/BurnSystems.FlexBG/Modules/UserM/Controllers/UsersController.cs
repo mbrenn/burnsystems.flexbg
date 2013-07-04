@@ -171,6 +171,13 @@ namespace BurnSystems.FlexBG.Modules.UserM.Controllers
                     "The given passwords are not equal");
             }
 
+            if (!model.AcceptTOS)
+            {
+                throw new MVCProcessException(
+                    "register_noaccepttos",
+                    "User has not accepted Terms of Service");
+            }
+
             if (this.UserConfig.UseDisplayNameForRegister &&
                 string.IsNullOrEmpty(model.DisplayName))
             {
