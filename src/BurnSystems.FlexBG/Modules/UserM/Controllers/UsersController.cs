@@ -157,7 +157,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Controllers
                     "The username is already existing");
             }
 
-            if (string.IsNullOrEmpty(model.Password))
+            if (string.IsNullOrEmpty(model.Password)) 
             {
                 throw new MVCProcessException(
                     "register_nopassword",
@@ -183,7 +183,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Controllers
             {
                 throw new MVCProcessException(
                     "register_displayname",
-                    "Thie Displayname is not given");
+                    "The Displayname is not given");
             }
 
             try
