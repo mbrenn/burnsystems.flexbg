@@ -45,6 +45,8 @@ namespace BurnSystems.FlexBG.Modules.MailSenderM
             this.SendMail(mail);
 
             logger.Message("Dummy-Mail has received request to send mail '" + subject + " to '" + receiver + "'");
+            logger.Verbose("Subject: " + subject);
+            logger.Verbose("Message: " + message);
         }
 
         /// <summary>
