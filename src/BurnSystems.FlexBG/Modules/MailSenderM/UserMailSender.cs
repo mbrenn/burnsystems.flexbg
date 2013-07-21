@@ -69,19 +69,19 @@ namespace BurnSystems.FlexBG.Modules.MailSenderM
 
             if (!acceptsMails)
             {
-                logger.Message("Mail " + subject + " to user " + email + " not sent due to settings");
+                //logger.Message("Mail " + subject + " to user " + email + " not sent due to settings");
                 return false;
             }
 
             if (now - lastLogin > this.Settings.TimeSinceLastLogin)
             {
-                logger.Message("Mail " + subject + " to user " + email + " not sent due to last login");
+                //logger.Message("Mail " + subject + " to user " + email + " not sent due to last login");
                 return false;
             }
 
             if (now - lastSending < this.Settings.MaxMailInterval)
             {
-                logger.Message("Mail " + subject + " to user " + email + " not sent due to last mail sending");
+                //logger.Message("Mail " + subject + " to user " + email + " not sent due to last mail sending");
                 return false;
             }
 
