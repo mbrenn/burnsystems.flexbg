@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -37,6 +37,12 @@
     </Reference>
     <Reference Include="MongoDB.Driver">
       <HintPath>..\..\..\..\src\packages\mongocsharpdriver.1.8.1\lib\net35\MongoDB.Driver.dll</HintPath>
+    </Reference>
+    <Reference Include="BurnSystems.dll">
+      <HintPath>../../packages/bin/BurnSystems.dll</HintPath>
+    </Reference>
+    <Reference Include="BurnSystems.Parser.dll">
+      <HintPath>../../packages/bin/BurnSystems.Parser.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="System" />
@@ -276,10 +282,6 @@
     <Folder Include="Modules\BackgroundWorkerM\Data\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\dependencies\BurnSystems.Parser\src\BurnSystems.Parser.csproj">
-      <Project>{24fc6cc7-afef-456d-8056-96712d1b7909}</Project>
-      <Name>BurnSystems.Parser</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\BurnSystems.WebServer.Umbra\src\BurnSystems.WebServer.Umbra\BurnSystems.WebServer.Umbra.csproj">
       <Project>{0d3e61d8-1a3e-47c3-b90a-e89fde6f4e90}</Project>
       <Name>BurnSystems.WebServer.Umbra</Name>
@@ -288,16 +290,11 @@
       <Project>{b31df31a-f19e-4ff9-b50f-b70f4f5949f4}</Project>
       <Name>BurnSystems.WebServer</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\dependencies\BurnSystems\src\BurnSystems.csproj">
-      <Project>{42023d16-afd1-4d99-bc39-9ef46982eb54}</Project>
-      <Name>BurnSystems</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
