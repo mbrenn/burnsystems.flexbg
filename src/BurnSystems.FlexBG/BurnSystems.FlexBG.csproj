@@ -44,6 +44,12 @@
     <Reference Include="BurnSystems.Parser.dll">
       <HintPath>../../packages/bin/BurnSystems.Parser.dll</HintPath>
     </Reference>
+    <Reference Include="BurnSystems.WebServer.dll">
+      <HintPath>../../packages/bin/BurnSystems.WebServer.dll</HintPath>
+    </Reference>
+    <Reference Include="BurnSystems.WebServer.Umbra.dll">
+      <HintPath>../../packages/bin/BurnSystems.WebServer.Umbra.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -280,16 +286,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Modules\BackgroundWorkerM\Data\" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\BurnSystems.WebServer.Umbra\src\BurnSystems.WebServer.Umbra\BurnSystems.WebServer.Umbra.csproj">
-      <Project>{0d3e61d8-1a3e-47c3-b90a-e89fde6f4e90}</Project>
-      <Name>BurnSystems.WebServer.Umbra</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\BurnSystems.WebServer\src\BurnSystems.WebServer\BurnSystems.WebServer.csproj">
-      <Project>{b31df31a-f19e-4ff9-b50f-b70f4f5949f4}</Project>
-      <Name>BurnSystems.WebServer</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
