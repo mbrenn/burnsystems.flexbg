@@ -1,6 +1,6 @@
 CS_FILES = $(shell find src/ -type f -name *.cs)
 
-all: build_burnsystems build_burnsystems_parser build_burnsystems_webserver bin/BurnSystems.Webserver.Umbra.dll
+all: build_burnsystems build_burnsystems_parser build_burnsystems_webserver bin/BurnSystems.WebServer.Umbra.dll
 
 
 .PHONY: build_burnsystems
@@ -28,7 +28,7 @@ packages/bin/BurnSystems.WebServer.dll: packages/burnsystems/bin/BurnSystems.dll
 	cp -r packages/burnsystems.webserver/bin/* packages/bin/
 
 
-bin/BurnSystems.Webserver.Umbra.dll: $(CS_FILES) packages/bin/BurnSystems.dll packages/bin/BurnSystems.Parser.dll packages/bin/BurnSystems.WebServer.dll
+bin/BurnSystems.WebServer.Umbra.dll: $(CS_FILES) packages/bin/BurnSystems.dll packages/bin/BurnSystems.Parser.dll packages/bin/BurnSystems.WebServer.dll
 	xbuild src/BurnSystems.WebServer.Umbra/BurnSystems.WebServer.Umbra.csproj
 	mkdir -p bin/
 	mkdir -p bin/htdocs
