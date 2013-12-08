@@ -37,7 +37,7 @@ packages/bin/BurnSystems.WebServer.Umbra.dll: packages/burnsystems.webserver/bin
 bin/BurnSystems.FlexBG.dll: $(CS_FILES) packages/bin/BurnSystems.dll packages/bin/BurnSystems.Parser.dll packages/bin/BurnSystems.WebServer.dll packages/bin/BurnSystems.WebServer.Umbra.dll
 	xbuild src/BurnSystems.FlexBG/BurnSystems.FlexBG.csproj
 	mkdir -p bin/
-	cp src/BurnSystems.FlexBG/bin/Debug/* bin/
+	cp -r src/BurnSystems.FlexBG/bin/Debug/* bin/
 
 
 bin/BurnSystems.FlexBG.Test.dll: $(CS_FILES) bin/BurnSystems.Webserver.dll
