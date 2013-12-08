@@ -42,7 +42,6 @@ clean:
 	make -C packages/burnsystems clean
 	make -C packages/burnsystems.parser clean
 	make -C packages/burnsystems.webserver clean
-	rm -rf packages/bin
 	rm -rf bin
 	rm -rf packages/bin
 	rm -rf src/BurnSystems.WebServer.Umbra/bin
