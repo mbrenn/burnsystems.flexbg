@@ -39,5 +39,9 @@ bin/BurnSystems.WebServer.Umbra.dll: $(CS_FILES) packages/bin/BurnSystems.dll pa
 	cp packages/burnsystems.webserver/src/BurnSystems.WebServer/Resources/DateFormat/dateformat.js bin/htdocs/js/lib/
 
 clean:
+	make -C packages/burnsystems clean
+	make -C packages/burnsystems.parser clean
+	make -C packages/burnsystems.webserver clean
+	rm -rf packages/bin
 	rm -rf bin
 	rm -rf src/BurnSystems.WebServer.Umbra/bin
