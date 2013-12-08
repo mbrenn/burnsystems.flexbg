@@ -40,4 +40,5 @@ bin/BurnSystems.WebServer.Umbra.dll: $(CS_FILES) packages/bin/BurnSystems.dll pa
 
 clean:
 	rm -rf bin
+	rm -rf packages/bin
 	rm -rf src/BurnSystems.WebServer.Umbra/bin
