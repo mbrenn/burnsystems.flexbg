@@ -10,7 +10,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 namespace BurnSystems.FlexBG.Modules.UserM.Data
 {
     [BindAlsoTo(typeof(IFlexBgRuntimeModule))]
-    public class UserDatabase : IFlexBgRuntimeModule
+    public class UserDatabase : IFlexBgRuntimeModule, IDisposable
     {
         /// <summary>
         /// Gets the database storing the users. 
@@ -123,6 +123,11 @@ namespace BurnSystems.FlexBG.Modules.UserM.Data
         public void Shutdown()
         {
             this.StoreToFile();
+        }
+
+        public void Dispose()
+        {
+            this.sync.Dispose();
         }
     }
 }

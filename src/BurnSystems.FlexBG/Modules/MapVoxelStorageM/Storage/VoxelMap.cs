@@ -10,7 +10,7 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
     /// <summary>
     /// Defines the voxelmap class, which gives the access to voxels for the game
     /// </summary>
-    public class VoxelMap : IVoxelMap
+    public class VoxelMap : IVoxelMap, IDisposable
     {
         /// <summary>
         /// Stores the logger
@@ -317,7 +317,7 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
         /// <param name="y">Y-Coordinate of the column</param>
         public void ReleaseReadLock(long instanceId, int x1, int y1, int x2, int y2)
         {
-            sync.ExitReadLock();
+            this.sync.ExitReadLock();
         }
 
         /// <summary>
@@ -327,7 +327,12 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
         /// <param name="y">Y-Coordinate of the column</param>
         public void ReleaseWriteLock(long instanceId, int x1, int y1, int x2, int y2)
         {
-            sync.ExitWriteLock();
+            this.sync.ExitWriteLock();
+        }
+
+        public void Dispose()
+        {
+            this.sync.Dispose();
         }
     }
 }

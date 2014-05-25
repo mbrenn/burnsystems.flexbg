@@ -12,7 +12,7 @@ namespace BurnSystems.FlexBG.Modules.LockMasterM.Simple
     /// A very simple lock master that just locks the complete game, but checks whether
     /// we have the right order for entity types. 
     /// </summary>
-    public class SimpleLockMaster : ILockMaster
+    public class SimpleLockMaster : ILockMaster, IDisposable
     {
         /// <summary>
         /// Used for synchronization
@@ -48,6 +48,11 @@ namespace BurnSystems.FlexBG.Modules.LockMasterM.Simple
         /// <param name="childEntityType">Type if of the parent</param>
         public void AddRelationShip(int parentEntityType, int childEntityType)
         {
+        }
+
+        public void Dispose()
+        {
+            this.syncObject.Dispose();
         }
     }
 }

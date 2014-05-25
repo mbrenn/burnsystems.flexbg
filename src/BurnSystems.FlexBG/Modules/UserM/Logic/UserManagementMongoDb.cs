@@ -20,7 +20,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
     /// Defines the usermanagement
     /// </summary>
     [BindAlsoTo(typeof(IFlexBgRuntimeModule))]
-    public class UserManagementMongoDb : UserManagementFramework, IUserManagement, IFlexBgRuntimeModule
+    public class UserManagementMongoDb : UserManagementFramework, IUserManagement, IFlexBgRuntimeModule, IDisposable
     {
         /// <summary>
         /// Stores the read write lock
@@ -365,6 +365,11 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         public MongoCollection<Membership> MembershipCollection
         {
             get { return this.Db.Database.GetCollection<Membership>("Memberships"); }
+        }
+
+        public void Dispose()
+        {
+            this.readWriteLock.Dispose();
         }
     }
 }

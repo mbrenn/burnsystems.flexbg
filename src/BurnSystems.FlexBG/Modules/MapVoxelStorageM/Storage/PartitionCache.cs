@@ -12,7 +12,7 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
     /// The methods are also thread-safe
     /// </summary>
     [BindAlsoTo(typeof(IFlexBgRuntimeModule))]
-    public class PartitionCache : IPartitionLoader, IFlexBgRuntimeModule
+    public class PartitionCache : IPartitionLoader, IFlexBgRuntimeModule, IDisposable
     {
         private ILog logger = new ClassLogger(typeof(PartitionCache));
 
@@ -312,6 +312,11 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage
         void IFlexBgRuntimeModule.Shutdown()
         {
             this.StoreAndClearAll();
+        }
+
+        public void Dispose()
+        {
+            this.sync.Dispose();
         }
     }
 }

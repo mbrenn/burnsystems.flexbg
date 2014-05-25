@@ -17,7 +17,7 @@ namespace BurnSystems.FlexBG.Modules.BackgroundWorkerM.Logic
     /// Implements the interface IBackgroundWorker
     /// </summary>
     [BindAlsoTo(typeof(IFlexBgRuntimeModule))]
-    public class BackgroundWorker : IBackgroundWorker, IFlexBgRuntimeModule
+    public class BackgroundWorker : IBackgroundWorker, IFlexBgRuntimeModule, IDisposable
     {
         /// <summary>
         /// Stores the worker dictionary
@@ -191,6 +191,14 @@ namespace BurnSystems.FlexBG.Modules.BackgroundWorkerM.Logic
             {
                 var worker = this.workers[id];
                 this.workers.Remove(id);
+            }
+        }
+
+        public void Dispose()
+        {
+            if (this.actionEvent != null)
+            {
+                this.actionEvent.Dispose();
             }
         }
     }

@@ -15,7 +15,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
     /// Defines the usermanagement
     /// </summary>
     [BindAlsoTo(typeof(IFlexBgRuntimeModule))]
-    public class UserManagementLocal : UserManagementFramework, IUserManagement, IFlexBgRuntimeModule
+    public class UserManagementLocal : UserManagementFramework, IUserManagement, IFlexBgRuntimeModule, IDisposable
     {
         /// <summary>
         /// Stores the read write lock
@@ -327,6 +327,11 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
             {
                 return this.Db.Data.Users.Where(x => x.TokenId == id).FirstOrDefault();
             }
+        }
+
+        public void Dispose()
+        {
+            this.readWriteLock.Dispose();
         }
     }
 }
