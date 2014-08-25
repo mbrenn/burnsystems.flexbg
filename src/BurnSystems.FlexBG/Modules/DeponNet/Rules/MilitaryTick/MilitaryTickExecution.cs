@@ -1,5 +1,4 @@
 ﻿using BurnSystems.FlexBG.Modules.DeponNet.GameM;
-using BurnSystems.FlexBG.Modules.DeponNet.GameM.Controllers;
 using BurnSystems.Logging;
 using BurnSystems.ObjectActivation;
 using System;
@@ -13,7 +12,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.Rules.MilitaryTick
 {
     public class MilitaryTickExecution
     {
-        [Inject(ByName = DeponGamesController.CurrentGameName)]
+        //[Inject(ByName = DeponGamesController.CurrentGameName)]
         public Game CurrentGame
         {
             get;

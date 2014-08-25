@@ -1,5 +1,4 @@
 ﻿using BurnSystems.FlexBG.Modules.DeponNet.GameM;
-using BurnSystems.FlexBG.Modules.DeponNet.GameM.Controllers;
 using BurnSystems.FlexBG.Modules.DeponNet.MapFieldOwnerM;
 using BurnSystems.FlexBG.Modules.LockMasterM;
 using BurnSystems.Logging;
@@ -15,7 +14,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.Rules.EconomyTick
 {
     public class EconomyTickExecution
     {
-        [Inject(ByName = DeponGamesController.CurrentGameName)]
+        //[Inject(ByName = DeponGamesController.CurrentGameName)]
         public Game CurrentGame
         {
             get;

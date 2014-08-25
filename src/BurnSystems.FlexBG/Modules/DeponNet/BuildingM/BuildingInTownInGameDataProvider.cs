@@ -1,6 +1,5 @@
 ﻿using BurnSystems.FlexBG.Modules.DeponNet.BuildingM.Interface;
 using BurnSystems.FlexBG.Modules.DeponNet.GameM;
-using BurnSystems.FlexBG.Modules.DeponNet.GameM.Controllers;
 using BurnSystems.FlexBG.Modules.DeponNet.PlayerM.Interface;
 using BurnSystems.FlexBG.Modules.DeponNet.TownM.Interface;
 using BurnSystems.ObjectActivation;
@@ -39,7 +38,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.BuildingM
             set;
         }
 
-        [Inject(ByName = DeponGamesController.CurrentGameName, IsMandatory = true)]
+        //[Inject(ByName = DeponGamesController.CurrentGameName, IsMandatory = true)]
         public Game CurrentGame
         {
             get;

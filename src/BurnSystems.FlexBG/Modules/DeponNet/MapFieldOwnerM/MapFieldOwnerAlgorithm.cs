@@ -1,6 +1,5 @@
 ﻿using BurnSystems.FlexBG.Modules.DeponNet.Common;
 using BurnSystems.FlexBG.Modules.DeponNet.GameM;
-using BurnSystems.FlexBG.Modules.DeponNet.GameM.Controllers;
 using BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage;
 using BurnSystems.ObjectActivation;
 using BurnSystems.Test;
@@ -27,7 +26,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.MapFieldOwnerM
             set;
         }
 
-        [Inject(ByName = DeponGamesController.CurrentGameName, IsMandatory = true)]
+        // [Inject(ByName = DeponGamesController.CurrentGameName, IsMandatory = true)]
         public Game CurrentGame
         {
             get;

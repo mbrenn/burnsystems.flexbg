@@ -1,6 +1,5 @@
 ﻿using BurnSystems.FlexBG.Modules.DeponNet.GameClockM.Interface;
 using BurnSystems.FlexBG.Modules.DeponNet.GameM;
-using BurnSystems.FlexBG.Modules.DeponNet.GameM.Controllers;
 using BurnSystems.FlexBG.Modules.DeponNet.MapM.Interface;
 using BurnSystems.FlexBG.Modules.DeponNet.ResourceSetM.Interface;
 using BurnSystems.Logging;
@@ -41,7 +40,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.ResourceSetM
             set;
         }
 
-        [Inject(IsMandatory = true, ByName = DeponGamesController.CurrentGameName)]
+        //[Inject(IsMandatory = true, ByName = DeponGamesController.CurrentGameName)]
         public Game CurrentGame
         {
             get;

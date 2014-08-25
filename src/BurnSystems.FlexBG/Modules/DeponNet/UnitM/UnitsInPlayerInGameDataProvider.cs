@@ -1,5 +1,4 @@
 ﻿using BurnSystems.FlexBG.Modules.DeponNet.GameM;
-using BurnSystems.FlexBG.Modules.DeponNet.GameM.Controllers;
 using BurnSystems.FlexBG.Modules.DeponNet.PlayerM.Interface;
 using BurnSystems.FlexBG.Modules.DeponNet.UnitM.Data;
 using BurnSystems.FlexBG.Modules.DeponNet.UnitM.Interfaces;
@@ -21,7 +20,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.UnitM
         /// <summary>
         /// Gets or sets the current game
         /// </summary>
-        [Inject(ByName = DeponGamesController.CurrentGameName, IsMandatory = true)]
+        // [Inject(ByName = DeponGamesController.CurrentGameName, IsMandatory = true)]
         public Game CurrentGame
         {
             get;

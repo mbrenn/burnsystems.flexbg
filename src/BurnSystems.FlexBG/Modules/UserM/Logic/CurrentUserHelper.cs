@@ -1,7 +1,6 @@
 ﻿using BurnSystems.FlexBG.Modules.UserM.Interfaces;
 using BurnSystems.FlexBG.Modules.UserM.Models;
 using BurnSystems.ObjectActivation;
-using BurnSystems.WebServer.Modules.UserManagement;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,16 +20,6 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         public const string Name = "CurrentUser";
 
         /// <summary>
-        /// Gets or sets the authentication
-        /// </summary>
-        [Inject]
-        public IAuthentication Authentication
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
         /// Gets or sets the user management
         /// </summary>
         [Inject]
@@ -48,14 +37,16 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         public static User GetCurrentUser(IActivates activates)
         {
             var helper = activates.Create<CurrentUserHelper>();
-            var webUser = helper.Authentication.GetLoggedInUser();
+
+            throw new NotImplementedException();
+            /*string webUser = null; 
             if (webUser == null)
             {
                 return null;
             }
 
-            var user = helper.UserManagement.GetUser(webUser.Id);
-            return user;
+             var user = helper.UserManagement.GetUser(webUser.Id);
+            return user;*/
         }
     }
 }

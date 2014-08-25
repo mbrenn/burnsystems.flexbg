@@ -1,5 +1,4 @@
 ﻿using BurnSystems.Collections;
-using BurnSystems.WebServer.Modules.UserManagement;
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson.Serialization.Options;
 using System;
