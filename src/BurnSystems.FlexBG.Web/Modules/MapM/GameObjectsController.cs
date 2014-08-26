@@ -10,12 +10,12 @@ using BurnSystems.FlexBG.Modules.DeponNet.TownM.Interface;
 using BurnSystems.FlexBG.Modules.DeponNet.UnitM.Interfaces;
 using BurnSystems.FlexBG.Modules.LockMasterM;
 using BurnSystems.ObjectActivation;
-using BurnSystems.WebServer.Modules.MVC;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace BurnSystems.FlexBG.Modules.DeponNet.MapM.Controllers
 {
@@ -105,8 +105,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.MapM.Controllers
         /// <param name="y1">Top-Y-Coordinate of the map</param>
         /// <param name="y2">Bottom-Y-Coordinate of the map</param>
         /// <returns>Enumeration of gameobjects</returns>
-        [WebMethod]
-        public IActionResult GetGameObjects(int x1, int x2, int y1, int y2)
+        public ActionResult GetGameObjects(int x1, int x2, int y1, int y2)
         {
             using (this.LockMaster.AcquireReadLock())
             {

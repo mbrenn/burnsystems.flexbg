@@ -1,12 +1,12 @@
 ﻿using BurnSystems.FlexBG.Modules.MapVoxelStorageM.Controllers;
 using BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage;
 using BurnSystems.ObjectActivation;
-using BurnSystems.WebServer.Modules.MVC;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace BurnSystems.FlexBG.Modules.DeponNet.DataProvider
 {
@@ -26,12 +26,11 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.DataProvider
             set;
         }
 
-        [WebMethod]
-        public IActionResult GetMapInfo()
+        public ActionResult GetMapInfo()
         {
             if (this.CurrentMapInstance == null)
             {
-                throw new MVCProcessException("nomapinfo", "No mapinfo retrieved");
+                throw new NotImplementedException("nomapinfo");
             }
             else
             {
@@ -53,8 +52,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.DataProvider
         /// <param name="y1">Top-Y-Coordinate of the map</param>
         /// <param name="y2">Bottom-Y-Coordinate of the map</param>
         /// <returns></returns>
-        [WebMethod]
-        public IActionResult GetSurface(int x1, int x2, int y1, int y2)
+        public ActionResult GetSurface(int x1, int x2, int y1, int y2)
         {
             if (x2 < x1 || y2 < y1)
             {

@@ -4,12 +4,12 @@ using BurnSystems.FlexBG.Modules.DeponNet.GameM.Interface;
 using BurnSystems.FlexBG.Modules.DeponNet.MapM.Interface;
 using BurnSystems.FlexBG.Modules.DeponNet.ResourceSetM.Interface;
 using BurnSystems.ObjectActivation;
-using BurnSystems.WebServer.Modules.MVC;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace BurnSystems.FlexBG.Modules.DeponNet.DataProvider
 {
@@ -50,8 +50,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.DataProvider
         /// Gets information about the current game. 
         /// Includes resource types
         /// </summary>
-        [WebMethod]
-        public IActionResult GetCurrentGame()
+        public ActionResult GetCurrentGame()
         {
             var fieldTypes = this.FieldTypeProvider.GetAll().Select(x =>
                 new

@@ -2,12 +2,12 @@
 using BurnSystems.FlexBG.Modules.DeponNet.GameM;
 using BurnSystems.FlexBG.Modules.DeponNet.GameM.Controllers;
 using BurnSystems.ObjectActivation;
-using BurnSystems.WebServer.Modules.MVC;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace BurnSystems.FlexBG.Modules.DeponNet.GameClockM.Controllers
 {
@@ -30,8 +30,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.GameClockM.Controllers
             set;
         }
 
-        [WebMethod]
-        public IActionResult GetTime()
+        public ActionResult GetTime()
         {
             var ticks = this.GameClock.GetTicks(this.CurrentGame.Id);
             var result = new

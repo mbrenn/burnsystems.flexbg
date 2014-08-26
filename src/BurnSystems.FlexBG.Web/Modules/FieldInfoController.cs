@@ -10,12 +10,12 @@ using BurnSystems.FlexBG.Modules.DeponNet.UnitM;
 using BurnSystems.FlexBG.Modules.DeponNet.UnitM.Interfaces;
 using BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage;
 using BurnSystems.ObjectActivation;
-using BurnSystems.WebServer.Modules.MVC;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace BurnSystems.FlexBG.Modules.DeponNet.DataProvider
 {
@@ -102,8 +102,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.DataProvider
         /// <param name="x">Requested X-Coordinate</param>
         /// <param name="y">Requested Y-Coordinate</param>
         /// <returns>Result of the field</returns>
-        [WebMethod]
-        public IActionResult GetDetailFieldInfo(int x, int y)
+        public ActionResult GetDetailFieldInfo(int x, int y)
         {
             // Gets the field information
             var field = this.VoxelMap.GetColumn(this.CurrentGame.Id, x, y);

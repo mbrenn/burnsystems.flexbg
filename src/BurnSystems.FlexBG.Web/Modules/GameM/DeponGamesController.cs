@@ -5,13 +5,12 @@ using BurnSystems.FlexBG.Modules.UserM.Interfaces;
 using BurnSystems.FlexBG.Modules.UserM.Models;
 using BurnSystems.ObjectActivation;
 using BurnSystems.Test;
-using BurnSystems.WebServer.Modules.MVC;
-using BurnSystems.WebServer.Modules.Sessions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace BurnSystems.FlexBG.Modules.DeponNet.GameM.Controllers
 {
@@ -48,13 +47,6 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.GameM.Controllers
             set;
         }
 
-        [Inject(IsMandatory = true)]
-        public Session Session
-        {
-            get;
-            set;
-        }
-
         /// <summary>
         /// Gets or sets the activation container
         /// </summary>
@@ -84,8 +76,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.GameM.Controllers
         /// Lists all games
         /// </summary>
         /// <returns></returns>
-        [WebMethod]
-        public IActionResult GetGames()
+        public ActionResult GetGames()
         {
             var games = this.GameManagement.GetAll();
             var players = this.PlayerManagement.GetPlayersOfUser(this.CurrentUser.Id);
@@ -106,8 +97,8 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.GameM.Controllers
             return this.Json(result);
         }
 
-        [WebMethod]
-        public IActionResult JoinGame([PostModel] JoinGameModel model)
+        [HttpPost]
+        public ActionResult JoinGame( JoinGameModel model)
         {
             using (var block = CreateActivationBlockInGameScope(this.ActivationBlock, this.GameManagement, model.GameId))
             {
@@ -133,8 +124,8 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.GameM.Controllers
             }
         }
 
-        [WebMethod]
-        public IActionResult ContinueGame([PostModel] ContinueGameModel model)
+        [HttpPost]
+        public ActionResult ContinueGame( ContinueGameModel model)
         {
             using (var block = CreateActivationBlockInGameScope(this.ActivationBlock, this.GameManagement, model.GameId))
             {
@@ -142,20 +133,20 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.GameM.Controllers
 
                 if (!playerRules.CanUserContinueGame(this.CurrentUser.Id, model.GameId))
                 {
-                    throw new MVCProcessException("continuegame_playernotingame", "Player cannot join game.");
+                    throw new NotImplementedException("continuegame_playernotingame");
                 }
                 else
                 {
                     // Ok, we are in game, now add a cookie for game (Cookies are for games, mjam)
-                    this.Session["FlexBG.CurrentGame"] = model.GameId;
+                    throw new InvalidOperationException();
+                    /*this.Session["FlexBG.CurrentGame"] = model.GameId;
 
-                    return this.SuccessJson();
+                    return this.SuccessJson();*/
                 }
             }
         }
 
-        [WebMethod]
-        public IActionResult GetGameInfo()
+        public ActionResult GetGameInfo()
         {
             var result = new
             {
@@ -174,20 +165,18 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.GameM.Controllers
         /// Leaves the gameplay. This is the counter method to <c>ContinueGame</c>. 
         /// </summary>
         /// <returns>Result of the web request</returns>
-        [WebMethod]
-        public IActionResult LeaveGame()
+        public ActionResult LeaveGame()
         {
             this.Session.Remove("FlexBG.CurrentGame");
 
-            return this.SuccessJson();
+            return this.Json(new { success = true });
         }
 
         /// <summary>
         /// Checks, if player is in game
         /// </summary>
         /// <returns></returns>
-        [WebMethod]
-        public IActionResult HasUserJoined()
+        public ActionResult HasUserJoined()
         {
             if (this.CurrentGame == null
                 || this.PlayerManagement.GetPlayersOfUser(this.CurrentUser.Id).All(x => x.GameId != this.CurrentGame.Id))
@@ -219,6 +208,9 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.GameM.Controllers
         /// <returns>Found game or null, if user has not continued a game</returns>
         public static Game GetGameOfWebRequest(IActivates activates)
         {
+            throw new NotImplementedException("SESSION");
+
+            /*
             var session = activates.Get<Session>();
             var gameManagement = activates.Get<IGameManagement>();
             Ensure.That(session != null, "Binding to Session has not been done");
@@ -231,7 +223,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.GameM.Controllers
                 return null;
             }
 
-            return gameManagement.Get((long)gameIdObj);
+            return gameManagement.Get((long)gameIdObj);*/
         }
 
         /// <summary>

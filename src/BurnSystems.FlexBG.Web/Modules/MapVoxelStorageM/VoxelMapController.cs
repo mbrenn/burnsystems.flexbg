@@ -6,10 +6,10 @@ using BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage;
 using BurnSystems.FlexBG.Modules.MapVoxelStorageM.Configuration;
 using System.Globalization;
 using BurnSystems.ObjectActivation;
-using BurnSystems.WebServer.Modules.MVC;
 using BurnSystems.FlexBG.Modules.DeponNet.GameM;
 using BurnSystems.FlexBG.Modules.DeponNet.GameM.Controllers;
 using BurnSystems.Test;
+using System.Web.Mvc;
 
 namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Controllers
 {
@@ -41,12 +41,11 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Controllers
             set;
         }
 
-        [WebMethod]
-        public IActionResult GetMapInfo()
+        public ActionResult GetMapInfo()
         {
             if (this.CurrentMapInstance == null)
             {
-                throw new MVCProcessException("nomapinfo", "No mapinfo retrieved");
+                throw new NotImplementedException("nomapinfo");
             }
             else
             {
@@ -68,8 +67,7 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Controllers
         /// <param name="y1">Top-Y-Coordinate of the map</param>
         /// <param name="y2">Bottom-Y-Coordinate of the map</param>
         /// <returns></returns>
-        [WebMethod]
-        public IActionResult GetSurface(int x1, int x2, int y1, int y2)
+        public ActionResult GetSurface(int x1, int x2, int y1, int y2)
         {
             if (x2 < x1 || y2 < y1)
             {
@@ -119,7 +117,7 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM.Controllers
         /// <summary>
         /// Returns an actionresult containing the textures
         /// </summary>
-        public IActionResult Textures()
+        public ActionResult Textures()
         {
             var result = new Dictionary<string, string>();
 
