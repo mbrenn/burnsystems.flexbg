@@ -62,48 +62,5 @@ namespace BurnSystems.FlexBG.Modules.UserM.Interfaces
         void InitAdmin();
 
         void UpdateUser(User user);
-
-        /// <summary>
-        /// Gets a specific user by token id
-        /// </summary>
-        /// <param name="id">Id of the user</param>
-        User GetUserByToken(Guid id);
-
-        /// <summary>
-        /// Sets a persistant cookie to user.
-        /// The following mechanism is used: 
-        /// http://stackoverflow.com/questions/244882/what-is-the-best-way-to-implement-remember-me-for-a-website
-        /// </summary>
-        /// <param name="userId">Id of the user</param>
-        /// <param name="series">Series to be stored</param>
-        /// <param name="token">Token to be stored</param>
-        void SetPersistantCookie(long userId, string series, string token);
-
-        /// <summary>
-        /// Checks, if the retrieved persistant cookie is correct. 
-        /// The following mechanism is used: 
-        /// http://stackoverflow.com/questions/244882/what-is-the-best-way-to-implement-remember-me-for-a-website
-        /// The token is removed
-        /// </summary>
-        /// <param name="userId">Id of the user</param>
-        /// <param name="series">Series to be checked</param>
-        /// <param name="token">Token to be checked</param>
-        /// <returns>true, if ok</returns>
-        bool CheckPersistantCookie(long userId, string series, string token);
-
-        /// <summary>
-        /// Deletes the persistant cookie
-        /// </summary>
-        /// <param name="userId">Id of the user</param>
-        /// <param name="series">Series to be deleted</param>
-        void DeletePersistantCookie(long userId, string series);
-
-        /// <summary>
-        /// Changes the username of the given username.
-        /// It will be checked whether the username is allowed and is already existing
-        /// </summary>
-        /// <param name="user">User to be checked</param>
-        /// <param name="newUsername">New Username to be used</param>
-        void ChangeUsername(User user, string newUsername);
     }
 }

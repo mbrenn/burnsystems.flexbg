@@ -43,6 +43,12 @@
     <Reference Include="EntityFramework.SqlServer">
       <HintPath>..\..\..\depon-game\src\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core">
+      <HintPath>..\..\..\depon-game\src\packages\Microsoft.AspNet.Identity.Core.2.1.0\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.EntityFramework">
+      <HintPath>..\..\..\depon-game\src\packages\Microsoft.AspNet.Identity.EntityFramework.2.1.0\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
+    </Reference>
     <Reference Include="Ninject">
       <HintPath>..\..\..\depon-game\src\packages\Ninject.3.2.2.0\lib\net45-full\Ninject.dll</HintPath>
     </Reference>
@@ -174,9 +180,6 @@
     <Compile Include="Modules\MailSenderM\UserMailSenderSettings.cs" />
     <Compile Include="Modules\MapVoxelStorageM\Storage\VoxelMapColumn.cs" />
     <Compile Include="Modules\MapVoxelStorageM\Storage\VoxelMapDataItem.cs" />
-    <Compile Include="Modules\ServerInfoM\ServerInfo.cs" />
-    <Compile Include="Modules\ServerInfoM\ServerInfoProvider.cs" />
-    <Compile Include="Modules\ServerInfoM\IServerInfoProvider.cs" />
     <Compile Include="Modules\GenericObjectStorageM\Entry.cs" />
     <Compile Include="Modules\GenericObjectStorageM\Extensions.cs" />
     <Compile Include="Modules\GenericObjectStorageM\RuntimeStore.cs" />
@@ -216,20 +219,22 @@
     <Compile Include="Modules\MapVoxelStorageM\Storage\PartitionLoader.cs" />
     <Compile Include="Modules\MapVoxelStorageM\Storage\VoxelMap.cs" />
     <Compile Include="Modules\MapVoxelStorageM\Storage\VoxelMapInfo.cs" />
-    <Compile Include="Modules\UserM\Data\UserDatabase.cs" />
-    <Compile Include="Modules\UserM\Data\UserDatabaseInfo.cs" />
-    <Compile Include="Modules\UserM\Data\UserDatabaseLocal.cs" />
+    <Compile Include="Modules\ServerInfoM\IServerInfoProvider.cs" />
+    <Compile Include="Modules\ServerInfoM\ServerInfo.cs" />
+    <Compile Include="Modules\UserM\Local\Data\UserDatabase.cs" />
+    <Compile Include="Modules\UserM\Local\Data\UserDatabaseInfo.cs" />
+    <Compile Include="Modules\UserM\Local\Data\UserDatabaseLocal.cs" />
     <Compile Include="Modules\UserM\Interfaces\IUserManagement.cs" />
-    <Compile Include="Modules\UserM\Logic\UserManagementFramework.cs" />
+    <Compile Include="Modules\UserM\Logic\ASPNetIdentity\UserManagementAspNetIdentity.cs" />
     <Compile Include="Modules\UserM\Logic\CurrentUserHelper.cs" />
-    <Compile Include="Modules\UserM\Logic\UserManagementMongoDb.cs" />
     <Compile Include="Modules\UserM\Logic\UserManagementConfig.cs" />
-    <Compile Include="Modules\UserM\Logic\UserManagementLocal.cs" />
     <Compile Include="Modules\UserM\Logic\UserManagementException.cs" />
+    <Compile Include="Modules\UserM\Logic\UserManagementFramework.cs" />
+    <Compile Include="Modules\UserM\Logic\Local\UserManagementLocal.cs" />
+    <Compile Include="Modules\UserM\Logic\MongoDb\UserManagementMongoDb.cs" />
     <Compile Include="Modules\UserM\Models\Group.cs" />
     <Compile Include="Modules\UserM\Models\Membership.cs" />
     <Compile Include="Modules\UserM\Models\User.cs" />
-    <Compile Include="Modules\UserM\Models\UserDataTokens.cs" />
     <Compile Include="Modules\UserQueryM\IUserQuery.cs" />
     <Compile Include="Modules\UserQueryM\UserQueryConsole.cs" />
     <Compile Include="Modules\UserQueryM\UserQueryDefaultAnswer.cs" />

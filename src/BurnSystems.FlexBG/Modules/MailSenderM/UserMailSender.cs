@@ -1,5 +1,4 @@
 ﻿using BurnSystems.FlexBG.Modules.UserM.Interfaces;
-using BurnSystems.FlexBG.Modules.UserM.Models;
 using BurnSystems.Logging;
 using BurnSystems.ObjectActivation;
 using System;
@@ -53,6 +52,8 @@ namespace BurnSystems.FlexBG.Modules.MailSenderM
         /// <returns>Defines the information whether a mail had been sent to user</returns>
         public bool SendMailToUser(long userId, string subject, string content)
         {
+            return false;
+            /*
             var user = this.UserManagement.GetUser(userId);
             if (user == null)
             {
@@ -90,6 +91,7 @@ namespace BurnSystems.FlexBG.Modules.MailSenderM
             this.MailSender.SendMail(email, subject, content);
 
             return true;
+             */
         }
     }
 }
