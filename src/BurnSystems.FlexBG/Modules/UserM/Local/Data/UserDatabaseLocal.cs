@@ -85,18 +85,18 @@ namespace BurnSystems.FlexBG.Modules.UserM.Local.Data
         /// Gets the next user id
         /// </summary>
         /// <returns></returns>
-        public long GetNextUserId()
+        public string GetNextUserId()
         {
-            return Interlocked.Increment(ref this.lastUserId);
+            return Guid.NewGuid().ToString();
         }
 
         /// <summary>
         /// Gets the next user id
         /// </summary>
         /// <returns></returns>
-        public long GetNextGroupId()
+        public string GetNextGroupId()
         {
-            return Interlocked.Increment(ref this.lastGroupId);
+            return Guid.NewGuid().ToString();
         }
 
     }

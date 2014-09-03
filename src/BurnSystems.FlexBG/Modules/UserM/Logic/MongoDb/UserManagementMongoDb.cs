@@ -57,7 +57,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic.MongoDb
         /// </summary>
         /// <param name="userId">Id of the user to be requested</param>
         /// <returns>Containing the user</returns>
-        public override User GetUser(long userId)
+        public override User GetUserById(string userId)
         {
             return this.UserCollection.AsQueryable().Where(x => x.Id == userId).FirstOrDefault();
         }
@@ -116,7 +116,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic.MongoDb
         /// Gets the group
         /// </summary>
         /// <param name="groupId">Id of the group</param>
-        public override Group GetGroup(long groupId)
+        public override Group GetGroupById(string groupId)
         {
             return this.GroupCollection.AsQueryable().FirstOrDefault(x => x.Id == groupId);
         }
@@ -290,27 +290,9 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic.MongoDb
         /// Gets the next user id
         /// </summary>
         /// <returns></returns>
-        public long GetNextUserId()
+        public string GetNextUserId()
         {
-            lock (this.readWriteLock.GetWriteLock())
-            {
-                var collection = this.Db.Database.GetCollection<UserDatabaseInfo>("UserdatabaseInfo");
-                var info = collection.AsQueryable().SingleOrDefault();
-
-                if (info == null)
-                {
-                    info = new UserDatabaseInfo();
-                    info.LastUserId = 1;
-                }
-                else
-                {
-                    info.LastUserId++;
-                }
-
-                collection.Save(info);
-
-                return info.LastUserId;
-            }
+            return Guid.NewGuid().ToString();
         }
 
         /// <summary>
@@ -329,27 +311,9 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic.MongoDb
         /// Gets the next user id
         /// </summary>
         /// <returns></returns>
-        public long GetNextGroupId()
+        public string GetNextGroupId()
         {
-            lock (this.readWriteLock.GetWriteLock())
-            {
-                var collection = this.Db.Database.GetCollection<UserDatabaseInfo>("UserdatabaseInfo");
-                var info = collection.AsQueryable().SingleOrDefault();
-
-                if (info == null)
-                {
-                    info = new UserDatabaseInfo();
-                    info.LastGroupId = 1;
-                }
-                else
-                {
-                    info.LastGroupId++;
-                }
-
-                collection.Save(info);
-
-                return info.LastGroupId;
-            }
+            return Guid.NewGuid().ToString();
         }
 
         public MongoCollection<User> UserCollection

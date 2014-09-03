@@ -33,7 +33,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.PlayerM
         /// <param name="playerName">Name of the player</param>
         /// <param name="empireName">Name of the empire</param>
         /// <returns>Id of the new player</returns>
-        public long CreatePlayer(long userId, long gameId, string playerName, string empireName)
+        public long CreatePlayer(string userId, long gameId, string playerName, string empireName)
         {
             var player = new Player();
             player.OwnerId = userId;
@@ -66,7 +66,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.PlayerM
             }
         }
 
-        public IEnumerable<Player> GetPlayersOfUser(long userId)
+        public IEnumerable<Player> GetPlayersOfUser(string userId)
         {
             lock (this.Data.SyncObject)
             {

@@ -43,7 +43,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic.Local
         /// <param name="user"></param>
         public override void AddUserToDb(User user)
         {
-            user.Id = this.Db.Data.GetNextUserId();
+            user.Id = Guid.NewGuid().ToString();
 
             this.Db.Data.Users.Add(user);
         }
@@ -53,7 +53,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic.Local
         /// </summary>
         /// <param name="userId">Id of the user to be requested</param>
         /// <returns>Containing the user</returns>
-        public override User GetUser(long userId)
+        public override User GetUserById(string userId)
         {
             using (this.readWriteLock.GetReadLock())
             {
@@ -172,7 +172,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic.Local
         /// Gets the group
         /// </summary>
         /// <param name="groupId">Id of the group</param>
-        public override Group GetGroup(long groupId)
+        public override Group GetGroupById(string groupId)
         {
             using (this.readWriteLock.GetReadLock())
             {

@@ -16,7 +16,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.PlayerM.Interface
         /// <param name="playerName">Name of the player</param>
         /// <param name="empireName">Name of the empire</param>
         /// <returns>Id of the new player</returns>
-        long CreatePlayer(long userId, long gameId, string playerName, string empireName);
+        long CreatePlayer(string userId, long gameId, string playerName, string empireName);
 
         /// <summary>
         /// Removes the player
@@ -35,7 +35,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.PlayerM.Interface
         /// </summary>
         /// <param name="userId">Id of the user</param>
         /// <returns>Players of the user</returns>
-        IEnumerable<Player> GetPlayersOfUser(long userId);
+        IEnumerable<Player> GetPlayersOfUser(string userId);
 
         /// <summary>
         /// Gets the players of a specific game

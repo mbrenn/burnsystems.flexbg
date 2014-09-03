@@ -20,7 +20,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Models
             this.TokenId = Guid.NewGuid();
         }
 
-        private long id;
+        private string id;
 
         private string username;
 
@@ -55,7 +55,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Models
         /// <summary>
         /// Gets or sets the user id
         /// </summary>
-        public virtual long Id
+        public virtual string Id
         {
             get { return this.id; }
             set { this.id = value; }

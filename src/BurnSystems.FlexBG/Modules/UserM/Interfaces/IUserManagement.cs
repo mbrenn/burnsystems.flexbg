@@ -8,11 +8,11 @@ namespace BurnSystems.FlexBG.Modules.UserM.Interfaces
 {
     public interface IUserManagement
     {
-        long AddUser(User user);
+        string AddUser(User user);
 
         void RemoveUser(User user);
 
-        User GetUser(long userId);
+        User GetUserById(string userId);
 
         User GetUser(string username);
 
@@ -43,13 +43,13 @@ namespace BurnSystems.FlexBG.Modules.UserM.Interfaces
         /// <returns>Returned data or null, if not correct type or not existing</returns>
         T GetUserData<T>(User user, string key);
 
-        long AddGroup(Group group);
+        string AddGroup(Group group);
 
         void RemoveGroup(Group group);
 
         IEnumerable<Group> GetAllGroups();
 
-        Group GetGroup(long groupId);
+        Group GetGroupById(string groupId);
 
         Group GetGroup(string groupName);
 

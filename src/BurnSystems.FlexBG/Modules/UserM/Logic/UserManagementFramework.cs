@@ -77,7 +77,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         /// </summary>
         /// <param name="userId">Id of the user</param>
         /// <returns>Found user</returns>
-        public abstract User GetUser(long userId);
+        public abstract User GetUserById(string userId);
 
         /// <summary>
         /// The implementation to retrieve a specific user from database
@@ -131,7 +131,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         /// </summary>
         /// <param name="groupId">Id of the group</param>
         /// <returns>Found group or null</returns>
-        public abstract Group GetGroup(long groupId);
+        public abstract Group GetGroupById(string groupId);
 
         /// <summary>
         /// Gets group by groupname
@@ -166,7 +166,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         /// Adds a user to database
         /// </summary>
         /// <param name="user">Information of user to be added</param>
-        public long AddUser(User user)
+        public string AddUser(User user)
         {
             using (this.AcquireWriteLock())
             {
@@ -225,7 +225,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         /// Adds group to usermanagement
         /// </summary>
         /// <param name="group">Group to be added</param>
-        public long AddGroup(Group group)   
+        public string AddGroup(Group group)   
         {
             using (this.AcquireWriteLock())
             {
@@ -309,7 +309,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         /// <returns>Password hash</returns>
         private string CreatePasswordHash(User user, string password)
         {
-            var completePassword = user.Id.ToString("") + user.TokenId.ToString() + password + this.GameInfoProvider.ServerInfo.PasswordSalt;
+            var completePassword = user.Id.ToString() + user.TokenId.ToString() + password + this.GameInfoProvider.ServerInfo.PasswordSalt;
             return completePassword.Sha1();
         }
 
@@ -356,11 +356,11 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
             }
         }
 
-        public void SetPersistantCookie(long userId, string series, string token)
+        public void SetPersistantCookie(string userId, string series, string token)
         {
             using (this.AcquireWriteLock())
             {
-                var user = this.GetUser(userId);
+                var user = this.GetUserById(userId);
                 if (user == null)
                 {
                     throw new InvalidOperationException("User not found");
@@ -371,11 +371,11 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
             }
         }
 
-        public bool CheckPersistantCookie(long userId, string series, string token)
+        public bool CheckPersistantCookie(string userId, string series, string token)
         {
             using (this.AcquireReadLock())
             {
-                var user = this.GetUser(userId);
+                var user = this.GetUserById(userId);
                 if (user == null)
                 {
                     throw new InvalidOperationException("User not found");
@@ -405,11 +405,11 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
             }
         }
 
-        public void DeletePersistantCookie(long userId, string series)
+        public void DeletePersistantCookie(string userId, string series)
         {
             using (this.AcquireWriteLock())
             {
-                var user = this.GetUser(userId);
+                var user = this.GetUserById(userId);
                 if (user == null)
                 {
                     throw new InvalidOperationException("User not found");

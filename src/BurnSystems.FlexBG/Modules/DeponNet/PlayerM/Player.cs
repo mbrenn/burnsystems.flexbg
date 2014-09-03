@@ -30,7 +30,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.PlayerM
         /// <summary>
         /// Gets or sets the owner id
         /// </summary>
-        public long OwnerId
+        public string OwnerId
         {
             get;
             set;

@@ -10,7 +10,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic.ASPNetIdentity
 {
     public class UserManagementAspNetIdentity : UserManagementFramework
     {
-        public override Models.User GetUser(long userId)
+        public override Models.User GetUserById(string userId)
         {
             var store = new UserStore<IdentityUser>();
 
@@ -52,7 +52,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic.ASPNetIdentity
             throw new NotImplementedException();
         }
 
-        public override Models.Group GetGroup(long groupId)
+        public override Models.Group GetGroupById(string groupId)
         {
             throw new NotImplementedException();
         }

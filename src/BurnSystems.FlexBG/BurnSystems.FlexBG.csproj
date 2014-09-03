@@ -235,6 +235,7 @@
     <Compile Include="Modules\UserM\Models\Group.cs" />
     <Compile Include="Modules\UserM\Models\Membership.cs" />
     <Compile Include="Modules\UserM\Models\User.cs" />
+    <Compile Include="Modules\UserM\Models\UserDataTokens.cs" />
     <Compile Include="Modules\UserQueryM\IUserQuery.cs" />
     <Compile Include="Modules\UserQueryM\UserQueryConsole.cs" />
     <Compile Include="Modules\UserQueryM\UserQueryDefaultAnswer.cs" />

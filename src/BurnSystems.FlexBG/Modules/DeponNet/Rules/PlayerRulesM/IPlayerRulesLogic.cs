@@ -30,6 +30,6 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.Rules.PlayerRulesM
         /// <param name="userId">Id of the user</param>
         /// <param name="gameId">Id of the game</param>
         /// <returns>true, if user can join the game</returns>
-        bool CanUserContinueGame(long userId, long gameId);
+        bool CanUserContinueGame(string userId, long gameId);
     }
 }

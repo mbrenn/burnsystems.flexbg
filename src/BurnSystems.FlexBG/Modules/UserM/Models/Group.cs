@@ -18,7 +18,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Models
         /// <summary>
         /// Stores the id
         /// </summary>
-        private long id;
+        private string id;
 
         /// <summary>
         /// Stores the title
@@ -41,7 +41,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Models
         /// <summary>
         /// Gets or sets the id of the group
         /// </summary>
-        public long Id
+        public string Id
         {
             get { return this.id; }
             set { this.id = value; }

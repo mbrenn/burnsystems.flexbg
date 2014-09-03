@@ -14,7 +14,7 @@ namespace BurnSystems.FlexBG.Modules.DeponNet.Rules.PlayerRulesM
             set;
         }
 
-        public long UserId
+        public string UserId
         {
             get;
             set;

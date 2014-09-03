@@ -12,20 +12,13 @@ namespace BurnSystems.FlexBG.Modules.UserM.Models
     [Serializable]
     public class Membership
     {
-        private long id;
-        private long userId;
-        private long groupId;
-
-        public long Id
-        {
-            get { return this.id; }
-            set { this.id = value; }
-        }
+        private string userId;
+        private string groupId;
 
         /// <summary>
         /// Id of the user
         /// </summary>
-        public long UserId
+        public string UserId
         {
             get { return this.userId; }
             set { this.userId = value; }
@@ -34,7 +27,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Models
         /// <summary>
         /// Id of the group
         /// </summary>
-        public long GroupId
+        public string GroupId
         {
             get { return this.groupId; }
             set { this.groupId = value; }
