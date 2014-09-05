@@ -45,11 +45,27 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
             set;
         }
 
-        [Inject(IsMandatory = true)]
-        public IServerInfoProvider GameInfoProvider
+        /// <summary>
+        /// Stores the game info provider
+        /// </summary>
+        private IServerInfoProvider serverInfoProvider;
+
+        public IServerInfoProvider ServerInfoProvider
         {
-            get;
-            set;
+            get
+            {
+                if (this.serverInfoProvider == null)
+                {
+                    throw new InvalidOperationException("ServerInfoProvider is not set");
+                }
+
+                return this.serverInfoProvider;
+            }
+
+            set
+            {
+                this.serverInfoProvider = value;
+            }
         }
 
         /// <summary>
@@ -309,7 +325,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         /// <returns>Password hash</returns>
         private string CreatePasswordHash(User user, string password)
         {
-            var completePassword = user.Id.ToString() + user.TokenId.ToString() + password + this.GameInfoProvider.ServerInfo.PasswordSalt;
+            var completePassword = user.Id.ToString() + user.TokenId.ToString() + password + this.ServerInfoProvider.ServerInfo.PasswordSalt;
             return completePassword.Sha1();
         }
 
@@ -457,12 +473,12 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
                 var password = this.UserQuery.Ask(
                     "Give password: ",
                     null,
-                    this.GameInfoProvider.ServerInfo.PasswordSalt);
+                    this.ServerInfoProvider.ServerInfo.PasswordSalt);
 
 
                 var user = new User();
                 user.Username = AdminName;
-                user.EMail = this.GameInfoProvider.ServerInfo.AdminEMail;
+                user.EMail = this.ServerInfoProvider.ServerInfo.AdminEMail;
                 user.HasAgreedToTOS = true;
                 user.HasNoCredentials = false;
                 user.IsActive = true;

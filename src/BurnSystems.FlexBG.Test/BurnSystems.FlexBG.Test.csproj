@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -14,7 +14,9 @@
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\..\..\Depon.Net 2.0\</SolutionDir>
     <RestorePackages>true</RestorePackages>
     <StartAction>Program</StartAction>
-    <StartProgram>C:\Users\Martin\Programme\NUnit\bin\net-2.0\nunit.exe</StartProgram>
+    <StartProgram>C:\Users\Martin\Programme\NUnit\bin\nunit.exe</StartProgram>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -74,10 +76,6 @@
     <Compile Include="WayPointCalculationM\TestOnlyHeights.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\burnsystems.webserver\src\BurnSystems.WebServer\BurnSystems.WebServer.csproj">
-      <Project>{b31df31a-f19e-4ff9-b50f-b70f4f5949f4}</Project>
-      <Name>BurnSystems.WebServer</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\burnsystems\src\BurnSystems.csproj">
       <Project>{42023d16-afd1-4d99-bc39-9ef46982eb54}</Project>
       <Name>BurnSystems</Name>

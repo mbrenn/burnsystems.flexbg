@@ -17,7 +17,7 @@ namespace BurnSystems.FlexBG.Test.Database.MongoDb
             var activationContainer = new ActivationContainer("Test");
             var settings = new MongoDbSettings()
             {
-                ConnectionString = "mongodb://192.168.1.126/",
+                ConnectionString = "mongodb://127.0.0.1/",
                 Database = "test"
             };
 
