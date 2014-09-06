@@ -10,14 +10,16 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic.ASPNetIdentity
 {
     public class UserManagementAspNetIdentity : UserManagementFramework, IUserManagement
     {
+        private UserStore<IdentityUser> store = new UserStore<IdentityUser>();
+
         public override Models.User GetUserById(string userId)
         {
-            var store = new UserStore<IdentityUser>();
+            var user = this.store.FindByIdAsync(userId).Result;
 
-            throw new NotImplementedException();
+            return ConvertToModel(user);
         }
 
-        public override Models.User GetUser(string usernasme)
+        public override Models.User GetUser(string username)
         {
             throw new NotImplementedException();
         }
@@ -70,7 +72,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic.ASPNetIdentity
 
         public IEnumerable<Models.User> GetAllUsers()
         {
-            throw new NotImplementedException();
+            return this.store.Users.ToList().Select(x => this.ConvertToModel(x));
         }
 
         public void SetUserData(Models.User user, string key, object value)
@@ -101,6 +103,24 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic.ASPNetIdentity
         public IEnumerable<Models.Group> GetGroupsOfUser(Models.User user)
         {
             throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Converts the IdentityUser to the FlexBG Model
+        /// </summary>
+        /// <param name="user">User to be converted</param>
+        /// <returns>The converted model</returns>
+        private Models.User ConvertToModel(IdentityUser user)
+        {
+            var result = new Models.User()
+            {
+                EMail = user.Email,
+                Id = user.Id,
+                IsActive = user.EmailConfirmed,
+                Username = user.UserName
+            };
+
+            return result;
         }
     }
 }
