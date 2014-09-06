@@ -228,6 +228,8 @@
     <Compile Include="Modules\UserM\Local\Data\UserDatabaseInfo.cs" />
     <Compile Include="Modules\UserM\Local\Data\UserDatabaseLocal.cs" />
     <Compile Include="Modules\UserM\Interfaces\IUserManagement.cs" />
+    <Compile Include="Modules\UserM\Logic\ASPNetIdentity\FlexBGIdentityUser.cs" />
+    <Compile Include="Modules\UserM\Logic\ASPNetIdentity\FlexBgUserDbContext.cs" />
     <Compile Include="Modules\UserM\Logic\ASPNetIdentity\UserManagementAspNetIdentity.cs" />
     <Compile Include="Modules\UserM\Logic\CurrentUserHelper.cs" />
     <Compile Include="Modules\UserM\Logic\UserManagementConfig.cs" />

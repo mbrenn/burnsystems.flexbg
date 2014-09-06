@@ -10,7 +10,8 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic.ASPNetIdentity
 {
     public class UserManagementAspNetIdentity : UserManagementFramework, IUserManagement
     {
-        private UserStore<IdentityUser> store = new UserStore<IdentityUser>();
+        private UserStore<FlexBGIdentityUser> store = new UserStore<FlexBGIdentityUser>(
+            new FlexBgUserDbContext());
 
         public override Models.User GetUserById(string userId)
         {
@@ -110,14 +111,16 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic.ASPNetIdentity
         /// </summary>
         /// <param name="user">User to be converted</param>
         /// <returns>The converted model</returns>
-        private Models.User ConvertToModel(IdentityUser user)
+        private Models.User ConvertToModel(FlexBGIdentityUser user)
         {
             var result = new Models.User()
             {
                 EMail = user.Email,
                 Id = user.Id,
                 IsActive = user.EmailConfirmed,
-                Username = user.UserName
+                Username = user.UserName,
+                HasAgreedToTOS = user.HasAgreedToTOS,
+                PremiumTill = user.PremiumTill ?? DateTime.MinValue
             };
 
             return result;
