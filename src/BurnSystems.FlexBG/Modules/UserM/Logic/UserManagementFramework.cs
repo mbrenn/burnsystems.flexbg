@@ -39,6 +39,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         /// Gets or sets the lockmaster to be used
         /// </summary>
         [Inject(IsMandatory = true)]
+        [Ninject.Inject()]
         public ILockMaster LockMaster
         {
             get;
@@ -50,6 +51,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         /// </summary>
         private IServerInfoProvider serverInfoProvider;
 
+        [Ninject.Inject()]
         public IServerInfoProvider ServerInfoProvider
         {
             get
@@ -72,6 +74,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         /// Gets or sets the configuration of the usermanagement
         /// </summary>
         [Inject(IsMandatory = true)]
+        [Ninject.Inject()]
         public UserManagementConfig Configuration
         {
             get;
@@ -82,6 +85,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         /// Gets or sets the user query
         /// </summary>
         [Inject]
+        [Ninject.Inject()]
         public IUserQuery UserQuery
         {
             get;

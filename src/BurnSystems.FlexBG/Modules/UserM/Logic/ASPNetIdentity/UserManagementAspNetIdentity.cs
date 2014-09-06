@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace BurnSystems.FlexBG.Modules.UserM.Logic.ASPNetIdentity
 {
-    public class UserManagementAspNetIdentity : UserManagementFramework
+    public class UserManagementAspNetIdentity : UserManagementFramework, IUserManagement
     {
         public override Models.User GetUserById(string userId)
         {
@@ -58,6 +58,47 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic.ASPNetIdentity
         }
 
         public override Models.Group GetGroup(string groupName)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public void RemoveUser(Models.User user)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<Models.User> GetAllUsers()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetUserData(Models.User user, string key, object value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public T GetUserData<T>(Models.User user, string key)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RemoveGroup(Models.Group group)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<Models.Group> GetAllGroups()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RemoveFromGroup(Models.Group group, Models.User user)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<Models.Group> GetGroupsOfUser(Models.User user)
         {
             throw new NotImplementedException();
         }
