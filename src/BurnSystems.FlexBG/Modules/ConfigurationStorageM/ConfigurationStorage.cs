@@ -17,9 +17,10 @@ namespace BurnSystems.FlexBG.Modules.ConfigurationStorageM
         /// </summary>
         private List<XDocument> configurationDocuments = new List<XDocument>();
 
-        public void Add(XDocument document)
+        public IConfigurationStorage Add(XDocument document)
         {
             this.configurationDocuments.Add(document);
+            return this;
         }
 
         public ConfigurationStorage()
@@ -30,12 +31,14 @@ namespace BurnSystems.FlexBG.Modules.ConfigurationStorageM
         /// Loads all xmlfiles from directory
         /// </summary>
         /// <param name="directoryPath">Directory from which the xml files shall be loaded</param>
-        public void AddFromDirectory(string directoryPath)
+        public ConfigurationStorage AddFromDirectory(string directoryPath)
         {
-            foreach (var file in Directory.GetFiles(directoryPath, "*.xml"))
+            foreach (var file in Directory.GetFiles(directoryPath, "*.xml").OrderBy(x => x))
             {
                 this.Add(XDocument.Load(file));
             }
+
+            return this;
         }
 
         /// <summary>

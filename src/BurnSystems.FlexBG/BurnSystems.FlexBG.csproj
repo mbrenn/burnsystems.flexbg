@@ -49,6 +49,14 @@
     <Reference Include="Microsoft.AspNet.Identity.EntityFramework">
       <HintPath>..\..\..\depon-game\src\packages\Microsoft.AspNet.Identity.EntityFramework.2.1.0\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
     </Reference>
+    <Reference Include="MongoDB.Bson, Version=1.9.2.235, Culture=neutral, PublicKeyToken=f686731cfb9cc103, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\depon-game\src\packages\mongocsharpdriver.1.9.2\lib\net35\MongoDB.Bson.dll</HintPath>
+    </Reference>
+    <Reference Include="MongoDB.Driver, Version=1.9.2.235, Culture=neutral, PublicKeyToken=f686731cfb9cc103, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\depon-game\src\packages\mongocsharpdriver.1.9.2\lib\net35\MongoDB.Driver.dll</HintPath>
+    </Reference>
     <Reference Include="Ninject">
       <HintPath>..\..\..\depon-game\src\packages\Ninject.3.2.2.0\lib\net45-full\Ninject.dll</HintPath>
     </Reference>
@@ -60,12 +68,6 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="MongoDB.Bson">
-      <HintPath>..\..\packages\MongoDB.Bson.dll</HintPath>
-    </Reference>
-    <Reference Include="MongoDB.Driver">
-      <HintPath>..\..\packages\MongoDB.Driver.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Helper\ProviderByIdM\BaseProviderById.cs" />
@@ -221,6 +223,7 @@
     <Compile Include="Modules\MapVoxelStorageM\Storage\VoxelMapInfo.cs" />
     <Compile Include="Modules\ServerInfoM\IServerInfoProvider.cs" />
     <Compile Include="Modules\ServerInfoM\ServerInfo.cs" />
+    <Compile Include="Modules\ServerInfoM\ServerInfoProvider.cs" />
     <Compile Include="Modules\UserM\Local\Data\UserDatabase.cs" />
     <Compile Include="Modules\UserM\Local\Data\UserDatabaseInfo.cs" />
     <Compile Include="Modules\UserM\Local\Data\UserDatabaseLocal.cs" />

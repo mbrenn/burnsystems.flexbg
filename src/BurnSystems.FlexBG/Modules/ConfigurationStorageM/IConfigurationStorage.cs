@@ -15,7 +15,7 @@ namespace BurnSystems.FlexBG.Modules.ConfigurationStorageM
         /// Adds a document to configuration storage
         /// </summary>
         /// <param name="document"></param>
-        void Add(XDocument document);
+        IConfigurationStorage Add(XDocument document);
 
         /// <summary>
         /// Gets the configuration documents
