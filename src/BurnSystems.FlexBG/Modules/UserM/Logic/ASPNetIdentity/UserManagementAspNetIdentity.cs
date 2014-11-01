@@ -73,7 +73,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic.ASPNetIdentity
 
         public IEnumerable<Models.User> GetAllUsers()
         {
-            return this.store.Users.ToList().Select(x => this.ConvertToModel(x));
+            return this.store.Users.ToList().Select(x => ConvertToModel(x));
         }
 
         public void SetUserData(Models.User user, string key, object value)
@@ -111,7 +111,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic.ASPNetIdentity
         /// </summary>
         /// <param name="user">User to be converted</param>
         /// <returns>The converted model</returns>
-        private Models.User ConvertToModel(FlexBGIdentityUser user)
+        private static Models.User ConvertToModel(FlexBGIdentityUser user)
         {
             var result = new Models.User()
             {
