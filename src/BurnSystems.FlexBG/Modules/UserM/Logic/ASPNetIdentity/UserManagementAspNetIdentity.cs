@@ -1,4 +1,5 @@
 ﻿using BurnSystems.FlexBG.Modules.UserM.Interfaces;
+using BurnSystems.Test;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
@@ -10,8 +11,9 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic.ASPNetIdentity
 {
     public class UserManagementAspNetIdentity : UserManagementFramework, IUserManagement
     {
-        private UserStore<FlexBGIdentityUser> store = new UserStore<FlexBGIdentityUser>(
-            new FlexBgUserDbContext());
+        private UserStore<FlexBgIdentityUser> store = new UserStore<FlexBgIdentityUser>(
+            new FlexBgUserDbContext());      
+ 
 
         public override Models.User GetUserById(string userId)
         {
@@ -22,12 +24,25 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic.ASPNetIdentity
 
         public override Models.User GetUser(string username)
         {
-            throw new NotImplementedException();
+            var user = this.store.FindByNameAsync(username).Result;
+
+            return ConvertToModel(user);
         }
 
         public override void UpdateUser(Models.User user)
         {
-            throw new NotImplementedException();
+            Ensure.That(user != null);
+            var foundUser = this.store.FindByIdAsync(user.Id).Result;
+            if (foundUser != null)
+            {
+                // Transfer the necessary stuff
+                foundUser.APIKey = user.APIKey;
+                foundUser.HasAgreedToTOS = user.HasAgreedToTOS;
+                foundUser.PremiumTill = user.PremiumTill;
+
+                // Is doing the update
+                this.store.UpdateAsync(foundUser);
+            }           
         }
 
         public override void AddUserToDb(Models.User user)
@@ -42,7 +57,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic.ASPNetIdentity
 
         public override bool IsUsernameExisting(string username)
         {
-            throw new NotImplementedException();
+            return this.store.FindByNameAsync(username).Result != null;
         }
 
         public override bool IsGroupExisting(string groupName)
@@ -65,10 +80,15 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic.ASPNetIdentity
             throw new NotImplementedException();
         }
 
-
         public void RemoveUser(Models.User user)
         {
-            throw new NotImplementedException();
+            var foundUser = this.store.FindByIdAsync(user.Id).Result;
+
+            // Checks, if we have found the user, if yes, return it
+            if (foundUser != null)
+            {
+                this.store.DeleteAsync(foundUser);
+            }
         }
 
         public IEnumerable<Models.User> GetAllUsers()
@@ -111,8 +131,13 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic.ASPNetIdentity
         /// </summary>
         /// <param name="user">User to be converted</param>
         /// <returns>The converted model</returns>
-        private static Models.User ConvertToModel(FlexBGIdentityUser user)
+        private static Models.User ConvertToModel(FlexBgIdentityUser user)
         {
+            if (user == null)
+            {
+                return null;
+            }
+
             var result = new Models.User()
             {
                 EMail = user.Email,

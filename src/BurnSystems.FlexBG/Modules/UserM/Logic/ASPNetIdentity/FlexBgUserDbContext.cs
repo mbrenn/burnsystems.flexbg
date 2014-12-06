@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace BurnSystems.FlexBG.Modules.UserM.Logic.ASPNetIdentity
 {
-    public class FlexBgUserDbContext : IdentityDbContext<FlexBGIdentityUser>
+    public class FlexBgUserDbContext : IdentityDbContext<FlexBgIdentityUser, FlexBgIdentityRole, string, IdentityUserLogin, IdentityUserRole, IdentityUserClaim>
     {
         public FlexBgUserDbContext()
-            : base("DefaultConnection", throwIfV1Schema: false)
-        {
+            : base("DefaultConnection")
+        {            
         }
 
         public static FlexBgUserDbContext Create()

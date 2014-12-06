@@ -9,11 +9,22 @@ using System.Threading.Tasks;
 
 namespace BurnSystems.FlexBG.Modules.UserM.Logic.ASPNetIdentity
 {
-    public class FlexBGIdentityUser : IdentityUser
+    public class FlexBgIdentityUser : IdentityUser
     {
         private DateTime? premiumTill;
 
         private bool hasAgreedToTOS;
+
+        private string apiKey;
+        
+        /// <summary>
+        /// Gets or sets the API Key
+        /// </summary>
+        public string APIKey
+        {
+            get { return this.apiKey; }
+            set { this.apiKey = value; }
+        }
 
         /// <summary>
         /// Gets or sets a date until user is premium
@@ -33,7 +44,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic.ASPNetIdentity
             set { this.hasAgreedToTOS = value; }
         }
 
-        public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<FlexBGIdentityUser> manager)
+        public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<FlexBgIdentityUser> manager)
         {
             // Beachten Sie, dass der "authenticationType" mit dem in "CookieAuthenticationOptions.AuthenticationType" definierten Typ übereinstimmen muss.
             var userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);
