@@ -11,20 +11,29 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic.ASPNetIdentity
 {
     public class UserManagementAspNetIdentity : UserManagementFramework, IUserManagement
     {
-        private UserStore<FlexBgIdentityUser> store = new UserStore<FlexBgIdentityUser>(
-            new FlexBgUserDbContext());      
- 
+        public UserManagementAspNetIdentity()
+        {
+            var dbContext = new FlexBgUserDbContext();
+            this.userStore = new UserStore<
+                FlexBgIdentityUser,FlexBgIdentityRole,string,IdentityUserLogin,IdentityUserRole,IdentityUserClaim>
+                (dbContext);
+            this.roleStore = new RoleStore<FlexBgIdentityRole>(dbContext );
+        }
+
+        private UserStore<FlexBgIdentityUser, FlexBgIdentityRole, string, IdentityUserLogin, IdentityUserRole, IdentityUserClaim> userStore;
+
+        private RoleStore<FlexBgIdentityRole> roleStore;
 
         public override Models.User GetUserById(string userId)
         {
-            var user = this.store.FindByIdAsync(userId).Result;
+            var user = this.userStore.FindByIdAsync(userId).Result;
 
             return ConvertToModel(user);
         }
 
         public override Models.User GetUser(string username)
         {
-            var user = this.store.FindByNameAsync(username).Result;
+            var user = this.userStore.FindByNameAsync(username).Result;
 
             return ConvertToModel(user);
         }
@@ -32,7 +41,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic.ASPNetIdentity
         public override void UpdateUser(Models.User user)
         {
             Ensure.That(user != null);
-            var foundUser = this.store.FindByIdAsync(user.Id).Result;
+            var foundUser = this.userStore.FindByIdAsync(user.Id).Result;
             if (foundUser != null)
             {
                 // Transfer the necessary stuff
@@ -41,59 +50,75 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic.ASPNetIdentity
                 foundUser.PremiumTill = user.PremiumTill;
 
                 // Is doing the update
-                this.store.UpdateAsync(foundUser);
+                this.userStore.UpdateAsync(foundUser).Wait();
             }           
         }
 
         public override void AddUserToDb(Models.User user)
         {
-            throw new NotImplementedException();
+            var newUser = new FlexBgIdentityUser();
+            newUser.APIKey = user.APIKey;
+            newUser.Email = user.EMail;
+            newUser.EmailConfirmed = user.IsActive;
+            newUser.HasAgreedToTOS = user.HasAgreedToTOS;
+            //newUser.Id = user.Id;
+            newUser.PremiumTill = user.PremiumTill;
+            newUser.UserName = user.Username;
+            this.userStore.CreateAsync(newUser).Wait();
         }
 
         public override void AddGroupToDb(Models.Group user)
         {
-            throw new NotImplementedException();
+            var role = new FlexBgIdentityRole();
+            role.Id = user.Id;
+            role.Name = user.Name;
+            role.TokenId = user.TokenId.ToString();
+            this.roleStore.CreateAsync(role).Wait();
         }
 
         public override bool IsUsernameExisting(string username)
         {
-            return this.store.FindByNameAsync(username).Result != null;
+            return this.userStore.FindByNameAsync(username).Result != null;
         }
 
         public override bool IsGroupExisting(string groupName)
         {
-            throw new NotImplementedException();
+            return this.roleStore.FindByNameAsync(groupName).Result != null;
         }
 
         public override void AddToGroup(Models.Group group, Models.User user)
         {
-            throw new NotImplementedException();
+            var foundUser = this.userStore.FindByIdAsync(user.Id).Result;
+            if (foundUser != null)
+            {
+                this.userStore.AddToRoleAsync(foundUser, group.Name).Wait();
+            }
         }
 
         public override Models.Group GetGroupById(string groupId)
         {
-            throw new NotImplementedException();
+            return ConvertToModel(this.roleStore.FindByIdAsync(groupId).Result);
         }
 
         public override Models.Group GetGroup(string groupName)
         {
-            throw new NotImplementedException();
+            return ConvertToModel(this.roleStore.FindByNameAsync(groupName).Result);
         }
 
         public void RemoveUser(Models.User user)
         {
-            var foundUser = this.store.FindByIdAsync(user.Id).Result;
+            var foundUser = this.userStore.FindByIdAsync(user.Id).Result;
 
             // Checks, if we have found the user, if yes, return it
             if (foundUser != null)
             {
-                this.store.DeleteAsync(foundUser);
+                this.userStore.DeleteAsync(foundUser).Wait();
             }
         }
 
         public IEnumerable<Models.User> GetAllUsers()
         {
-            return this.store.Users.ToList().Select(x => ConvertToModel(x));
+            return this.userStore.Users.ToList().Select(x => ConvertToModel(x));
         }
 
         public void SetUserData(Models.User user, string key, object value)
@@ -108,22 +133,36 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic.ASPNetIdentity
 
         public void RemoveGroup(Models.Group group)
         {
-            throw new NotImplementedException();
+            var foundGroup = this.roleStore.FindByIdAsync(group.Id).Result;
+            if (foundGroup != null)
+            {
+                this.roleStore.DeleteAsync(foundGroup).Wait();
+            }
         }
 
         public IEnumerable<Models.Group> GetAllGroups()
         {
-            throw new NotImplementedException();
+            return this.roleStore.Roles.ToList().Select(x => ConvertToModel(x));
         }
 
         public void RemoveFromGroup(Models.Group group, Models.User user)
         {
-            throw new NotImplementedException();
+            var foundUser = this.userStore.FindByIdAsync(user.Id).Result;
+            if (foundUser != null)
+            {
+                this.userStore.RemoveFromRoleAsync(foundUser, group.Name);
+            } 
         }
 
         public IEnumerable<Models.Group> GetGroupsOfUser(Models.User user)
         {
-            throw new NotImplementedException();
+            var foundUser = this.userStore.FindByIdAsync(user.Id).Result;
+            if (foundUser != null)
+            {
+                return foundUser.Roles.Select(x => this.GetGroupById(x.RoleId));
+            }
+
+            return null;
         }
 
         /// <summary>
@@ -146,6 +185,28 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic.ASPNetIdentity
                 Username = user.UserName,
                 HasAgreedToTOS = user.HasAgreedToTOS,
                 PremiumTill = user.PremiumTill ?? DateTime.MinValue
+            };
+
+            return result;
+        }
+
+        /// <summary>
+        /// Converts the IdentityRole to the FlexBG Model
+        /// </summary>
+        /// <param name="role">User to be converted</param>
+        /// <returns>The converted model</returns>
+        private static Models.Group ConvertToModel(FlexBgIdentityRole role)
+        {
+            if (role == null)
+            {
+                return null;
+            }
+
+            var result = new Models.Group()
+            {
+                Id = role.Id,
+                Name = role.Name,
+                TokenId = new Guid(role.TokenId)
             };
 
             return result;

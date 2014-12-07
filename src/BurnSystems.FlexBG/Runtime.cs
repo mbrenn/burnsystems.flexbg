@@ -6,6 +6,7 @@ using BurnSystems.FlexBG.Modules.ConfigurationStorageM;
 using BurnSystems.Logging;
 using BurnSystems.Test;
 using BurnSystems.ObjectActivation;
+using Ninject;
 
 namespace BurnSystems.FlexBG
 {
@@ -27,7 +28,7 @@ namespace BurnSystems.FlexBG
         /// <summary>
         /// Stores the activation container being used by FlexBG
         /// </summary>
-        private IActivates activationContainer;
+        private IKernel activationContainer;
 
         /// <summary>
         /// Stores the path to the configuration folder
@@ -48,7 +49,7 @@ namespace BurnSystems.FlexBG
         /// </summary>
         /// <param name="activationContainer">Activation container to be used</param>
         /// <param name="location">Location, where runtime is started</param>
-        public Runtime(IActivates activationContainer, string configurationFolder)
+        public Runtime(IKernel activationContainer, string configurationFolder)
         {
             this.activationContainer = activationContainer;
             this.ConfigurationFolder = configurationFolder;

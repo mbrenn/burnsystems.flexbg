@@ -8,6 +8,7 @@ using BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage;
 using BurnSystems.FlexBG.Modules.WayPointCalculationM;
 using BurnSystems.Logging;
 using BurnSystems.ObjectActivation;
+using Ninject;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -25,7 +26,7 @@ namespace BurnSystems.FlexBG.Test.WayPointCalculationM
         ///  Initialies the activation container
         /// </summary>
         /// <returns></returns>
-        private IActivates Init(bool big = false)
+        private IKernel Init(bool big = false)
         {
             if (!Directory.Exists("config"))
             {
@@ -36,7 +37,7 @@ namespace BurnSystems.FlexBG.Test.WayPointCalculationM
             Log.TheLog.AddLogProvider(new DebugProvider());
             Log.TheLog.FilterLevel = LogLevel.Verbose;
 
-            var container = new ActivationContainer("Test");
+            var container = new StandardKernel();
 
             var configurationStorage = new ConfigurationStorage();
             container.Bind<IConfigurationStorage>().ToConstant(configurationStorage);
@@ -48,7 +49,7 @@ namespace BurnSystems.FlexBG.Test.WayPointCalculationM
 
             var game = new Game();
             game.Id = 1;
-            container.BindToName("CurrentGame").ToConstant(game);
+            //container.BindToName("CurrentGame").ToConstant(game);
 
             // Starts up FlexBG
             var runtime = new Runtime(container, "config");

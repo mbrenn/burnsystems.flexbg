@@ -3,6 +3,7 @@ using BurnSystems.FlexBG.Modules.ConfigurationStorageM;
 using BurnSystems.FlexBG.Modules.MapVoxelStorageM.Configuration;
 using BurnSystems.FlexBG.Modules.MapVoxelStorageM.Storage;
 using BurnSystems.ObjectActivation;
+using Ninject;
 
 namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM
 {
@@ -15,7 +16,7 @@ namespace BurnSystems.FlexBG.Modules.MapVoxelStorageM
         /// Binds the voxelmap
         /// </summary>
         /// <param name="container">Container to be used</param>
-        public static void Load(ActivationContainer container)
+        public static void Load(IKernel container)
         {
             var loader = new PartitionLoader();
             var cache = new PartitionCache(loader);
