@@ -295,7 +295,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         /// <param name="user">User to be checked</param>
         /// <param name="password">Password to be checked</param>
         /// <returns>true, if password is correct</returns>
-        public bool IsPasswordCorrect(User user, string password)
+        public virtual bool IsPasswordCorrect(User user, string password)
         {
             Ensure.That(user != null);
             return user.EncryptedPassword == CreatePasswordHash(user, password);
@@ -307,7 +307,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic
         /// </summary>
         /// <param name="user">User whose password gets encrypted</param>
         /// <param name="password">Password to be encrypted</param>
-        public void SetPassword(User user, string password)
+        public virtual void SetPassword(User user, string password)
         {            
             Ensure.That(user != null);
             if (string.IsNullOrEmpty(password))

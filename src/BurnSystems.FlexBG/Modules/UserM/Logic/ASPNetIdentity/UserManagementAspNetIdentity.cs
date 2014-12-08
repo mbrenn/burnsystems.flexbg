@@ -1,5 +1,6 @@
 ﻿using BurnSystems.FlexBG.Modules.UserM.Interfaces;
 using BurnSystems.Test;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
@@ -11,29 +12,31 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic.ASPNetIdentity
 {
     public class UserManagementAspNetIdentity : UserManagementFramework, IUserManagement
     {
+        /// <summary>
+        /// Stores the usermanager
+        /// </summary>
+        private FlexBgUserManager userManager;
+
+        private RoleManager<FlexBgIdentityRole> roleManager;
+
         public UserManagementAspNetIdentity()
         {
             var dbContext = new FlexBgUserDbContext();
-            this.userStore = new UserStore<
-                FlexBgIdentityUser,FlexBgIdentityRole,string,IdentityUserLogin,IdentityUserRole,IdentityUserClaim>
-                (dbContext);
-            this.roleStore = new RoleStore<FlexBgIdentityRole>(dbContext );
+
+            this.roleManager = new FlexBgRoleManager(dbContext);
+            this.userManager = new FlexBgUserManager(dbContext);
         }
-
-        private UserStore<FlexBgIdentityUser, FlexBgIdentityRole, string, IdentityUserLogin, IdentityUserRole, IdentityUserClaim> userStore;
-
-        private RoleStore<FlexBgIdentityRole> roleStore;
 
         public override Models.User GetUserById(string userId)
         {
-            var user = this.userStore.FindByIdAsync(userId).Result;
+            var user = this.userManager.FindById(userId);
 
             return ConvertToModel(user);
         }
 
         public override Models.User GetUser(string username)
         {
-            var user = this.userStore.FindByNameAsync(username).Result;
+            var user = this.userManager.FindByName(username);
 
             return ConvertToModel(user);
         }
@@ -41,7 +44,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic.ASPNetIdentity
         public override void UpdateUser(Models.User user)
         {
             Ensure.That(user != null);
-            var foundUser = this.userStore.FindByIdAsync(user.Id).Result;
+            var foundUser = this.userManager.FindById(user.Id);
             if (foundUser != null)
             {
                 // Transfer the necessary stuff
@@ -50,7 +53,7 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic.ASPNetIdentity
                 foundUser.PremiumTill = user.PremiumTill;
 
                 // Is doing the update
-                this.userStore.UpdateAsync(foundUser).Wait();
+                this.userManager.Update(foundUser);
             }           
         }
 
@@ -61,64 +64,84 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic.ASPNetIdentity
             newUser.Email = user.EMail;
             newUser.EmailConfirmed = user.IsActive;
             newUser.HasAgreedToTOS = user.HasAgreedToTOS;
-            //newUser.Id = user.Id;
             newUser.PremiumTill = user.PremiumTill;
             newUser.UserName = user.Username;
-            this.userStore.CreateAsync(newUser).Wait();
+            this.userManager.Create(newUser);
+
+            user.Id = newUser.Id;
         }
 
-        public override void AddGroupToDb(Models.Group user)
+        public override void AddGroupToDb(Models.Group group)
         {
             var role = new FlexBgIdentityRole();
-            role.Id = user.Id;
-            role.Name = user.Name;
-            role.TokenId = user.TokenId.ToString();
-            this.roleStore.CreateAsync(role).Wait();
+            role.Name = group.Name;
+            role.TokenId = group.TokenId.ToString();
+            this.roleManager.CreateAsync(role).Wait();
+            
+            group.Id = role.Id;
+        }
+
+        public override void SetPassword(Models.User user, string password)
+        {
+            this.userManager.RemovePassword(user.Id);
+            var result = this.userManager.AddPassword(user.Id, password);
+            if (!result.Succeeded)
+            {                
+                throw new InvalidOperationException(result.Errors.First());
+            }
+        }
+
+        public override bool IsPasswordCorrect(Models.User user, string password)
+        {
+            var foundUser = this.userManager.FindById(user.Id);
+            if (foundUser != null)
+            {
+                return this.userManager.CheckPassword(foundUser, password);
+            }
+
+            return false;
         }
 
         public override bool IsUsernameExisting(string username)
         {
-            return this.userStore.FindByNameAsync(username).Result != null;
+            return this.userManager.FindByName(username) != null;
         }
 
         public override bool IsGroupExisting(string groupName)
         {
-            return this.roleStore.FindByNameAsync(groupName).Result != null;
+            return this.roleManager.FindByNameAsync(groupName).Result != null;
         }
 
         public override void AddToGroup(Models.Group group, Models.User user)
         {
-            var foundUser = this.userStore.FindByIdAsync(user.Id).Result;
-            if (foundUser != null)
-            {
-                this.userStore.AddToRoleAsync(foundUser, group.Name).Wait();
-            }
+            this.userManager.AddToRole(user.Id, group.Name);
         }
 
         public override Models.Group GetGroupById(string groupId)
         {
-            return ConvertToModel(this.roleStore.FindByIdAsync(groupId).Result);
+            return ConvertToModel(this.roleManager.FindByIdAsync(groupId).Result);
         }
 
         public override Models.Group GetGroup(string groupName)
         {
-            return ConvertToModel(this.roleStore.FindByNameAsync(groupName).Result);
+            return ConvertToModel(this.roleManager.FindByNameAsync(groupName).Result);
         }
 
         public void RemoveUser(Models.User user)
         {
-            var foundUser = this.userStore.FindByIdAsync(user.Id).Result;
+            var foundUser = this.userManager.FindById(user.Id);
 
             // Checks, if we have found the user, if yes, return it
             if (foundUser != null)
             {
-                this.userStore.DeleteAsync(foundUser).Wait();
+                this.userManager.Delete(foundUser);
             }
         }
 
         public IEnumerable<Models.User> GetAllUsers()
         {
-            return this.userStore.Users.ToList().Select(x => ConvertToModel(x));
+
+            return this.userManager.Users.ToList().Select(x => ConvertToModel(x));
         }
 
         public void SetUserData(Models.User user, string key, object value)
@@ -133,33 +156,29 @@ namespace BurnSystems.FlexBG.Modules.UserM.Logic.ASPNetIdentity
 
         public void RemoveGroup(Models.Group group)
         {
-            var foundGroup = this.roleStore.FindByIdAsync(group.Id).Result;
+            var foundGroup = this.roleManager.FindByIdAsync(group.Id).Result;
             if (foundGroup != null)
             {
-                this.roleStore.DeleteAsync(foundGroup).Wait();
+                this.roleManager.DeleteAsync(foundGroup).Wait();
             }
         }
 
         public IEnumerable<Models.Group> GetAllGroups()
         {
-            return this.roleStore.Roles.ToList().Select(x => ConvertToModel(x));
+            return this.roleManager.Roles.ToList().Select(x => ConvertToModel(x));
         }
 
         public void RemoveFromGroup(Models.Group group, Models.User user)
         {
-            var foundUser = this.userStore.FindByIdAsync(user.Id).Result;
-            if (foundUser != null)
-            {
-                this.userStore.RemoveFromRoleAsync(foundUser, group.Name);
-            } 
+            this.userManager.RemoveFromRole(user.Id, group.Id);
         }
 
         public IEnumerable<Models.Group> GetGroupsOfUser(Models.User user)
         {
-            var foundUser = this.userStore.FindByIdAsync(user.Id).Result;
-            if (foundUser != null)
+            var roles = this.userManager.GetRoles(user.Id);
+            if (roles != null)
             {
-                return foundUser.Roles.Select(x => this.GetGroupById(x.RoleId));
+                return roles.Select(x => this.GetGroup(x));
             }
 
             return null;

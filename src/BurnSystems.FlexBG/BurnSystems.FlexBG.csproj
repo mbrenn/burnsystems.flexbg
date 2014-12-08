@@ -230,7 +230,9 @@
     <Compile Include="Modules\UserM\Interfaces\IUserManagement.cs" />
     <Compile Include="Modules\UserM\Logic\ASPNetIdentity\FlexBgIdentityRole.cs" />
     <Compile Include="Modules\UserM\Logic\ASPNetIdentity\FlexBgIdentityUser.cs" />
+    <Compile Include="Modules\UserM\Logic\ASPNetIdentity\FlexBgRoleManager.cs" />
     <Compile Include="Modules\UserM\Logic\ASPNetIdentity\FlexBgUserDbContext.cs" />
+    <Compile Include="Modules\UserM\Logic\ASPNetIdentity\FlexBgUserManager.cs" />
     <Compile Include="Modules\UserM\Logic\ASPNetIdentity\UserManagementAspNetIdentity.cs" />
     <Compile Include="Modules\UserM\Logic\CurrentUserHelper.cs" />
     <Compile Include="Modules\UserM\Logic\UserManagementConfig.cs" />
